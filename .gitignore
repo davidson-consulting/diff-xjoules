@@ -1,0 +1,7 @@
+/target
+
+# diff-jjoules files
+
+diff-jjoules/target/
+diff-jjoules/.idea/
+diff-jjoules/*.iml
