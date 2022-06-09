@@ -5,3 +5,5 @@
 diff-jjoules/target/
 diff-jjoules/.idea/
 diff-jjoules/*.iml
+diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/target/
+diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/diff-jjoules-toy-java-project.iml
