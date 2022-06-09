@@ -1,0 +1,17 @@
+name: Diff-JJoules CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.0
+      - name: Build and run tests
+        run: export MAVEN_HOME=`mvn --version | grep 'Maven home' | sed -e 's/Maven h.* //'` && echo "🎉 ${MAVEN_HOME}" && mvn -f diff-jjoules --batch-mode clean install -Dcheckstyle.skip=true
+      - name: Codecov
+        uses: codecov/codecov-action@v2

@@ -1,0 +1,15 @@
+name: Diff-JJoules Checkstyle
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.0
+      - name: Checkstyle with Maven
+        run: mvn -f diff-jjoules checkstyle:checkstyle -DskipTests
