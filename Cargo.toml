@@ -8,3 +8,7 @@ edition = "2021"
 [dependencies]
 ferris-says = "0.2"
 clap = { version = "3.0", features = ["derive"] }
+
+serde = "1.0.117"
+serde_derive = "1.0.117"
+serde_json = "1.0.59"
