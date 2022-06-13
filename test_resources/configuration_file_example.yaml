@@ -1,0 +1,3 @@
+path_v1: "/tmp/v1"
+path_v2: "/tmp/v2"
+cmd_coverage: "java -jar my.jar --task coverage --path ${path_project}"
