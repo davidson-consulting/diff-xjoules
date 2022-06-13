@@ -1,4 +1,4 @@
-package fr.davidson.diff_jjoules.steps;
+package fr.davidson.diff_jjoules.tasks;
 
 import fr.davidson.diff_jjoules.Configuration;
 
@@ -7,7 +7,7 @@ import fr.davidson.diff_jjoules.Configuration;
  * benjamin.danglot@davidson.fr
  * on 08/06/2022
  */
-public interface Step {
+public interface Task {
 
     public void run(Configuration configuration);
 

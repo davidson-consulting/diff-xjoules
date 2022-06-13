@@ -1,4 +1,4 @@
-package fr.davidson.diff_jjoules.steps.selection.coverage;
+package fr.davidson.diff_jjoules.tasks.test_coverage.coverage;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         final Configuration configuration = parse(args);
-        configuration.getStep().getStep().run(configuration);
+        configuration.getTask().getTask().run(configuration);
     }
 
     public static Configuration parse(String[] args) {

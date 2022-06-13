@@ -1,5 +1,5 @@
 {
-  "step": "TEST_EXECUTION",
+  "task": "TEST_EXECUTION",
   "pathToProject": "this.is.a.path.to.project",
   "outputPath": "this.is.a.output.path"
 }

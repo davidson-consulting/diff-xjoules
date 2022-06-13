@@ -1,30 +1,30 @@
-package fr.davidson.diff_jjoules.steps;
+package fr.davidson.diff_jjoules.tasks;
 
-import fr.davidson.diff_jjoules.steps.selection.TestSelectionStep;
+import fr.davidson.diff_jjoules.tasks.test_coverage.TestCoverageTask;
 
 /**
  * @author Benjamin DANGLOT
  * benjamin.danglot@davidson.fr
  * on 08/06/2022
  */
-public enum StepEnum {
-    TEST_SELECTION() {
+public enum TaskEnum {
+    TEST_COVERAGE() {
         @Override
-        public Step getStep() {
-            return new TestSelectionStep();
+        public Task getTask() {
+            return new TestCoverageTask();
         }
     },
     TEST_INSTRUMENTATION() {
         @Override
-        public Step getStep() {
+        public Task getTask() {
             throw new UnsupportedOperationException();
         }
     },
     TEST_EXECUTION() {
         @Override
-        public Step getStep() {
+        public Task getTask() {
             throw new UnsupportedOperationException();
         }
     };
-    public abstract Step getStep();
+    public abstract Task getTask();
 }

@@ -1,10 +1,10 @@
-package fr.davidson.diff_jjoules.steps.selection;
+package fr.davidson.diff_jjoules.tasks.test_coverage;
 
 import fr.davidson.diff_jjoules.Configuration;
-import fr.davidson.diff_jjoules.steps.Step;
-import fr.davidson.diff_jjoules.steps.selection.coverage.CloverExecutor;
-import fr.davidson.diff_jjoules.steps.selection.coverage.CloverReader;
-import fr.davidson.diff_jjoules.steps.selection.coverage.Coverage;
+import fr.davidson.diff_jjoules.tasks.Task;
+import fr.davidson.diff_jjoules.tasks.test_coverage.clover.CloverExecutor;
+import fr.davidson.diff_jjoules.tasks.test_coverage.clover.CloverReader;
+import fr.davidson.diff_jjoules.tasks.test_coverage.coverage.Coverage;
 import fr.davidson.diff_jjoules.utils.JSONUtils;
 
 /**
@@ -12,7 +12,7 @@ import fr.davidson.diff_jjoules.utils.JSONUtils;
  * benjamin.danglot@davidson.fr
  * on 08/06/2022
  */
-public class TestSelectionStep implements Step {
+public class TestCoverageTask implements Task {
 
     @Override
     public void run(Configuration configuration) {

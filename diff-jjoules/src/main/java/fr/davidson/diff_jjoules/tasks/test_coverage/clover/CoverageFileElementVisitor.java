@@ -1,7 +1,10 @@
-package fr.davidson.diff_jjoules.steps.selection.coverage;
+package fr.davidson.diff_jjoules.tasks.test_coverage.clover;
 
 import com.atlassian.clover.api.registry.*;
 import com.atlassian.clover.registry.FileElementVisitor;
+import fr.davidson.diff_jjoules.tasks.test_coverage.coverage.Coverage;
+import fr.davidson.diff_jjoules.tasks.test_coverage.coverage.FileCoverage;
+import fr.davidson.diff_jjoules.tasks.test_coverage.coverage.TestCoverage;
 
 /**
  * @author Benjamin DANGLOT

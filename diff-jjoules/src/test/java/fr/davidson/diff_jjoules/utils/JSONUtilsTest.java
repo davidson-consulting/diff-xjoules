@@ -1,15 +1,12 @@
 package fr.davidson.diff_jjoules.utils;
 
 import fr.davidson.diff_jjoules.Configuration;
-import fr.davidson.diff_jjoules.steps.StepEnum;
-import fr.davidson.diff_jjoules.steps.selection.TestSelectionStep;
+import fr.davidson.diff_jjoules.tasks.TaskEnum;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,7 +25,7 @@ public class JSONUtilsTest {
         final Configuration configuration = new Configuration();
         configuration.setPathToProject("this.is.a.path.to.project");
         configuration.setOutputPath("this.is.a.output.path");
-        configuration.setStep(StepEnum.TEST_EXECUTION);
+        configuration.setTask(TaskEnum.TEST_EXECUTION);
         JSONUtils.write(jsonFilePath, configuration);
         try (final BufferedReader reader = new BufferedReader(new FileReader(jsonFilePath))) {
             assertEquals(
@@ -44,11 +41,11 @@ public class JSONUtilsTest {
         final Configuration configurationLoadFromJSON = JSONUtils.read(jsonFilePath, Configuration.class);
         assertEquals("this.is.a.path.to.project", configurationLoadFromJSON.getPathToProject());
         assertEquals("this.is.a.output.path", configurationLoadFromJSON.getOutputPath());
-        assertEquals(StepEnum.TEST_EXECUTION, configurationLoadFromJSON.getStep());
+        assertEquals(TaskEnum.TEST_EXECUTION, configurationLoadFromJSON.getTask());
     }
 
     public static final String EXPECTED_CONFIGURATION_JSON = "{" + Constants.NEW_LINE +
-            "  \"step\": \"TEST_EXECUTION\"," + Constants.NEW_LINE +
+            "  \"task\": \"TEST_EXECUTION\"," + Constants.NEW_LINE +
             "  \"pathToProject\": \"this.is.a.path.to.project\"," + Constants.NEW_LINE +
             "  \"outputPath\": \"this.is.a.output.path\"" + Constants.NEW_LINE +
             "}";

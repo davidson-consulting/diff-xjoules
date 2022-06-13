@@ -1,6 +1,6 @@
 package fr.davidson.diff_jjoules;
 
-import fr.davidson.diff_jjoules.steps.StepEnum;
+import fr.davidson.diff_jjoules.tasks.TaskEnum;
 import picocli.CommandLine;
 
 /**
@@ -12,12 +12,12 @@ import picocli.CommandLine;
 public class Configuration {
 
     @CommandLine.Option(
-            names = "--step",
+            names = "--task",
             required = true,
-            description = "Specify the step to perform." +
+            description = "Specify the task to perform." +
                     "Valid values: ${COMPLETION-CANDIDATES}"
     )
-    private StepEnum step;
+    private TaskEnum task;
 
     @CommandLine.Option(names = {"-p", "--path-to-project"}, description = "Path to the program.", required = true)
     private String pathToProject;
@@ -25,12 +25,12 @@ public class Configuration {
     @CommandLine.Option(names = {"-o", "--output-path"}, description = "Path to the output.", required = true)
     private String outputPath;
 
-    public StepEnum getStep() {
-        return step;
+    public TaskEnum getTask() {
+        return task;
     }
 
-    public void setStep(StepEnum step) {
-        this.step = step;
+    public void setTask(TaskEnum task) {
+        this.task = task;
     }
 
     public String getPathToProject() {

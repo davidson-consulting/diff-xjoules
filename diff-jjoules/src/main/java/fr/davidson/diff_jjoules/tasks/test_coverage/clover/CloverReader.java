@@ -1,4 +1,4 @@
-package fr.davidson.diff_jjoules.steps.selection.coverage;
+package fr.davidson.diff_jjoules.tasks.test_coverage.clover;
 
 import clover.com.google.common.collect.Sets;
 import com.atlassian.clover.BitSetCoverageProvider;
@@ -12,7 +12,7 @@ import com.atlassian.clover.registry.entities.FullFileInfo;
 import com.atlassian.clover.registry.entities.FullPackageInfo;
 import com.atlassian.clover.registry.entities.TestCaseInfo;
 import com.atlassian.clover.registry.metrics.HasMetricsFilter;
-import fr.davidson.diff_jjoules.steps.selection.TestSelectionStep;
+import fr.davidson.diff_jjoules.tasks.test_coverage.coverage.Coverage;
 import fr.davidson.diff_jjoules.utils.MethodFullQualifiedName;
 
 import java.io.File;

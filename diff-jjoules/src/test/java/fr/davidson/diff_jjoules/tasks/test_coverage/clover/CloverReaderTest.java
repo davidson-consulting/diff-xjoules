@@ -1,6 +1,7 @@
-package fr.davidson.diff_jjoules.steps.selection.coverage;
+package fr.davidson.diff_jjoules.tasks.test_coverage.clover;
 
-import fr.davidson.diff_jjoules.utils.JSONUtils;
+import fr.davidson.diff_jjoules.tasks.test_coverage.clover.CloverReader;
+import fr.davidson.diff_jjoules.tasks.test_coverage.coverage.Coverage;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
