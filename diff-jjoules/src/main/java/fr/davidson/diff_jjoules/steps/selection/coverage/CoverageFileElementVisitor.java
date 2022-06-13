@@ -2,9 +2,6 @@ package fr.davidson.diff_jjoules.steps.selection.coverage;
 
 import com.atlassian.clover.api.registry.*;
 import com.atlassian.clover.registry.FileElementVisitor;
-import fr.davidson.diff_jjoules.steps.selection.TestSelectionStep;
-
-import java.util.*;
 
 /**
  * @author Benjamin DANGLOT
@@ -13,23 +10,23 @@ import java.util.*;
  */
 public class CoverageFileElementVisitor implements FileElementVisitor {
 
-    private final TestSelectionStep.Coverage coverage;
+    private final Coverage coverage;
 
     private final String testIdentifier;
 
     private final String targetFileName;
 
     public CoverageFileElementVisitor(
-            TestSelectionStep.Coverage coverage,
+            Coverage coverage,
             String targetFileName,
             String testIdentifier) {
         this.targetFileName = targetFileName;
         this.testIdentifier = testIdentifier;
         this.coverage = coverage;
-        if (!this.coverage.containsKey(this.testIdentifier)) {
-            this.coverage.put(this.testIdentifier, new HashMap<>());
+        if (!this.coverage.containsTestIdentifier(this.testIdentifier)) {
+            this.coverage.test_coverages.add(new TestCoverage(this.testIdentifier));
         }
-        this.coverage.get(this.testIdentifier).put(this.targetFileName, new ArrayList<>());
+        this.coverage.findByTestIdentifier(this.testIdentifier).file_coverages.add(new FileCoverage(this.targetFileName));
     }
 
     @Override
@@ -58,7 +55,9 @@ public class CoverageFileElementVisitor implements FileElementVisitor {
 
     private void addCoveredLine(ElementInfo info) {
         if (info.getHitCount() > 0) {
-            this.coverage.get(this.testIdentifier).get(this.targetFileName).add(info.getStartLine());
+            this.coverage.findByTestIdentifier(this.testIdentifier)
+                    .findFileCoverageByFilename(this.targetFileName)
+                    .covered_lines.add(info.getStartLine());
         }
     }
 }

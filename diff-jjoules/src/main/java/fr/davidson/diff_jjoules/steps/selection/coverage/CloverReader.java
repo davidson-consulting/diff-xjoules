@@ -30,8 +30,8 @@ public class CloverReader {
 
     private static final String DATABASE_FILE = "/clover.db";
 
-    public TestSelectionStep.Coverage read(String pathToProject) {
-        final TestSelectionStep.Coverage coverage = new TestSelectionStep.Coverage();
+    public Coverage read(String pathToProject) {
+        final Coverage coverage = new Coverage();
         try {
             final CloverDatabase cloverDatabase = this.getCloverDatabase(pathToProject);
             for (PackageInfo packageInfo : cloverDatabase.getFullModel().getAllPackages()) {
@@ -43,13 +43,13 @@ public class CloverReader {
         return coverage;
     }
 
-    private void processPackage(String pathToProject, CloverDatabase database, FullPackageInfo packageInfo, TestSelectionStep.Coverage coverage) {
+    private void processPackage(String pathToProject, CloverDatabase database, FullPackageInfo packageInfo, Coverage coverage) {
         for (FileInfo file : packageInfo.getFiles()) {
             processFile(pathToProject, database, (FullFileInfo)file, coverage);
         }
     }
 
-    private void processFile(String pathToProject, CloverDatabase database, FullFileInfo fileInfo, TestSelectionStep.Coverage coverage) {
+    private void processFile(String pathToProject, CloverDatabase database, FullFileInfo fileInfo, Coverage coverage) {
         final Set<TestCaseInfo> testHits = database.getTestHits(fileInfo);
         final FullFileInfo fcopy = fileInfo.copy((FullPackageInfo) fileInfo.getContainingPackage(), HasMetricsFilter.ACCEPT_ALL);
         final Set<TestCaseInfo> testSet = Sets.newHashSet();
