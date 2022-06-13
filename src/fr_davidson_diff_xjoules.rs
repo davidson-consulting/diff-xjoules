@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use utils::files_utils::read_yaml;
+use utils::yaml_utils::read_yaml;
 
 pub mod utils;
 
