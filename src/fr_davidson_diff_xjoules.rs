@@ -7,6 +7,9 @@ use self::{utils::coverage::Coverage, steps::test_selection};
 pub mod steps;
 pub mod utils;
 
+pub const SUFFIX_V1: &str = "_v1";
+pub const SUFFIX_V2: &str = "_v2";
+
 #[derive(Deserialize)]
 pub struct Configuration {
     pub path_v1: String,
@@ -39,6 +42,6 @@ impl DiffXJoulesData {
 pub fn run(path_to_configuration_yaml_file: String) {
     let configuration = Configuration::new(path_to_configuration_yaml_file);
     let diff_xjoules_data = DiffXJoulesData::new();
-    
+
     test_selection::run(configuration, diff_xjoules_data);
 }
