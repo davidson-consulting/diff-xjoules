@@ -2,7 +2,7 @@ use serde_derive::Deserialize;
 
 use utils::yaml_utils::read_yaml;
 
-use self::{utils::coverage::Coverage, steps::test_selection};
+use self::{utils::coverage::Coverage, steps::test_selection::{self, TestSelection}};
 
 pub mod steps;
 pub mod utils;
@@ -14,9 +14,9 @@ pub const SUFFIX_V2: &str = "_v2";
 pub struct Configuration {
     pub path_v1: String,
     pub path_v2: String,
+    pub src_folder: String,
+    pub path_output_dir: String,
     pub cmd_coverage: String,
-    pub path_output_coverage: String,
-    
 }
 
 impl Configuration {
@@ -27,7 +27,9 @@ impl Configuration {
 
 pub struct DiffXJoulesData {
     pub coverage_v1: Option<Coverage>,
-    pub coverage_v2: Option<Coverage>
+    pub coverage_v2: Option<Coverage>,
+    pub diff: Option<String>,
+    pub test_selection: Option<TestSelection>
 }
 
 impl DiffXJoulesData {
@@ -35,6 +37,8 @@ impl DiffXJoulesData {
         return DiffXJoulesData { 
             coverage_v1: None,
             coverage_v2: None,
+            diff: None,
+            test_selection: None
          };
     }
 }
