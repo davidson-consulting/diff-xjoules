@@ -24,14 +24,14 @@ pub struct FileCoverage {
     pub covered_lines: Vec<i16>
 }
 
-pub fn run_coverage_cmd(path_to_project: String, coverage_cmd: String, output_path: String) -> Coverage {
+pub fn run_coverage_cmd(path_to_project: &str, coverage_cmd: &str, output_path: String) -> Coverage {
     let mut handlebars = Handlebars::new();
     handlebars
         .register_template_string("coverage_cmd", coverage_cmd)
         .unwrap();
     let mut data = HashMap::new();
     data.insert("path_project", path_to_project);
-    data.insert("output_path", output_path.clone());
+    data.insert("output_path", &output_path);
     command::run_command(handlebars.render("coverage_cmd", &data).unwrap());
-    return json_utils::read_json::<Coverage>(output_path.clone());
+    return json_utils::read_json::<Coverage>(&output_path);
 }
