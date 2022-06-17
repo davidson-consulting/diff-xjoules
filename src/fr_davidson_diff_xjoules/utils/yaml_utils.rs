@@ -17,6 +17,6 @@ mod tests {
         let configuration = read_yaml::<Configuration>(String::from("test_resources/configuration_file_example.yaml"));
         assert_eq!("/tmp/v1", configuration.path_v1);
         assert_eq!("/tmp/v2", configuration.path_v2);
-        assert_eq!("java -jar my.jar --task coverage --path ${path_project}", configuration.cmd_coverage);
+        assert_eq!("java -jar my.jar --task coverage --path ${path_project}", configuration.coverage_cmd);
     }
 }

@@ -32,6 +32,17 @@ pub fn run_coverage_cmd(path_to_project: &str, coverage_cmd: &str, output_path: 
     let mut data = HashMap::new();
     data.insert("path_project", path_to_project);
     data.insert("output_path", &output_path);
-    command::run_command(handlebars.render("coverage_cmd", &data).unwrap());
+    command::run_command(&handlebars.render("coverage_cmd", &data).unwrap());
     return json_utils::read_json::<Coverage>(&output_path);
+}
+
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_run_coverage_cmd() {
+        assert_eq!(0, 1);
+    }
+
 }

@@ -16,7 +16,7 @@ pub struct Configuration {
     pub path_v2: String,
     pub src_folder: String,
     pub path_output_dir: String,
-    pub cmd_coverage: String,
+    pub coverage_cmd: String,
 }
 
 impl Configuration {
