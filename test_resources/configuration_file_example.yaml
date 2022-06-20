@@ -1,3 +1,6 @@
-path_v1: "/tmp/v1"
-path_v2: "/tmp/v2"
-cmd_coverage: "java -jar my.jar --task coverage --path ${path_project}"
+path_v1: "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"
+path_v2: "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2"
+path_output_dir: "target"
+src_folder: "src/main/java"
+
+coverage_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar -p {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}"

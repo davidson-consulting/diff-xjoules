@@ -1,0 +1,25 @@
+diff -r diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/src/main/java/fr/davidson/App.java diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/src/main/java/fr/davidson/App.java
+47a48
+>         System.out.println("Added");
+52d52
+<         System.out.println("ToRemove");
+56c56
+<         System.out.println("ToUpdate");
+---
+>         System.out.println("Updated");
+60d59
+<         System.out.println("ToRemove");
+63a63
+>         System.out.println("Added");
+67a68
+>         System.out.println("Added");
+72d72
+<         System.out.println("ToRemove");
+76c76
+<         System.out.println("ToUpdate");
+---
+>         System.out.println("Updated");
+80d79
+<         System.out.println("ToRemove");
+83a83
+>         System.out.println("Added");
