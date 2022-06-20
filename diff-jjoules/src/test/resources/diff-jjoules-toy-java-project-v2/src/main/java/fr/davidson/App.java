@@ -45,42 +45,42 @@ public class App {
 
     public void addedStatement() {
         System.out.println("");
+        System.out.println("Added");
     }
 
     public void removedStatement() {
         System.out.println("");
-        System.out.println("ToRemove");
     }
 
     public void updatedStatement() {
-        System.out.println("ToUpdate");
+        System.out.println("Updated");
     }
 
     public void addedAndRemovedStatement() {
-        System.out.println("ToRemove");
         System.out.println("");
         System.out.println("");
         System.out.println("");
+        System.out.println("Added");
     }
 
     public void notExecutedByTestAdded() {
         System.out.println("");
+        System.out.println("Added");
     }
 
     public void notExecutedByTestRemoved() {
         System.out.println("");
-        System.out.println("ToRemove");
     }
 
     public void notExecutedByTestUpdated() {
-        System.out.println("ToUpdate");
+        System.out.println("Updated");
     }
 
     public void notExecutedByTestAddedAndRemoved() {
-        System.out.println("ToRemove");
         System.out.println("");
         System.out.println("");
         System.out.println("");
+        System.out.println("Added");
     }
 
 }

@@ -1,6 +1,5 @@
 package fr.davidson.diff_jjoules.tasks.test_coverage.clover;
 
-import fr.davidson.diff_jjoules.tasks.test_coverage.clover.CloverReader;
 import fr.davidson.diff_jjoules.tasks.test_coverage.coverage.Coverage;
 import org.junit.jupiter.api.Test;
 

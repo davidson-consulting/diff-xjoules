@@ -20,7 +20,7 @@ public class TestCoverageTaskTest {
     @Test
     public void test() {
         final Configuration configuration = new Configuration();
-        configuration.setPathToProject(new File("src/test/resources/diff-jjoules-toy-java-project").getAbsolutePath());
+        configuration.setPathToProject(new File("src/test/resources/diff-jjoules-toy-java-project-v2").getAbsolutePath());
         configuration.setOutputPath("target/coverage.json");
         new TestCoverageTask().run(configuration);
         final Coverage coverage = JSONUtils.read("target/coverage.json", Coverage.class);
