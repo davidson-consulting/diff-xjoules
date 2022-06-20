@@ -23,6 +23,10 @@ public class MethodFullQualifiedName extends ClassFullQualifiedName {
         this(methodFullQualifiedName.split("#")[0], methodFullQualifiedName.split("#")[1]);
     }
 
+    public String getClassFullQualifiedName() {
+        return super.toString();
+    }
+
     public String toString() {
         return super.toString() + "#" + this.methodName;
     }

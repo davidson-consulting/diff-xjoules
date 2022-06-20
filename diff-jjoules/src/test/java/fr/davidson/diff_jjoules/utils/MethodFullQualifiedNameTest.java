@@ -18,6 +18,7 @@ public class MethodFullQualifiedNameTest {
         assertEquals("MethodFullQualifiedNameTest", methodFullQualifiedName.className);
         assertEquals("testConstructorSingle", methodFullQualifiedName.methodName);
         assertEquals("fr.davidson.diff_jjoules.utils.MethodFullQualifiedNameTest#testConstructorSingle", methodFullQualifiedName.toString());
+        assertEquals("fr.davidson.diff_jjoules.utils.MethodFullQualifiedNameTest", methodFullQualifiedName.getClassFullQualifiedName());
     }
 
     @Test
@@ -27,6 +28,7 @@ public class MethodFullQualifiedNameTest {
         assertEquals("MethodFullQualifiedNameTest", methodFullQualifiedName.className);
         assertEquals("testConstructorMethod", methodFullQualifiedName.methodName);
         assertEquals("fr.davidson.diff_jjoules.utils.MethodFullQualifiedNameTest#testConstructorMethod", methodFullQualifiedName.toString());
+        assertEquals("fr.davidson.diff_jjoules.utils.MethodFullQualifiedNameTest", methodFullQualifiedName.getClassFullQualifiedName());
     }
 
     @Test
@@ -36,6 +38,7 @@ public class MethodFullQualifiedNameTest {
         assertEquals("MethodFullQualifiedNameTest", methodFullQualifiedName.className);
         assertEquals("testConstructor", methodFullQualifiedName.methodName);
         assertEquals("fr.davidson.diff_jjoules.utils.MethodFullQualifiedNameTest#testConstructor", methodFullQualifiedName.toString());
+        assertEquals("fr.davidson.diff_jjoules.utils.MethodFullQualifiedNameTest", methodFullQualifiedName.getClassFullQualifiedName());
     }
 
 }
