@@ -11,3 +11,4 @@ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/target/
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/diff-jjoules-toy-java-project.iml
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/classpath
 diff-jjoules/spooned
+diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/*.backup
