@@ -61,7 +61,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- <dependency>
+        <dependency>
              <groupId>org.junit.jupiter</groupId>
              <artifactId>junit-jupiter-api</artifactId>
              <version>5.8.2</version>
@@ -80,7 +80,7 @@
              <artifactId>junit-platform-runner</artifactId>
              <version>1.8.2</version>
              <scope>test</scope>
-         </dependency>-->
+         </dependency>
 
         <!--<dependency>
             <groupId>fr.inria.gforge.spoon</groupId>
@@ -179,6 +179,7 @@
                             <directory>src/test/resources/</directory>
                             <includes>
                                 <include>diff-jjoules-toy-java-project/target/</include>
+                                <include>diff-jjoules-toy-java-project-v2/target/</include>
                             </includes>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
