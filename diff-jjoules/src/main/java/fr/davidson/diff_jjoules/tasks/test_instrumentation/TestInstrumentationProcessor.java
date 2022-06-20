@@ -44,7 +44,7 @@ public class TestInstrumentationProcessor extends AbstractProcessor<CtMethod<?>>
         this.instrumentedTypes = new HashSet<>();
         this.testsToBeInstrumented = testsList;
         this.testMethodsPerTestClassToBeInstrumented = new HashMap<>();
-        for (String testIdentifier : testsList.testSelection) {
+        for (String testIdentifier : testsList.test_selection) {
             final MethodFullQualifiedName methodFullQualifiedName = new MethodFullQualifiedName(testIdentifier);
             final String classFullQualifiedName = methodFullQualifiedName.getClassFullQualifiedName();
             if (!this.testMethodsPerTestClassToBeInstrumented.containsKey(classFullQualifiedName)) {

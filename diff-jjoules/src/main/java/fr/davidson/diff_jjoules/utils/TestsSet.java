@@ -9,13 +9,25 @@ import java.util.HashSet;
  */
 public class TestsSet {
 
-    public final HashSet<String> testSelection;
-
-    public TestsSet() {
-        this.testSelection = new HashSet<>();
-    }
+    public final HashSet<String> test_selection;
 
     public TestsSet(HashSet<String> testSelection) {
-        this.testSelection = testSelection;
+        this.test_selection = testSelection;
+    }
+
+    public String[] getTestClassNames() {
+        return test_selection.stream()
+                .map(testIdentifier ->
+                        new MethodFullQualifiedName(testIdentifier).getClassFullQualifiedName()
+
+                ).distinct()
+                .toArray(String[]::new);
+    }
+
+    public String[] getTestMethodNames() {
+        return test_selection.stream()
+                .map(testIdentifier ->
+                        new MethodFullQualifiedName(testIdentifier).methodName
+                ).toArray(String[]::new);
     }
 }

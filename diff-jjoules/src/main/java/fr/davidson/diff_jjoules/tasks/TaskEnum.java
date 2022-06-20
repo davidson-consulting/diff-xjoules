@@ -1,6 +1,7 @@
 package fr.davidson.diff_jjoules.tasks;
 
 import fr.davidson.diff_jjoules.tasks.test_coverage.TestCoverageTask;
+import fr.davidson.diff_jjoules.tasks.test_execution.TestExecutionTask;
 import fr.davidson.diff_jjoules.tasks.test_instrumentation.TestInstrumentationTask;
 
 /**
@@ -24,7 +25,7 @@ public enum TaskEnum {
     TEST_EXECUTION() {
         @Override
         public Task getTask() {
-            throw new UnsupportedOperationException();
+            return new TestExecutionTask();
         }
     };
     public abstract Task getTask();
