@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use serde_derive::Deserialize;
 use handlebars::Handlebars;
 
@@ -24,11 +26,11 @@ pub struct FileCoverage {
     pub covered_lines: Vec<i16>
 }
 
-pub fn find_test_executing_lines(coverage: &Coverage, filename: &str, lines: &Vec<i16>) -> Vec<String> {
-    let mut tests = Vec::new();
+pub fn find_test_executing_lines(coverage: &Coverage, filename: &str, lines: &Vec<i16>) -> HashSet<String> {
+    let mut tests = HashSet::new();
     for (_, test_coverage) in coverage.test_coverages.iter().enumerate() {
         if execute_lines_of_file(&test_coverage, filename, lines) {
-            tests.push(test_coverage.test_identifier.clone());
+            tests.insert(test_coverage.test_identifier.clone());
         }
     }
     return tests;
@@ -78,15 +80,15 @@ mod tests {
         lines.push(23);
         let mut selected_tests = find_test_executing_lines(&coverage, "src/main/java/fr/davidson/App.java", &lines);
         assert_eq!(2, selected_tests.len());
-        assert_eq!("fr.davidson.AppTest#testRandomQuickSort", selected_tests[0]);
-        assert_eq!("fr.davidson.AppTest#testRandomQuickSortLarge", selected_tests[1]);
+        assert!(selected_tests.contains("fr.davidson.AppTest#testRandomQuickSort"));
+        assert!(selected_tests.contains("fr.davidson.AppTest#testRandomQuickSortLarge"));
         lines = Vec::new();
         lines.push(47);
         lines.push(51);
         lines.push(52);
         selected_tests = find_test_executing_lines(&coverage, "src/main/java/fr/davidson/App.java", &lines);
-        assert_eq!("fr.davidson.AppTest#testAddedStatement", selected_tests[0]);
-        assert_eq!("fr.davidson.AppTest#testRemovedStatement", selected_tests[1]);
+        assert!(selected_tests.contains("fr.davidson.AppTest#testAddedStatement"));
+        assert!(selected_tests.contains("fr.davidson.AppTest#testRemovedStatement"));
         lines = Vec::new();
         lines.push(76);
         selected_tests = find_test_executing_lines(&coverage, "src/main/java/fr/davidson/App.java", &lines);
