@@ -6,7 +6,7 @@ use crate::fr_davidson_diff_xjoules::{
     utils::{
         command::{run_command_redirect_to_file},
         coverage::{find_test_executing_lines, run_coverage_cmd, Coverage, COVERAGE_FILENAME},
-        json_utils,
+        json_utils::{self, JSON_EXTENSION},
     },
     Configuration, DiffXJoulesData, SUFFIX_V1, SUFFIX_V2,
 };
@@ -54,8 +54,8 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
     ));
     json_utils::write_json(
         &format!(
-            "{}/{}",
-            &configuration.path_output_dir, TEST_SELECTION_FILENAME
+            "{}/{}{}",
+            &configuration.path_output_dir, TEST_SELECTION_FILENAME, JSON_EXTENSION
         ),
         diff_xjoules_data.test_selection.as_ref(),
     );
@@ -170,7 +170,7 @@ fn handle_diff_operation(
 
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::utils::{json_utils::{self, read_json}, command::run_command};
+    use crate::fr_davidson_diff_xjoules::utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command};
 
     #[test]
     fn test_run() {
@@ -208,7 +208,7 @@ mod tests {
                 .len()
         );
         let test_selection =
-            read_json::<TestSelection>(&format!("{}/{}", "target", TEST_SELECTION_FILENAME));
+            read_json::<TestSelection>(&format!("{}/{}{}", "target", TEST_SELECTION_FILENAME, JSON_EXTENSION));
         assert_eq!(4, test_selection.test_selection.len());
     }
 
@@ -264,8 +264,8 @@ mod tests {
 
     #[test]
     fn test_select_tests() {
-        let coverage_v1: Coverage = json_utils::read_json::<Coverage>("test_resources/coverage_v1");
-        let coverage_v2: Coverage = json_utils::read_json::<Coverage>("test_resources/coverage_v2");
+        let coverage_v1: Coverage = json_utils::read_json::<Coverage>("test_resources/coverage_v1.json");
+        let coverage_v2: Coverage = json_utils::read_json::<Coverage>("test_resources/coverage_v2.json");
         let diff = fs::read_to_string("test_resources/expected_diff").unwrap();
         let test_selection = select_tests(
             "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project",

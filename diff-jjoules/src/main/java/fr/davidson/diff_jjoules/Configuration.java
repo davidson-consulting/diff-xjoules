@@ -24,7 +24,7 @@ public class Configuration {
     @CommandLine.Option(names = {"-p", "--path-to-project"}, description = "Path to the program.", required = true)
     private String pathToProject;
 
-    @CommandLine.Option(names = {"-o", "--output-path"}, description = "Path to the output.", required = true)
+    @CommandLine.Option(names = {"-o", "--output-path"}, description = "Path to the output.", required = false)
     private String outputPath;
 
     @CommandLine.Option(names = {"-t", "--tests-set"}, description = "Path to the json file of tests set.", required = false)
@@ -33,7 +33,7 @@ public class Configuration {
     @CommandLine.Option(
             names = "--wrapper",
             required = false,
-            defaultValue = "maven",
+            defaultValue = "MAVEN",
             description = "Specify the task to perform." +
                     "Valid values: ${COMPLETION-CANDIDATES}." +
                     "Default value: ${DEFAULT_VALUE}"

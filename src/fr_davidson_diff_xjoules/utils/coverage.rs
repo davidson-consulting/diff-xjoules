@@ -6,6 +6,8 @@ use std::collections::HashMap;
 
 use crate::fr_davidson_diff_xjoules::utils::{command, json_utils};
 
+use super::json_utils::JSON_EXTENSION;
+
 pub const COVERAGE_FILENAME: &str = "coverage";
 
 #[derive(Serialize, Deserialize)]
@@ -67,13 +69,13 @@ pub fn run_coverage_cmd(
     data.insert("path_project", path_to_project);
     data.insert("output_path", &output_path);
     command::run_templated_command(coverage_cmd, &data);
-    return json_utils::read_json::<Coverage>(&output_path);
+    return json_utils::read_json::<Coverage>(&format!("{}{}", output_path, JSON_EXTENSION));
 }
 
 mod tests {
-    use super::*;
     use crate::fr_davidson_diff_xjoules::utils::json_utils::read_json;
-
+    use super::*;
+ 
     #[test]
     fn test_run_coverage_cmd() {
         assert_eq!(0, 1);
@@ -81,7 +83,7 @@ mod tests {
 
     #[test]
     fn test_find_test_executing_lines() {
-        let coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1");
+        let coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1.json");
         let mut lines = Vec::new();
         lines.push(21);
         lines.push(22);
