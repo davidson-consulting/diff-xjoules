@@ -82,7 +82,7 @@
              <scope>test</scope>
          </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>fr.inria.gforge.spoon</groupId>
             <artifactId>spoon-core</artifactId>
             <version>10.1.1</version>
@@ -91,9 +91,8 @@
         <dependency>
             <groupId>eu.stamp-project</groupId>
             <artifactId>test-runner</artifactId>
-            <version>SNAPSHOT</version>
+            <version>4.11</version>
         </dependency>
--->
     </dependencies>
 
     <build>
