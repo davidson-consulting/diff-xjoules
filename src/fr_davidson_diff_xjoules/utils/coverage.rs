@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use serde_derive::Deserialize;
+use serde_derive::{Serialize, Deserialize};
 use handlebars::Handlebars;
 
 use std::collections::HashMap;
@@ -9,18 +9,18 @@ use crate::fr_davidson_diff_xjoules::utils::{command, json_utils};
 
 pub const COVERAGE_FILENAME: &str = "coverage";
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Coverage {
     pub test_coverages: Vec<TestCoverage>
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct TestCoverage {
     pub test_identifier: String,
     pub file_coverages: Vec<FileCoverage>
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct FileCoverage {
     pub filename: String,
     pub covered_lines: Vec<i16>

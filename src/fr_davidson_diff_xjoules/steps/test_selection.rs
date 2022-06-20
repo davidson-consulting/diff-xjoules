@@ -1,5 +1,7 @@
 use std::{collections::HashSet, fs};
 
+use serde_derive::{Serialize, Deserialize};
+
 use crate::fr_davidson_diff_xjoules::{
     utils::{
         command::{run_command, run_command_redirect_to_file},
@@ -10,6 +12,7 @@ use crate::fr_davidson_diff_xjoules::{
 
 const DIFF_FILENAME: &str = "diff";
 
+#[derive(Serialize, Deserialize)]
 pub struct TestSelection {
     pub test_selection: HashSet<String>,
 }
