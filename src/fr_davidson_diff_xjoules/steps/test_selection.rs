@@ -1,16 +1,18 @@
 use std::{collections::HashSet, fs};
 
-use serde_derive::{Serialize, Deserialize};
+use serde_derive::{Deserialize, Serialize};
 
 use crate::fr_davidson_diff_xjoules::{
     utils::{
         command::{run_command, run_command_redirect_to_file},
         coverage::{find_test_executing_lines, run_coverage_cmd, Coverage, COVERAGE_FILENAME},
+        json_utils,
     },
     Configuration, DiffXJoulesData, SUFFIX_V1, SUFFIX_V2,
 };
 
 const DIFF_FILENAME: &str = "diff";
+const TEST_SELECTION_FILENAME: &str = "test_selection";
 
 #[derive(Serialize, Deserialize)]
 pub struct TestSelection {
@@ -50,7 +52,13 @@ pub fn run(configuration: Configuration, diff_xjoules_data: &mut DiffXJoulesData
         diff_xjoules_data.coverage_v2.as_ref().unwrap(),
         &diff_xjoules_data.diff.as_ref().unwrap(),
     ));
-    // TODO write test_selection in a json file
+    json_utils::write_json(
+        &format!(
+            "{}/{}",
+            &configuration.path_output_dir, TEST_SELECTION_FILENAME
+        ),
+        diff_xjoules_data.test_selection.as_ref(),
+    );
 }
 
 fn compute_coverage(
@@ -162,7 +170,7 @@ fn handle_diff_operation(
 
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::utils::json_utils;
+    use crate::fr_davidson_diff_xjoules::utils::json_utils::{self, read_json};
 
     #[test]
     fn test_run() {
@@ -198,6 +206,9 @@ mod tests {
                 .test_selection
                 .len()
         );
+        let test_selection =
+            read_json::<TestSelection>(&format!("{}/{}", "target", TEST_SELECTION_FILENAME));
+        assert_eq!(4, test_selection.test_selection.len());
     }
 
     #[test]
