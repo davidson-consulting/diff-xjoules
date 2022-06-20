@@ -1,0 +1,8 @@
+{
+  "test_selection": [
+    "fr.davidson.AppTest#testRemovedStatement",
+    "fr.davidson.AppTest#testAddedStatement",
+    "fr.davidson.AppTest#testUpdatedStatement",
+    "fr.davidson.AppTest#testAddedAndRemovedStatement"
+  ]
+}
