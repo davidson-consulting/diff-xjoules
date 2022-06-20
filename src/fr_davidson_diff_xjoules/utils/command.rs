@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+use handlebars::Handlebars;
 use std::process::{Command, ExitStatus, Stdio};
 use std::fs::File;
 use std::os::unix::io::{FromRawFd, IntoRawFd};
@@ -32,6 +34,14 @@ pub fn run_command_redirect_to_file(str_command: &str, path_file: &str) -> ExitS
         .expect("Could not wait for the command!");
 }
 
+pub fn run_templated_command(templated_command: &str,  data: &HashMap<&str, &str>) -> ExitStatus {
+    let mut handlebars = Handlebars::new();
+    handlebars
+        .register_template_string("templated_command", templated_command)
+        .unwrap();
+    return run_command(&handlebars.render("templated_command", data).unwrap());
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -52,5 +62,13 @@ mod tests {
         assert!(splitted_content.any(|element| element.eq(".git")));
         assert!(splitted_content.any(|element| element.eq("src")));
         
+    }
+
+    #[test]
+    fn test_run_templated_command() {
+        let mut data = HashMap::new();
+        data.insert("option", "-a");
+        let exit_status = run_templated_command("ls {{ option }}", &data);
+        assert!(exit_status.success());
     }
 }
