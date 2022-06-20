@@ -1,6 +1,7 @@
 package fr.davidson.diff_jjoules.tasks;
 
 import fr.davidson.diff_jjoules.tasks.test_coverage.TestCoverageTask;
+import fr.davidson.diff_jjoules.tasks.test_instrumentation.TestInstrumentationTask;
 
 /**
  * @author Benjamin DANGLOT
@@ -17,7 +18,7 @@ public enum TaskEnum {
     TEST_INSTRUMENTATION() {
         @Override
         public Task getTask() {
-            throw new UnsupportedOperationException();
+            return new TestInstrumentationTask();
         }
     },
     TEST_EXECUTION() {

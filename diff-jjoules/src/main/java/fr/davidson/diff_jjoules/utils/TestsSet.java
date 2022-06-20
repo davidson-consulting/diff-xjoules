@@ -7,5 +7,15 @@ import java.util.HashSet;
  * benjamin.danglot@davidson.fr
  * on 20/06/2022
  */
-public class TestsSet extends HashSet<String> {
+public class TestsSet {
+
+    public final HashSet<String> testSelection;
+
+    public TestsSet() {
+        this.testSelection = new HashSet<>();
+    }
+
+    public TestsSet(HashSet<String> testSelection) {
+        this.testSelection = testSelection;
+    }
 }
