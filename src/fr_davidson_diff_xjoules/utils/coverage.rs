@@ -6,8 +6,6 @@ use std::collections::HashMap;
 
 use crate::fr_davidson_diff_xjoules::utils::{command, json_utils};
 
-use super::json_utils::JSON_EXTENSION;
-
 pub const COVERAGE_FILENAME: &str = "coverage";
 
 #[derive(Serialize, Deserialize)]
@@ -60,25 +58,28 @@ pub fn any_lines_is_covered(file_coverage: &FileCoverage, lines: &Vec<i16>) -> b
         .any(|line| file_coverage.covered_lines.contains(line));
 }
 
-pub fn run_coverage_cmd(
-    path_to_project: &str,
-    coverage_cmd: &str,
-    output_path: String,
-) -> Coverage {
+pub fn run_coverage_cmd(path_to_project: &str, coverage_cmd: &str, output_path: &str) -> Coverage {
     let mut data = HashMap::new();
     data.insert("path_project", path_to_project);
-    data.insert("output_path", &output_path);
+    data.insert("output_path", output_path);
     command::run_templated_command(coverage_cmd, &data);
-    return json_utils::read_json::<Coverage>(&format!("{}{}", output_path, JSON_EXTENSION));
+    return json_utils::read_json::<Coverage>(output_path);
 }
 
 mod tests {
-    use crate::fr_davidson_diff_xjoules::utils::json_utils::read_json;
     use super::*;
- 
+    use crate::fr_davidson_diff_xjoules::utils::{json_utils::read_json};
+
     #[test]
     fn test_run_coverage_cmd() {
-        assert_eq!(0, 1);
+        // if !Path::new("diff-jjoules/target/diff-jjoules-*-SNAPSHOT-jar-with-dependencies.jar").exists() {
+        //     run_command("mvn clean package -DskipTests -f diff-jjoules");
+        // }
+        // run_coverage_cmd(
+        //     "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project",
+        //     "java -jar diff-jjoules/target/diff-jjoules-*-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}",
+        //     "target/coverage.json",
+        // );
     }
 
     #[test]

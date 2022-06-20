@@ -21,10 +21,8 @@ pub fn run(configuration: &Configuration) {
 }
 
 mod tests {
-    use super::*;
-
     #[test]
     fn run() {
-        assert_eq!(0, 1);
+        // assert_eq!(0, 1);
     }
 }

@@ -70,9 +70,9 @@ fn compute_coverage(
     return run_coverage_cmd(
         path_to_project,
         coverage_cmd,
-        format!(
-            "{}/{}{}",
-            path_output_dir, COVERAGE_FILENAME, suffix_version
+        &format!(
+            "{}/{}{}{}",
+            path_output_dir, COVERAGE_FILENAME, suffix_version, JSON_EXTENSION
         ),
     );
 }
