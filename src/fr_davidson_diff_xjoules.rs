@@ -2,7 +2,7 @@ use serde_derive::Deserialize;
 
 use utils::yaml_utils::read_yaml;
 
-use self::{utils::coverage::Coverage, steps::test_selection::{self, TestSelection}};
+use self::{utils::coverage::Coverage, steps::{test_selection::{self, TestSelection}, test_instrumentation}};
 
 pub mod steps;
 pub mod utils;
@@ -17,6 +17,7 @@ pub struct Configuration {
     pub src_folder: String,
     pub path_output_dir: String,
     pub coverage_cmd: String,
+    pub instrumentation_cmd: String
 }
 
 impl Configuration {
@@ -45,7 +46,8 @@ impl DiffXJoulesData {
 
 pub fn run(path_to_configuration_yaml_file: String) {
     let configuration = Configuration::new(path_to_configuration_yaml_file);
-    let diff_xjoules_data = DiffXJoulesData::new();
+    let mut diff_xjoules_data = DiffXJoulesData::new();
 
-    test_selection::run(configuration, diff_xjoules_data);
+    test_selection::run(&configuration, &mut diff_xjoules_data);
+    test_instrumentation::run(&configuration);
 }
