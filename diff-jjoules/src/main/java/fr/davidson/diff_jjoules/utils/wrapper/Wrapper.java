@@ -27,4 +27,6 @@ public interface Wrapper {
 
     public void injectDependencies(String pathToRootDir);
 
+    public void runClover(String pathToRootDif);
+
 }

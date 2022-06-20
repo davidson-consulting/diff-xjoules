@@ -125,6 +125,15 @@ public class MavenWrapper implements Wrapper {
         new DependencyInjection(pathToRootDir).inject();
     }
 
+    public void runClover(String pathToRootOfProject) {
+        runGoals(
+                pathToRootOfProject,
+                "clean",
+                "org.openclover:clover-maven-plugin:4.4.1:setup",
+                "test"
+        );
+    }
+
     public void runGoals(String pathToRootDir, String... goals) {
         runGoals(pathToRootDir, new Properties(), goals);
     }
@@ -145,7 +154,6 @@ public class MavenWrapper implements Wrapper {
         properties.setProperty("jacoco.skip", "true");
         properties.setProperty("animal.sniffer.skip", "true");
         properties.setProperty("proguard.skip", "true");
-        properties.setProperty("java.locale.providers", "COMPAT,CLDR,SPI");
 
         invocationRequest.setProperties(properties);
         LOGGER.info("mvn -f {} {} {}",

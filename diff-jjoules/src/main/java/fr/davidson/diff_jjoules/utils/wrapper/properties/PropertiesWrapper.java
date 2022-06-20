@@ -143,4 +143,8 @@ public class PropertiesWrapper implements Wrapper {
 //            throw new RuntimeException(e);
 //        }
     }
+
+    public void runClover(String pathToRootDif) {
+        throw new UnsupportedOperationException();
+    }
 }

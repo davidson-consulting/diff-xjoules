@@ -17,7 +17,7 @@ public class TestCoverageTask implements Task {
     @Override
     public void run(Configuration configuration) {
         final String pathToProject = configuration.getPathToProject();
-        new CloverExecutor().instrumentAndRunTest(pathToProject);
+        new CloverExecutor().instrumentAndRunTest(configuration.getWrapper(), pathToProject);
         final Coverage coverage = new CloverReader().read(pathToProject);
         JSONUtils.write(configuration.getOutputPath(), coverage);
     }
