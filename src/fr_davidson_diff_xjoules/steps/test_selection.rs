@@ -4,7 +4,7 @@ use serde_derive::{Deserialize, Serialize};
 
 use crate::fr_davidson_diff_xjoules::{
     utils::{
-        command::{run_command, run_command_redirect_to_file},
+        command::{run_command_redirect_to_file},
         coverage::{find_test_executing_lines, run_coverage_cmd, Coverage, COVERAGE_FILENAME},
         json_utils,
     },
@@ -12,7 +12,7 @@ use crate::fr_davidson_diff_xjoules::{
 };
 
 const DIFF_FILENAME: &str = "diff";
-const TEST_SELECTION_FILENAME: &str = "test_selection";
+pub const TEST_SELECTION_FILENAME: &str = "test_selection";
 
 #[derive(Serialize, Deserialize)]
 pub struct TestSelection {
@@ -27,7 +27,7 @@ impl TestSelection {
     }
 }
 
-pub fn run(configuration: Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
+pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
     diff_xjoules_data.coverage_v1 = Some(compute_coverage(
         &configuration.path_v1,
         &configuration.coverage_cmd,
@@ -170,7 +170,7 @@ fn handle_diff_operation(
 
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::utils::json_utils::{self, read_json};
+    use crate::fr_davidson_diff_xjoules::utils::{json_utils::{self, read_json}, command::run_command};
 
     #[test]
     fn test_run() {
@@ -185,9 +185,10 @@ mod tests {
             coverage_cmd: String::from(
                 "cp test_resources/coverage_v1.json target/coverage_v1.json",
             ),
+            instrumentation_cmd: String::from("")
         };
         let mut diff_xjoules_data = DiffXJoulesData::new();
-        run(configuration, &mut diff_xjoules_data);
+        run(&configuration, &mut diff_xjoules_data);
         let expected_diff_content = fs::read_to_string("test_resources/expected_diff").unwrap();
         assert_eq!(
             9,
