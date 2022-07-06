@@ -25,6 +25,7 @@ public class TestInstrumentationTask implements Task {
         final TestsSet testsSet = JSONUtils.read(configuration.getTestsSetPath(), TestsSet.class);
         final Wrapper wrapper = configuration.getWrapper();
         final String pathToProject = configuration.getPathToProject();
+        wrapper.cleanAndCompile(pathToProject);
         final String classpath = wrapper.buildClasspath(pathToProject);
 
         final TestInstrumentationProcessor processor = new TestInstrumentationProcessor(
