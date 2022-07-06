@@ -185,7 +185,10 @@ mod tests {
             coverage_cmd: String::from(
                 "cp test_resources/coverage_v1.json target/coverage_v1.json",
             ),
-            instrumentation_cmd: String::from("")
+            instrumentation_cmd: String::from(""),
+            execution_cmd: String::from(""),
+            iteration_warmup: 0,
+            iteration_run: 0
         };
         let mut diff_xjoules_data = DiffXJoulesData::new();
         run(&configuration, &mut diff_xjoules_data);
@@ -220,33 +223,8 @@ mod tests {
             "target/",
             SUFFIX_V1,
         );
-        assert_eq!(
-            "fr.davidson.AppTest#testRandomQuickSort",
-            coverage.test_coverages.get(0).unwrap().test_identifier
-        );
-        assert_eq!(
-            "src/main/java/fr/davidson/App.java",
-            coverage
-                .test_coverages
-                .get(0)
-                .unwrap()
-                .file_coverages
-                .get(0)
-                .unwrap()
-                .filename
-        );
-        assert_eq!(
-            21,
-            coverage
-                .test_coverages
-                .get(0)
-                .unwrap()
-                .file_coverages
-                .get(0)
-                .unwrap()
-                .covered_lines
-                .len()
-        );
+        assert_eq!(9, coverage.test_coverages.len());
+        assert!(coverage.test_coverages.iter().any(|test_coverage| test_coverage.test_identifier == "fr.davidson.AppTest#testRandomQuickSort"));
     }
 
     #[test]
