@@ -59,7 +59,8 @@ public class CloverReader {
             final CoverageData data = database.getCoverageData();
             fcopy.setDataProvider(new BitSetCoverageProvider(data.getHitsFor(testSet, fcopy), data));
             final String testIdentifier = new MethodFullQualifiedName(tci.getRuntimeTypeName(), tci.getTestName()).toString();
-            final String targetFileName = fileInfo.getPhysicalFile().getAbsolutePath().substring(pathToProject.length() + 1);
+            final String absolutePathTargetFileName = fileInfo.getPhysicalFile().getAbsolutePath();
+            final String targetFileName = absolutePathTargetFileName.substring(absolutePathTargetFileName.indexOf(pathToProject) + pathToProject.length() + 1);
             fcopy.visitElements(new CoverageFileElementVisitor(coverage, targetFileName, testIdentifier));
         }
     }
