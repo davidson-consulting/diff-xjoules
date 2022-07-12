@@ -5,9 +5,9 @@ use utils::yaml_utils::read_yaml;
 use self::{
     steps::{
         test_execution, test_instrumentation,
-        test_selection::{self, TestSelection},
+        test_selection::{self, TestSelection}, test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum},
     },
-    utils::coverage::Coverage,
+    utils::{coverage::Coverage, math},
 };
 
 pub mod steps;
@@ -27,7 +27,9 @@ pub struct Configuration {
     pub execution_cmd: String,
     pub iteration_warmup: i8,
     pub iteration_run: i8,
-    pub time_to_wait_in_millis: u64
+    pub time_to_wait_in_millis: u64,
+    pub test_filter: TestFilterEnum,
+    pub mark_strategy: MarkStrategyEnum
 }
 
 impl Configuration {
@@ -37,23 +39,27 @@ impl Configuration {
 }
 
 pub struct DiffXJoulesData {
-    pub coverage_v1: Option<Coverage>,
-    pub coverage_v2: Option<Coverage>,
-    pub diff: Option<String>,
-    pub test_selection: Option<TestSelection>,
-    pub data_v1: Option<VersionMeasure>,
-    pub data_v2: Option<VersionMeasure>,
+    pub coverage_v1: Coverage,
+    pub coverage_v2: Coverage,
+    pub diff: String,
+    pub test_selection: TestSelection,
+    pub data_v1: VersionMeasure,
+    pub data_v2: VersionMeasure,
+    pub mark_test_selection: TestSelection,
+    pub decision: bool,
 }
 
 impl DiffXJoulesData {
     pub fn new() -> DiffXJoulesData {
         return DiffXJoulesData {
-            coverage_v1: None,
-            coverage_v2: None,
-            diff: None,
-            test_selection: None,
-            data_v1: None,
-            data_v2: None,
+            coverage_v1: Coverage { test_coverages: Vec::new() },
+            coverage_v2: Coverage { test_coverages: Vec::new() },
+            diff: String::from(""),
+            test_selection: TestSelection::new(),
+            data_v1: VersionMeasure { test_measures: Vec::new() },
+            data_v2: VersionMeasure { test_measures: Vec::new() },
+            mark_test_selection: TestSelection::new(),
+            decision: false,
         };
     }
 }
@@ -76,12 +82,26 @@ impl VersionMeasure {
                 }
         }
     }
+    pub fn find_test_measure(&self, test_identifier: &str) -> Option<&TestMeasure> {
+        return self.test_measures.iter()
+            .find(|test_measure| test_measure.test_identifier == test_identifier);
+    }
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct TestMeasure {
     pub test_identifier: String,
     pub measures: Vec<Vec<Data>>,
+}
+
+impl TestMeasure {
+    pub fn get_median(&self, indicator: &str) -> f64 {
+        let mut values: Vec<i128> = self.measures.iter()
+        .map(|datas| 
+            datas.iter().find(|data| data.indicator == indicator).unwrap().value
+        ).collect();
+        return math::median(& mut values);
+    }
 }
 
 #[derive(Serialize, Deserialize)]
@@ -95,13 +115,50 @@ pub fn run(path_to_configuration_yaml_file: String) {
     let mut diff_xjoules_data = DiffXJoulesData::new();
     test_selection::run(&configuration, &mut diff_xjoules_data);
     test_instrumentation::run(&configuration);
-    test_execution::run(&configuration, diff_xjoules_data);
 }
- 
 
 mod tests {
     use super::*;
     use crate::fr_davidson_diff_xjoules::utils::json_utils;
+
+    #[test]
+    fn test_version_measure_find_test_measure() {
+        let mut version_measure_1: VersionMeasure = VersionMeasure { test_measures: Vec::new() };
+        let test_measure_test_1: TestMeasure = TestMeasure { test_identifier: String::from("test1"), measures: Vec::new() };
+        let test_measure_test_2: TestMeasure = TestMeasure { test_identifier: String::from("test2"), measures: Vec::new() };
+
+        version_measure_1.test_measures.push(test_measure_test_1);
+        version_measure_1.test_measures.push(test_measure_test_2);
+
+        assert_eq!("test1", version_measure_1.find_test_measure("test1").unwrap().test_identifier);
+        assert_eq!("test2", version_measure_1.find_test_measure("test2").unwrap().test_identifier);
+        match version_measure_1.find_test_measure("does_not_exist") {
+            Some(_) => assert!(false),
+            None => assert!(true)
+        }
+    }
+
+    #[test]
+    fn test_test_measure_get_median() {
+        let mut test_measure_test_1: TestMeasure = TestMeasure { test_identifier: String::from("test1"), measures: Vec::new() };
+        let mut data_1 = Vec::new();
+        data_1.push(Data {indicator: String::from("instructions"), value: 20});
+        data_1.push(Data {indicator: String::from("cycles"), value: 2000});
+        test_measure_test_1.measures.push(data_1);
+
+        let mut data_2 = Vec::new();
+        data_2.push(Data {indicator: String::from("instructions"), value: 10});
+        data_2.push(Data {indicator: String::from("cycles"), value: 1000});
+        test_measure_test_1.measures.push(data_2);
+
+        let mut data_3 = Vec::new();
+        data_3.push(Data {indicator: String::from("instructions"), value: 30});
+        data_3.push(Data {indicator: String::from("cycles"), value: 3000});
+        test_measure_test_1.measures.push(data_3);
+
+        assert_eq!(20.0, test_measure_test_1.get_median("instructions"));
+        assert_eq!(2000.0, test_measure_test_1.get_median("cycles"));
+    }
 
     #[test]
     fn test_version_measure_merge() {
