@@ -59,8 +59,8 @@ pub fn run(configuration: &Configuration, mut diff_xjoules_data: DiffXJoulesData
     }
     json_utils::write_json::<VersionMeasure>(&format!("{}/data_v1.json", configuration.path_output_dir), &data_v1);
     json_utils::write_json::<VersionMeasure>(&format!("{}/data_v2.json", configuration.path_output_dir), &data_v2);
-    diff_xjoules_data.data_v1 = Some(data_v1);
-    diff_xjoules_data.data_v2 = Some(data_v2);
+    diff_xjoules_data.data_v1 = data_v1;
+    diff_xjoules_data.data_v2 = data_v2;
 }
 
 pub fn warmup(configuration: &Configuration, tests_set_path: &str) {
@@ -93,7 +93,7 @@ pub fn run_and_merge_for_version(path_project: &str, test_set_path: &str, instru
 
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command};
+    use crate::fr_davidson_diff_xjoules::{utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command}, steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum}};
     use std::{fs, panic};
 
     #[test]
@@ -123,6 +123,8 @@ mod tests {
                 iteration_warmup: 1,
                 iteration_run: 3,
                 time_to_wait_in_millis: 500,
+                test_filter: TestFilterEnum::ALL,
+                mark_strategy: MarkStrategyEnum::STRICT
             };
             run(&configuration, DiffXJoulesData::new());
             let data_v1 = json_utils::read_json::<VersionMeasure>("target/data_v1.json");

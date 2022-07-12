@@ -28,30 +28,30 @@ impl TestSelection {
 }
 
 pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
-    diff_xjoules_data.coverage_v1 = Some(compute_coverage(
+    diff_xjoules_data.coverage_v1 = compute_coverage(
         &configuration.path_v1,
         &configuration.coverage_cmd,
         &configuration.path_output_dir,
         SUFFIX_V1,
-    ));
-    diff_xjoules_data.coverage_v2 = Some(compute_coverage(
+    );
+    diff_xjoules_data.coverage_v2 = compute_coverage(
         &configuration.path_v2,
         &configuration.coverage_cmd,
         &configuration.path_output_dir,
         SUFFIX_V2,
-    ));
-    diff_xjoules_data.diff = Some(compute_diff(
+    );
+    diff_xjoules_data.diff = compute_diff(
         &configuration.path_v1,
         &configuration.path_v2,
         &configuration.src_folder,
         &configuration.path_output_dir,
-    ));
-    diff_xjoules_data.test_selection = Some(select_tests(
+    );
+    diff_xjoules_data.test_selection = select_tests(
         &configuration.path_v1,
-        diff_xjoules_data.coverage_v1.as_ref().unwrap(),
-        diff_xjoules_data.coverage_v2.as_ref().unwrap(),
-        &diff_xjoules_data.diff.as_ref().unwrap(),
-    ));
+        &diff_xjoules_data.coverage_v1,
+        &diff_xjoules_data.coverage_v2,
+        &diff_xjoules_data.diff,
+    );
     json_utils::write_json(
         &format!(
             "{}/{}{}",
@@ -170,7 +170,7 @@ fn handle_diff_operation(
 
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command};
+    use crate::fr_davidson_diff_xjoules::{utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command}, steps::test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum}};
 
     #[test]
     fn test_run() {
@@ -189,25 +189,26 @@ mod tests {
             execution_cmd: String::from(""),
             iteration_warmup: 0,
             iteration_run: 0,
-            time_to_wait_in_millis: 0
+            time_to_wait_in_millis: 0,
+            test_filter: TestFilterEnum::ALL,
+            mark_strategy: MarkStrategyEnum::STRICT
         };
         let mut diff_xjoules_data = DiffXJoulesData::new();
         run(&configuration, &mut diff_xjoules_data);
         let expected_diff_content = fs::read_to_string("test_resources/expected_diff").unwrap();
         assert_eq!(
             9,
-            diff_xjoules_data.coverage_v1.unwrap().test_coverages.len()
+            diff_xjoules_data.coverage_v1.test_coverages.len()
         );
         assert_eq!(
             9,
-            diff_xjoules_data.coverage_v2.unwrap().test_coverages.len()
+            diff_xjoules_data.coverage_v2.test_coverages.len()
         );
-        assert_eq!(expected_diff_content, diff_xjoules_data.diff.unwrap());
+        assert_eq!(expected_diff_content, diff_xjoules_data.diff);
         assert_eq!(
             4,
             diff_xjoules_data
                 .test_selection
-                .unwrap()
                 .test_selection
                 .len()
         );

@@ -21,6 +21,8 @@ pub fn run(configuration: &Configuration) {
 }
 
 mod tests {
+    use crate::fr_davidson_diff_xjoules::steps::test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum};
+
     use super::*;
     use std::{fs, panic};
 
@@ -42,6 +44,8 @@ mod tests {
                 iteration_warmup: 0,
                 iteration_run: 3,
                 time_to_wait_in_millis: 0,
+                test_filter: TestFilterEnum::ALL,
+                mark_strategy: MarkStrategyEnum::STRICT
             };
             run(&configuration);
             command::run_command_redirect_to_file("git diff", "target/diff_diff-xjoules");
