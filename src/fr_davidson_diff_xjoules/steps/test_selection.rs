@@ -57,7 +57,7 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
             "{}/{}{}",
             &configuration.path_output_dir, TEST_SELECTION_FILENAME, JSON_EXTENSION
         ),
-        diff_xjoules_data.test_selection.as_ref(),
+        &diff_xjoules_data.test_selection,
     );
 }
 

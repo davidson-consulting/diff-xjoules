@@ -3,8 +3,8 @@ use serde::{de::DeserializeOwned, Serialize};
 
 pub const JSON_EXTENSION: &str = ".json";
 
-pub fn write_json<T: Serialize>(path_to_json_file: &str, data: T) {
-    let json_file_content = serde_json::to_string(&data).unwrap();
+pub fn write_json<T: Serialize>(path_to_json_file: &str, data: &T) {
+    let json_file_content = serde_json::to_string_pretty(data).unwrap();
     fs::write(path_to_json_file, json_file_content).unwrap();
 }
 
@@ -29,7 +29,7 @@ mod tests {
     #[test]
     fn test_write_json() {
         let mut coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1.json");
-        write_json::<Coverage>("target/copy_coverage.json", coverage);
+        write_json::<Coverage>("target/copy_coverage.json", &coverage);
         coverage = read_json::<Coverage>("target/copy_coverage.json");
         assert_eq!("fr.davidson.AppTest#testRandomQuickSort", coverage.test_coverages.get(0).unwrap().test_identifier);
         assert_eq!("src/main/java/fr/davidson/App.java", coverage.test_coverages.get(0).unwrap().file_coverages.get(0).unwrap().filename);
