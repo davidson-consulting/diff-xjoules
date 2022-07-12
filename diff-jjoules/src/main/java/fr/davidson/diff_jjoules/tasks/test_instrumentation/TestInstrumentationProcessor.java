@@ -23,7 +23,7 @@ import java.util.*;
  */
 public class TestInstrumentationProcessor extends AbstractProcessor<CtMethod<?>> {
 
-    public static final String FOLDER_MEASURES_PATH = "diff-jjoules-measurements";
+    public static final String FOLDER_MEASURES_PATH = "diff-measurements";
 
     public static final String OUTPUT_FILE_NAME = "measurements.json";
 
@@ -52,7 +52,7 @@ public class TestInstrumentationProcessor extends AbstractProcessor<CtMethod<?>>
             }
             this.testMethodsPerTestClassToBeInstrumented.get(classFullQualifiedName).add(methodFullQualifiedName.methodName);
         }
-        this.rootPathFolder = rootPathFolder;
+        this.rootPathFolder = new File(rootPathFolder).getAbsolutePath();
         this.testFolderPath = testFolderPath;
     }
 
