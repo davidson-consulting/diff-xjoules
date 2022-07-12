@@ -3,6 +3,7 @@ path_v2: "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2"
 path_output_dir: "target"
 src_folder: "src/main/java"
 
+time_to_wait_in_millis: 3000
 iteration_warmup: 0
 iteration_run: 3
 

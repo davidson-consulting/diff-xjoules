@@ -3,12 +3,13 @@ use std::collections::HashMap;
 use crate::fr_davidson_diff_xjoules::{
     utils::{
         command,
-        json_utils::{read_json, JSON_EXTENSION},
+        json_utils::{read_json, JSON_EXTENSION, self},
     },
     Configuration, DiffXJoulesData, VersionMeasure,
 };
 
 use rand::Rng;
+use std::{thread, time};
 
 use super::test_selection::TEST_SELECTION_FILENAME;
 
@@ -20,8 +21,10 @@ pub fn run(configuration: &Configuration, mut diff_xjoules_data: DiffXJoulesData
     let mut data_v1 = VersionMeasure { test_measures: Vec::new() };
     let mut data_v2 = VersionMeasure { test_measures: Vec::new() };
     let mut rng = rand::thread_rng();
-    
+    let time_to_wait = time::Duration::from_millis(configuration.time_to_wait_in_millis);
+
     warmup(configuration, &tests_set_path);
+    thread::sleep(time_to_wait);
     for i in 0..configuration.iteration_run {
         if rng.gen_bool(0.5) {
             run_and_merge_for_version(
@@ -51,9 +54,11 @@ pub fn run(configuration: &Configuration, mut diff_xjoules_data: DiffXJoulesData
             );
         }
         if i % 3 == 0 {
-            println!("CHILL");
+            thread::sleep(time_to_wait);
         }
     }
+    json_utils::write_json::<VersionMeasure>(&format!("{}/data_v1.json", configuration.path_output_dir), &data_v1);
+    json_utils::write_json::<VersionMeasure>(&format!("{}/data_v2.json", configuration.path_output_dir), &data_v2);
     diff_xjoules_data.data_v1 = Some(data_v1);
     diff_xjoules_data.data_v2 = Some(data_v2);
 }
@@ -89,24 +94,58 @@ pub fn run_and_merge_for_version(path_project: &str, test_set_path: &str, instru
 mod tests {
     use super::*;
     use crate::fr_davidson_diff_xjoules::utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command};
+    use std::{fs, panic};
 
     #[test]
-    fn test_run() {
-        let configuration = Configuration {
-            path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
-            path_v2: String::from(
-                "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2",
-            ),
-            src_folder: String::from("src/main/java"),
-            path_output_dir: String::from("target"),
-            coverage_cmd: String::from(
-                "cp test_resources/coverage_v1.json target/coverage_v1.json",
-            ),
-            instrumentation_cmd: String::from(""),
-            execution_cmd: String::from("java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}"),
-            iteration_warmup: 0,
-            iteration_run: 3
-        };
-        run(&configuration, DiffXJoulesData::new());
+    fn test_run_integration_with_java() {
+        run_test(|| {
+            command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");
+            command::run_command_redirect_to_file("ls diff-jjoules/target", "target/list_files");
+            let list_files = fs::read_to_string("target/list_files").unwrap();
+            let jar_filename = list_files.lines().find(|file| file.ends_with("SNAPSHOT-jar-with-dependencies.jar")).unwrap();
+
+            // copy pre-instrumented classes
+            command::run_command("cp test_resources/AppTest.java.v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/src/test/java/fr/davidson/AppTest.java");
+            command::run_command("cp test_resources/AppTest.java.v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/src/test/java/fr/davidson/AppTest.java");
+            command::run_command("cp test_resources/pom.xml diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/pom.xml");
+            command::run_command("cp test_resources/pom.xml diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/pom.xml");
+
+            let configuration = Configuration {
+                path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
+                path_v2: String::from(
+                    "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2",
+                ),
+                src_folder: String::from("src/main/java"),
+                path_output_dir: String::from("target"),
+                coverage_cmd: String::from(""),
+                instrumentation_cmd: String::from(""),
+                execution_cmd: String::from(format!("java -jar diff-jjoules/target/{} --path-to-project {} --task TEST_EXECUTION --tests-set {}" , jar_filename, "{{ path_project }}", "{{ tests_set_path }}")),
+                iteration_warmup: 1,
+                iteration_run: 3,
+                time_to_wait_in_millis: 500,
+            };
+            run(&configuration, DiffXJoulesData::new());
+            let data_v1 = json_utils::read_json::<VersionMeasure>("target/data_v1.json");
+            let data_v2 = json_utils::read_json::<VersionMeasure>("target/data_v2.json");
+            assert_eq!(4, data_v1.test_measures.len());
+            assert_eq!(4, data_v2.test_measures.len());
+            assert_eq!(3, data_v1.test_measures[0].measures.len());
+            assert_eq!(3, data_v2.test_measures[0].measures.len());
+            assert_eq!(8, data_v1.test_measures[0].measures[0].len());
+            assert_eq!(8, data_v2.test_measures[0].measures[0].len());
+        });
     }
+
+    fn run_test<T>(test: T) -> () where T: FnOnce() -> () + panic::UnwindSafe {
+        let result = panic::catch_unwind(|| {
+            test()
+        });
+        teardown();
+        assert!(result.is_ok())
+    }
+
+    fn teardown() {
+        command::run_command("git checkout -- diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/");
+    }
+
 }
