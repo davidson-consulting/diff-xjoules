@@ -1,6 +1,4 @@
-use std::collections::HashMap;
-
-use serde_derive::Deserialize;
+use serde_derive::{Deserialize, Serialize};
 
 use utils::yaml_utils::read_yaml;
 
@@ -59,23 +57,33 @@ impl DiffXJoulesData {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct VersionMeasure {
     pub test_measures: Vec<TestMeasure>,
 }
 
-#[derive(Deserialize)]
+impl VersionMeasure {
+    pub fn merge(& mut self, that: VersionMeasure) {
+        for test_measure in that.test_measures.into_iter() {
+            match self.test_measures
+                .iter_mut()
+                .find(|test_measure_to_update| {
+                    test_measure_to_update.test_identifier == test_measure.test_identifier
+                }) {
+                    Some(test_measure_found) => test_measure_found.measures.extend(test_measure.measures),
+                    None => self.test_measures.push(test_measure)
+                }
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct TestMeasure {
     pub test_identifier: String,
-    pub measures: Vec<Measure>,
+    pub measures: Vec<Vec<Data>>,
 }
 
-#[derive(Deserialize)]
-pub struct Measure {
-    pub data: Vec<Data>,
-}
-
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Data {
     pub indicator: String,
     pub value: i128,
@@ -84,7 +92,55 @@ pub struct Data {
 pub fn run(path_to_configuration_yaml_file: String) {
     let configuration = Configuration::new(path_to_configuration_yaml_file);
     let mut diff_xjoules_data = DiffXJoulesData::new();
-    //test_selection::run(&configuration, &mut diff_xjoules_data);
-    //test_instrumentation::run(&configuration);
+    test_selection::run(&configuration, &mut diff_xjoules_data);
+    test_instrumentation::run(&configuration);
     test_execution::run(&configuration,diff_xjoules_data);
+}
+ 
+
+mod tests {
+    use super::*;
+    use crate::fr_davidson_diff_xjoules::utils::json_utils;
+
+    #[test]
+    fn test_version_measure_merge() {
+        let mut version_measure_1: VersionMeasure = VersionMeasure { test_measures: Vec::new() };
+        let mut test_measure_test_1: TestMeasure = TestMeasure { test_identifier: String::from("test1"), measures: Vec::new() };
+        let mut data_1 = Vec::new();
+        data_1.push(Data {indicator: String::from("instructions"), value: 1000});
+        data_1.push(Data {indicator: String::from("cycles"), value: 2000});
+        test_measure_test_1.measures.push(data_1);
+        version_measure_1.test_measures.push(test_measure_test_1);
+        let mut test_measure_test_2: TestMeasure = TestMeasure { test_identifier: String::from("test2"), measures: Vec::new() };
+        let mut data_2 = Vec::new();
+        data_2.push(Data {indicator: String::from("instructions"), value: 1000});
+        data_2.push(Data {indicator: String::from("cycles"), value: 2000});
+        test_measure_test_2.measures.push(data_2);
+        version_measure_1.test_measures.push(test_measure_test_2);
+
+        let mut version_measure_2: VersionMeasure = VersionMeasure { test_measures: Vec::new() };
+        let mut test_measure_test_3: TestMeasure = TestMeasure { test_identifier: String::from("test1"), measures: Vec::new() };
+        let mut data_3 = Vec::new();
+        data_3.push(Data {indicator: String::from("instructions"), value: 1000});
+        data_3.push(Data {indicator: String::from("cycles"), value: 2000});
+        test_measure_test_3.measures.push(data_3);
+        version_measure_2.test_measures.push(test_measure_test_3);
+        let mut test_measure_test_4: TestMeasure = TestMeasure { test_identifier: String::from("test3"), measures: Vec::new() };
+        let mut data_4 = Vec::new();
+        data_4.push(Data {indicator: String::from("instructions"), value: 1000});
+        data_4.push(Data {indicator: String::from("cycles"), value: 2000});
+        test_measure_test_4.measures.push(data_4);
+        version_measure_2.test_measures.push(test_measure_test_4);
+
+        assert_eq!(2, version_measure_1.test_measures.len());
+        assert_eq!(1, version_measure_1.test_measures[0].measures.len());
+        assert_eq!(1, version_measure_1.test_measures[1].measures.len());
+        
+        version_measure_1.merge(version_measure_2);
+
+        assert_eq!(3, version_measure_1.test_measures.len());
+        assert_eq!(2, version_measure_1.test_measures[0].measures.len());
+        assert_eq!(1, version_measure_1.test_measures[1].measures.len());
+
+    }
 }
