@@ -13,5 +13,5 @@ serde = "1.0.117"
 serde_derive = "1.0.117"
 serde_json = "1.0.59"
 serde_yaml = "0.8"
-
+rand = "0.8.5"
 handlebars = "3"
