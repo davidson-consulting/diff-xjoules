@@ -27,6 +27,7 @@ pub struct Configuration {
     pub execution_cmd: String,
     pub iteration_warmup: i8,
     pub iteration_run: i8,
+    pub time_to_wait_in_millis: u64
 }
 
 impl Configuration {
@@ -94,7 +95,7 @@ pub fn run(path_to_configuration_yaml_file: String) {
     let mut diff_xjoules_data = DiffXJoulesData::new();
     test_selection::run(&configuration, &mut diff_xjoules_data);
     test_instrumentation::run(&configuration);
-    test_execution::run(&configuration,diff_xjoules_data);
+    test_execution::run(&configuration, diff_xjoules_data);
 }
  
 

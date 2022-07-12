@@ -40,7 +40,8 @@ mod tests {
                 instrumentation_cmd: String::from(format!("java -jar diff-jjoules/target/{} --path-to-project {} --task TEST_INSTRUMENTATION --tests-set {}", jar_filename, "{{ path_project }}", "{{ tests_set_path }}")),
                 execution_cmd: String::from(""),
                 iteration_warmup: 0,
-                iteration_run: 3
+                iteration_run: 3,
+                time_to_wait_in_millis: 0,
             };
             run(&configuration);
             command::run_command_redirect_to_file("git diff", "target/diff_diff-xjoules");

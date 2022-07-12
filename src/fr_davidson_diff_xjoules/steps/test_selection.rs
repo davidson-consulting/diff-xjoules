@@ -188,7 +188,8 @@ mod tests {
             instrumentation_cmd: String::from(""),
             execution_cmd: String::from(""),
             iteration_warmup: 0,
-            iteration_run: 0
+            iteration_run: 0,
+            time_to_wait_in_millis: 0
         };
         let mut diff_xjoules_data = DiffXJoulesData::new();
         run(&configuration, &mut diff_xjoules_data);
