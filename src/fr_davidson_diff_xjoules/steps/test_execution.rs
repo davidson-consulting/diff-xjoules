@@ -13,7 +13,7 @@ use std::{thread, time};
 
 use super::test_selection::TEST_SELECTION_FILENAME;
 
-pub fn run(configuration: &Configuration, mut diff_xjoules_data: DiffXJoulesData) {
+pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
     let tests_set_path = format!(
         "{}/{}{}",
         configuration.path_output_dir, TEST_SELECTION_FILENAME, JSON_EXTENSION
@@ -126,7 +126,7 @@ mod tests {
                 test_filter: TestFilterEnum::ALL,
                 mark_strategy: MarkStrategyEnum::STRICT
             };
-            run(&configuration, DiffXJoulesData::new());
+            run(&configuration, &mut DiffXJoulesData::new());
             let data_v1 = json_utils::read_json::<VersionMeasure>("target/data_v1.json");
             let data_v2 = json_utils::read_json::<VersionMeasure>("target/data_v2.json");
             assert_eq!(4, data_v1.test_measures.len());

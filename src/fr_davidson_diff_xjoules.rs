@@ -5,7 +5,7 @@ use utils::yaml_utils::read_yaml;
 use self::{
     steps::{
         test_execution, test_instrumentation,
-        test_selection::{self, TestSelection}, test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum},
+        test_selection::{self, TestSelection}, test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum, self}, test_delta,
     },
     utils::{coverage::Coverage, math},
 };
@@ -45,6 +45,9 @@ pub struct DiffXJoulesData {
     pub test_selection: TestSelection,
     pub data_v1: VersionMeasure,
     pub data_v2: VersionMeasure,
+    pub median_v1: VersionMeasure,
+    pub median_v2: VersionMeasure,
+    pub delta: VersionMeasure,
     pub mark_test_selection: TestSelection,
     pub decision: bool,
 }
@@ -58,6 +61,9 @@ impl DiffXJoulesData {
             test_selection: TestSelection::new(),
             data_v1: VersionMeasure { test_measures: Vec::new() },
             data_v2: VersionMeasure { test_measures: Vec::new() },
+            median_v1: VersionMeasure { test_measures: Vec::new() },
+            median_v2: VersionMeasure { test_measures: Vec::new() },
+            delta: VersionMeasure { test_measures: Vec::new() },
             mark_test_selection: TestSelection::new(),
             decision: false,
         };
@@ -95,8 +101,13 @@ pub struct TestMeasure {
 }
 
 impl TestMeasure {
+    pub fn get_all_indicators(&self) -> Vec<&String> {
+        let mut indicators = Vec::<&String>::new();
+        self.measures[0].iter().for_each(|data| indicators.push(&data.indicator));
+        return indicators;
+    }
     pub fn get_median(&self, indicator: &str) -> f64 {
-        let mut values: Vec<i128> = self.measures.iter()
+        let mut values: Vec<f64> = self.measures.iter()
         .map(|datas| 
             datas.iter().find(|data| data.indicator == indicator).unwrap().value
         ).collect();
@@ -107,7 +118,7 @@ impl TestMeasure {
 #[derive(Serialize, Deserialize)]
 pub struct Data {
     pub indicator: String,
-    pub value: i128,
+    pub value: f64,
 }
 
 pub fn run(path_to_configuration_yaml_file: String) {
@@ -115,6 +126,9 @@ pub fn run(path_to_configuration_yaml_file: String) {
     let mut diff_xjoules_data = DiffXJoulesData::new();
     test_selection::run(&configuration, &mut diff_xjoules_data);
     test_instrumentation::run(&configuration);
+    test_execution::run(&configuration, &mut diff_xjoules_data);
+    test_delta::run(&mut diff_xjoules_data);
+    test_mark::run(&configuration, &mut diff_xjoules_data);
 }
 
 mod tests {
@@ -142,18 +156,18 @@ mod tests {
     fn test_test_measure_get_median() {
         let mut test_measure_test_1: TestMeasure = TestMeasure { test_identifier: String::from("test1"), measures: Vec::new() };
         let mut data_1 = Vec::new();
-        data_1.push(Data {indicator: String::from("instructions"), value: 20});
-        data_1.push(Data {indicator: String::from("cycles"), value: 2000});
+        data_1.push(Data {indicator: String::from("instructions"), value: 20.0});
+        data_1.push(Data {indicator: String::from("cycles"), value: 2000.0});
         test_measure_test_1.measures.push(data_1);
 
         let mut data_2 = Vec::new();
-        data_2.push(Data {indicator: String::from("instructions"), value: 10});
-        data_2.push(Data {indicator: String::from("cycles"), value: 1000});
+        data_2.push(Data {indicator: String::from("instructions"), value: 10.0});
+        data_2.push(Data {indicator: String::from("cycles"), value: 1000.0});
         test_measure_test_1.measures.push(data_2);
 
         let mut data_3 = Vec::new();
-        data_3.push(Data {indicator: String::from("instructions"), value: 30});
-        data_3.push(Data {indicator: String::from("cycles"), value: 3000});
+        data_3.push(Data {indicator: String::from("instructions"), value: 30.0});
+        data_3.push(Data {indicator: String::from("cycles"), value: 3000.0});
         test_measure_test_1.measures.push(data_3);
 
         assert_eq!(20.0, test_measure_test_1.get_median("instructions"));
@@ -165,28 +179,28 @@ mod tests {
         let mut version_measure_1: VersionMeasure = VersionMeasure { test_measures: Vec::new() };
         let mut test_measure_test_1: TestMeasure = TestMeasure { test_identifier: String::from("test1"), measures: Vec::new() };
         let mut data_1 = Vec::new();
-        data_1.push(Data {indicator: String::from("instructions"), value: 1000});
-        data_1.push(Data {indicator: String::from("cycles"), value: 2000});
+        data_1.push(Data {indicator: String::from("instructions"), value: 1000.0});
+        data_1.push(Data {indicator: String::from("cycles"), value: 2000.0});
         test_measure_test_1.measures.push(data_1);
         version_measure_1.test_measures.push(test_measure_test_1);
         let mut test_measure_test_2: TestMeasure = TestMeasure { test_identifier: String::from("test2"), measures: Vec::new() };
         let mut data_2 = Vec::new();
-        data_2.push(Data {indicator: String::from("instructions"), value: 1000});
-        data_2.push(Data {indicator: String::from("cycles"), value: 2000});
+        data_2.push(Data {indicator: String::from("instructions"), value: 1000.0});
+        data_2.push(Data {indicator: String::from("cycles"), value: 2000.0});
         test_measure_test_2.measures.push(data_2);
         version_measure_1.test_measures.push(test_measure_test_2);
 
         let mut version_measure_2: VersionMeasure = VersionMeasure { test_measures: Vec::new() };
         let mut test_measure_test_3: TestMeasure = TestMeasure { test_identifier: String::from("test1"), measures: Vec::new() };
         let mut data_3 = Vec::new();
-        data_3.push(Data {indicator: String::from("instructions"), value: 1000});
-        data_3.push(Data {indicator: String::from("cycles"), value: 2000});
+        data_3.push(Data {indicator: String::from("instructions"), value: 1000.0});
+        data_3.push(Data {indicator: String::from("cycles"), value: 2000.0});
         test_measure_test_3.measures.push(data_3);
         version_measure_2.test_measures.push(test_measure_test_3);
         let mut test_measure_test_4: TestMeasure = TestMeasure { test_identifier: String::from("test3"), measures: Vec::new() };
         let mut data_4 = Vec::new();
-        data_4.push(Data {indicator: String::from("instructions"), value: 1000});
-        data_4.push(Data {indicator: String::from("cycles"), value: 2000});
+        data_4.push(Data {indicator: String::from("instructions"), value: 1000.0});
+        data_4.push(Data {indicator: String::from("cycles"), value: 2000.0});
         test_measure_test_4.measures.push(data_4);
         version_measure_2.test_measures.push(test_measure_test_4);
 
