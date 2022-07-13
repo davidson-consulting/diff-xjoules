@@ -154,7 +154,7 @@ public class TestInstrumentationProcessor extends AbstractProcessor<CtMethod<?>>
     public void process(CtMethod<?> ctMethod) {
         final Factory factory = ctMethod.getFactory();
         final CtClass<?> parentClass = ctMethod.getParent(CtClass.class);
-        final String identifier = new ClassFullQualifiedName(parentClass.getQualifiedName(), ctMethod.getSimpleName()).toString();
+        final String identifier = new MethodFullQualifiedName(parentClass.getQualifiedName(), ctMethod.getSimpleName()).toString();
         ctMethod.getBody().insertBegin(
                 factory.createCodeSnippetStatement("fr.davidson.tlpc.sensor.TLPCSensor.start(\"" + identifier + "\")")
         );
