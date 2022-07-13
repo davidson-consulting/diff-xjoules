@@ -12,31 +12,37 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
             .data_v2
             .find_test_measure(&selected_test)
             .unwrap();
-        let mut median_v1 = TestMeasure {
-            test_identifier: String::from(selected_test),
-            measures: Vec::new(),
-        };
-        let mut median_v2 = TestMeasure {
-            test_identifier: String::from(selected_test),
-            measures: Vec::new(),
-        };
-        let mut delta = TestMeasure {
-            test_identifier: String::from(selected_test),
-            measures: Vec::new(),
-        };
+        let mut medians_v1 = Vec::<Data>::new();
+        let mut medians_v2 = Vec::<Data>::new();
+        let mut deltas = Vec::<Data>::new();
         for indicator in test_measure_v1.get_all_indicators() {
             compute_median_and_delta_indicator(
+                &mut medians_v1,
+                &mut medians_v2,
+                &mut deltas,
                 test_measure_v1,
                 test_measure_v2,
-                &mut median_v1,
-                &mut median_v2,
-                &mut delta,
                 &indicator,
             )
         }
-        diff_xjoules_data.median_v1.test_measures.push(median_v1);
-        diff_xjoules_data.median_v2.test_measures.push(median_v2);
-        diff_xjoules_data.delta.test_measures.push(delta);
+        let mut test_median_v1 = TestMeasure {
+            test_identifier: String::from(selected_test),
+            measures: Vec::new(),
+        };
+        let mut test_median_v2 = TestMeasure {
+            test_identifier: String::from(selected_test),
+            measures: Vec::new(),
+        };
+        let mut test_delta = TestMeasure {
+            test_identifier: String::from(selected_test),
+            measures: Vec::new(),
+        };
+        test_median_v1.measures.push(medians_v1);
+        test_median_v2.measures.push(medians_v2);
+        test_delta.measures.push(deltas);
+        diff_xjoules_data.median_v1.test_measures.push(test_median_v1);
+        diff_xjoules_data.median_v2.test_measures.push(test_median_v2);
+        diff_xjoules_data.delta.test_measures.push(test_delta);
         json_utils::write_json::<VersionMeasure>(
             &format!("{}/delta.json", configuration.path_output_dir),
             &diff_xjoules_data.delta,
@@ -45,29 +51,25 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
 }
 
 fn compute_median_and_delta_indicator(
+    medians_v1: &mut Vec<Data>,
+    medians_v2: &mut Vec<Data>,
+    deltas: &mut Vec<Data>,
     test_measure_v1: &TestMeasure,
     test_measure_v2: &TestMeasure,
-    median_v1: &mut TestMeasure,
-    median_v2: &mut TestMeasure,
-    delta: &mut TestMeasure,
     indicator: &str,
 ) {
-    let mut median_indicator_v1 = Vec::<Data>::new();
-    median_indicator_v1.push(Data {
+    let median_v1 = test_measure_v1.get_median(&indicator);
+    medians_v1.push(Data {
         indicator: String::from(indicator),
-        value: test_measure_v1.get_median(&indicator),
+        value: median_v1,
     });
-    let mut median_indicator_v2 = Vec::<Data>::new();
-    median_indicator_v2.push(Data {
+    let median_v2 = test_measure_v2.get_median(&indicator);
+    medians_v2.push(Data {
         indicator: String::from(indicator),
-        value: test_measure_v2.get_median(&indicator),
+        value: median_v2,
     });
-    let mut delta_indicator = Vec::<Data>::new();
-    delta_indicator.push(Data {
+    deltas.push(Data {
         indicator: String::from(indicator),
-        value: median_indicator_v2[0].value - median_indicator_v1[0].value,
+        value: median_v2 - median_v1,
     });
-    median_v1.measures.push(median_indicator_v1);
-    median_v2.measures.push(median_indicator_v2);
-    delta.measures.push(delta_indicator);
 }
