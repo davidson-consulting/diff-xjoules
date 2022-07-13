@@ -1,10 +1,12 @@
 use serde_derive::Deserialize;
 
-use crate::fr_davidson_diff_xjoules::{DiffXJoulesData, steps::test_selection::TestSelection};
+use crate::fr_davidson_diff_xjoules::{
+    steps::test_selection::TestSelection, utils::json_utils, Configuration, DiffXJoulesData,
+};
 
 #[derive(Deserialize)]
 pub enum TestFilterEnum {
-    ALL
+    ALL,
 }
 
 impl TestFilterEnum {
@@ -16,25 +18,35 @@ impl TestFilterEnum {
 }
 
 pub trait TestFilter {
-    fn filter(self, data: &DiffXJoulesData) -> TestSelection;
+    fn filter(&self, configuration: &Configuration, data: &DiffXJoulesData) -> TestSelection;
+    fn report(&self, configuration: &Configuration, test_selection: &TestSelection) {
+        json_utils::write_json::<TestSelection>(
+            &format!(
+                "{}/test_filter_selection.json",
+                configuration.path_output_dir
+            ),
+            &test_selection,
+        );
+    }
 }
 
-pub struct AllTestFilter {
-
-}
+pub struct AllTestFilter {}
 
 impl TestFilter for AllTestFilter {
-    fn filter(self, data: &DiffXJoulesData) -> TestSelection {
+    fn filter(&self, configuration: &Configuration, data: &DiffXJoulesData) -> TestSelection {
         let mut test_selection = TestSelection::new();
         for selected_test in data.test_selection.test_selection.iter() {
-            test_selection.test_selection.insert(selected_test.to_string());
+            test_selection
+                .test_selection
+                .insert(selected_test.to_string());
         }
+        self.report(configuration, &test_selection);
         return test_selection;
     }
 }
 
 impl AllTestFilter {
     pub fn new() -> AllTestFilter {
-        AllTestFilter { }
+        AllTestFilter {}
     }
 }
