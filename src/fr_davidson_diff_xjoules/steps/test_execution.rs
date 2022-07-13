@@ -5,7 +5,7 @@ use crate::fr_davidson_diff_xjoules::{
         command,
         json_utils::{read_json, JSON_EXTENSION, self},
     },
-    Configuration, DiffXJoulesData, VersionMeasure,
+    Configuration, DiffXJoulesData, measure::VersionMeasure,
 };
 
 use rand::Rng;

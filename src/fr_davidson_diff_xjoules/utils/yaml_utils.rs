@@ -9,7 +9,7 @@ pub fn read_yaml<T: DeserializeOwned>(path_to_yaml_file: String) -> T {
 
 #[cfg(test)]
 mod tests {
-    use crate::fr_davidson_diff_xjoules::Configuration;
+    use crate::fr_davidson_diff_xjoules::configuration::Configuration;
     use super::*;
 
     #[test]

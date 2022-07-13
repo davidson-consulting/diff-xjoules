@@ -1,7 +1,7 @@
 use serde_derive::Deserialize;
 
 use crate::fr_davidson_diff_xjoules::{
-    steps::test_selection::TestSelection, Configuration, DiffXJoulesData,
+    steps::test_selection::TestSelection, configuration::Configuration, diff_data::DiffXJoulesData
 };
 
 #[derive(Deserialize)]
@@ -57,10 +57,9 @@ impl StrictMarkStrategy {
 }
 
 mod test {
-    use crate::fr_davidson_diff_xjoules::{Configuration, DiffXJoulesData, utils::json_utils, steps::{test_selection::TestSelection, test_mark::test_filter::TestFilterEnum}, VersionMeasure};
-    use super::{StrictMarkStrategy, MarkStrategy, MarkStrategyEnum};
-
-
+    use crate::fr_davidson_diff_xjoules::{steps::test_mark::test_filter::TestFilterEnum, utils::json_utils, measure::VersionMeasure};
+    use super::*;
+    
     #[test]
     fn test_decide() {
         let mark_strategy = StrictMarkStrategy::new();
