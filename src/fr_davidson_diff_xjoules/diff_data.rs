@@ -1,4 +1,4 @@
-use super::{utils::coverage::Coverage, steps::test_selection::TestSelection, measure::VersionMeasure};
+use super::{utils::coverage::Coverage, steps::test_selection::TestSelection, measure::version_measure::VersionMeasure};
 
 pub struct DiffXJoulesData {
     pub coverage_v1: Coverage,

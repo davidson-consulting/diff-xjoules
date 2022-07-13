@@ -1,5 +1,5 @@
 use crate::fr_davidson_diff_xjoules::{
-    utils::json_utils, Configuration, DiffXJoulesData, measure::{Data, TestMeasure, VersionMeasure}
+    utils::json_utils, Configuration, DiffXJoulesData, measure::{data::Data, test_measure::TestMeasure, version_measure::VersionMeasure}
 };
 
 pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
