@@ -1,6 +1,8 @@
-use crate::fr_davidson_diff_xjoules::{Data, DiffXJoulesData, TestMeasure};
+use crate::fr_davidson_diff_xjoules::{
+    utils::json_utils, Configuration, Data, DiffXJoulesData, TestMeasure, VersionMeasure,
+};
 
-pub fn run(diff_xjoules_data: &mut DiffXJoulesData) {
+pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
     for selected_test in diff_xjoules_data.test_selection.test_selection.iter() {
         let test_measure_v1 = diff_xjoules_data
             .data_v1
@@ -35,6 +37,10 @@ pub fn run(diff_xjoules_data: &mut DiffXJoulesData) {
         diff_xjoules_data.median_v1.test_measures.push(median_v1);
         diff_xjoules_data.median_v2.test_measures.push(median_v2);
         diff_xjoules_data.delta.test_measures.push(delta);
+        json_utils::write_json::<VersionMeasure>(
+            &format!("{}/delta.json", configuration.path_output_dir),
+            &diff_xjoules_data.delta,
+        );
     }
 }
 
@@ -58,7 +64,7 @@ fn compute_median_and_delta_indicator(
     });
     let mut delta_indicator = Vec::<Data>::new();
     delta_indicator.push(Data {
-        indicator: String::from(format!("delta_{}", indicator)),
+        indicator: String::from(indicator),
         value: median_indicator_v2[0].value - median_indicator_v1[0].value,
     });
     median_v1.measures.push(median_indicator_v1);

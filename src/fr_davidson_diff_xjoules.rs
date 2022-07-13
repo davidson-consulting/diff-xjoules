@@ -7,7 +7,7 @@ use self::{
         test_execution, test_instrumentation,
         test_selection::{self, TestSelection}, test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum, self}, test_delta,
     },
-    utils::{coverage::Coverage, math},
+    utils::{coverage::Coverage, math, json_utils},
 };
 
 pub mod steps;
@@ -29,7 +29,8 @@ pub struct Configuration {
     pub iteration_run: i8,
     pub time_to_wait_in_millis: u64,
     pub test_filter: TestFilterEnum,
-    pub mark_strategy: MarkStrategyEnum
+    pub mark_strategy: MarkStrategyEnum,
+    pub indicator_to_consider_for_marking: String,
 }
 
 impl Configuration {
@@ -127,8 +128,13 @@ pub fn run(path_to_configuration_yaml_file: String) {
     test_selection::run(&configuration, &mut diff_xjoules_data);
     test_instrumentation::run(&configuration);
     test_execution::run(&configuration, &mut diff_xjoules_data);
-    test_delta::run(&mut diff_xjoules_data);
+    test_delta::run(&configuration, &mut diff_xjoules_data);
     test_mark::run(&configuration, &mut diff_xjoules_data);
+    if diff_xjoules_data.decision {
+        println!("PASS");
+    } else {
+        println!("BREAK");
+    }
 }
 
 mod tests {
