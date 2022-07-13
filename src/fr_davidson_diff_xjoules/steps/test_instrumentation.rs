@@ -45,7 +45,8 @@ mod tests {
                 iteration_run: 3,
                 time_to_wait_in_millis: 0,
                 test_filter: TestFilterEnum::ALL,
-                mark_strategy: MarkStrategyEnum::STRICT
+                mark_strategy: MarkStrategyEnum::STRICT,
+                indicator_to_consider_for_marking: String::from("cycles")
             };
             run(&configuration);
             command::run_command_redirect_to_file("git diff", "target/diff_diff-xjoules");
