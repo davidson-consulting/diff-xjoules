@@ -18,6 +18,6 @@ The red hexagons, and the red rectangle, are the language-specific parts.
 
 In the **Diff-XJoules**, there are 3 language-specific parts:
 
-1. [The computation of the code coverage](https://github.com/davidson-consulting/diff-xjoules/diff-jjoules/doc/coverage.md)
-2. [The instrumentation of the tests](https://github.com/davidson-consulting/diff-xjoules/diff-jjoules/doc/instrumentation.md)
-3. [The execution of the tests](https://github.com/davidson-consulting/diff-xjoules/diff-jjoules/doc/execution.md)
+1. [The computation of the code coverage](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/coverage.md)
+2. [The instrumentation of the tests](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/instrumentation.md)
+3. [The execution of the tests](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/execution.md)
