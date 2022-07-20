@@ -32,7 +32,7 @@ The configuration YAML file requires the following properties:
 - `mark_strategy`: the strategy for marking the decision. Values avalaible: `STRICT`.
 - `indicator_to_consider_for_marking`: the indicator (energy, cycles, instructions, etc) to use for the decision process
 
-Following, an example of configuration YAML file for Java (using [diff-jjoules](https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-jjoules):
+Following, an example of configuration YAML file for Java (using [diff-jjoules](https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-jjoules)):
 
 ```yaml
 path_v1: "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"
