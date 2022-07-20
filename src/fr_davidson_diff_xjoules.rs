@@ -9,7 +9,7 @@ pub mod measure;
 pub const SUFFIX_V1: &str = "_v1";
 pub const SUFFIX_V2: &str = "_v2";
 
-pub fn run(path_to_configuration_yaml_file: String) {
+pub fn run(path_to_configuration_yaml_file: std::path::PathBuf) {
     let configuration = Configuration::new(path_to_configuration_yaml_file);
     let mut diff_xjoules_data = DiffXJoulesData::new();
     test_selection::run(&configuration, &mut diff_xjoules_data);

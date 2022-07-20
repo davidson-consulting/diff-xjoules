@@ -1,11 +1,10 @@
 use std::fs;
 use serde::de::DeserializeOwned;
 
-pub fn read_yaml<T: DeserializeOwned>(path_to_yaml_file: String) -> T {
+pub fn read_yaml<T: DeserializeOwned>(path_to_yaml_file: std::path::PathBuf) -> T {
     let yaml_file_content = fs::read_to_string(path_to_yaml_file).unwrap();
     return serde_yaml::from_str::<T>(&yaml_file_content).unwrap();
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -14,7 +13,7 @@ mod tests {
 
     #[test]
     fn test_read_yaml() {
-        let configuration = read_yaml::<Configuration>(String::from("test_resources/configuration_file_example.yaml"));
+        let configuration = read_yaml::<Configuration>(std::path::PathBuf::from("test_resources/configuration_file_example.yaml"));
         assert_eq!("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project", configuration.path_v1);
         assert_eq!("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2", configuration.path_v2);
         assert_eq!("target", configuration.path_output_dir);

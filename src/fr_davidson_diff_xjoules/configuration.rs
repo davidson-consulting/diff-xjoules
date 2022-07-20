@@ -20,7 +20,7 @@ pub struct Configuration {
 }
 
 impl Configuration {
-    pub fn new(path_to_configuration_file: String) -> Configuration {
+    pub fn new(path_to_configuration_file: std::path::PathBuf) -> Configuration {
         return read_yaml::<Configuration>(path_to_configuration_file);
     }
 }

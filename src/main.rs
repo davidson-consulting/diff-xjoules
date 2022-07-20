@@ -1,11 +1,14 @@
-use ferris_says::say; // from the previous step
-use std::io::{stdout, BufWriter};
+pub mod fr_davidson_diff_xjoules;
+
+use clap::Parser;
+
+#[derive(Parser)]
+struct Cli {
+    #[clap(parse(from_os_str))]
+    yaml_path: std::path::PathBuf,
+}
 
 fn main() {
-    let stdout = stdout();
-    let message = String::from("Hello fellow Rustaceans!");
-    let width = message.chars().count();
-
-    let mut writer = BufWriter::new(stdout.lock());
-    say(message.as_bytes(), width, &mut writer).unwrap();
+    let args = Cli::parse();
+    fr_davidson_diff_xjoules::run(args.yaml_path);
 }
