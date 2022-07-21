@@ -82,6 +82,5 @@ For more information on contributing, see the dedicated [documentation](https://
 - [Coverage](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/coverage.md)
 - [Instrumentation](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/instrumentation.md)
 - [Execution](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/execution.md)
-- [Test Filters](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/test_filters.md)
-- [Mark Strategies](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/mark_strategies.md)
+- [Advanced Configuration](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/advanced_configuration.md)
 - [Contributing](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/contributing.md)
