@@ -1,7 +1,7 @@
 # Coverage
 
 The **Coverage computation** should produces a json file that gives the coverage of each source file for every tests, identified by a unique string.
-The **Coverage computation** is executed for each version of the program, before and after the code changeS.
+The **Coverage computation** is executed for each version of the program, before and after the code changes.
 
 ## Input
 
