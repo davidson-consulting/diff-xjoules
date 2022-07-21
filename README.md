@@ -21,7 +21,7 @@ The configuration YAML file requires the following properties:
 - `path_v1`: absolute path to the project **before** the commit
 - `path_v2`: absolute path to the project **after** the commit
 - `path_output_dir`: path to the output directory of diff-xjoules
-- `src_folder`: relative path (from properties path_v1 and path_v2) to folder that contains the sources
+- `src_folder`: relative path (from properties `path_v1` and `path_v2`) to folder that contains the sources
 - `time_to_wait_in_millis`: the number of milliseconds to wait for chilling
 - `iteration_warmup`: the number of iteration for the warmup
 - `iteration_run`: the number of iteration for the measure
@@ -82,7 +82,6 @@ For more information on contributing, see the dedicated [documentation](https://
 - [Coverage](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/coverage.md)
 - [Instrumentation](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/instrumentation.md)
 - [Execution](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/execution.md)
-- [Approach](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/approach.md)
-- [Test Fitlers](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/test_filters.md)
+- [Test Filters](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/test_filters.md)
 - [Mark Strategies](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/mark_strategies.md)
 - [Contributing](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/contributing.md)
