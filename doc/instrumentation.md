@@ -16,13 +16,12 @@ The process of instrumentation should take as input two parameters, which **Diff
     "test_identifiers_1",
     "test_identifiers_2",
     ...
-  ]
 }
 ```
 
 ## Ouput
 
-The The output of the process should be instrumented test code.
+The output of the process should be instrumented test code.
 It is adviced to modifies directly the test code within the project in order to be able to easily execute them, which is the next task.
 
 ## Command line example
