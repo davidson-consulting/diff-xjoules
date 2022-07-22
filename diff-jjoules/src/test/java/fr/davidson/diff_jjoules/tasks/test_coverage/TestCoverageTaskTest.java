@@ -3,6 +3,7 @@ package fr.davidson.diff_jjoules.tasks.test_coverage;
 import fr.davidson.diff_jjoules.Configuration;
 import fr.davidson.diff_jjoules.tasks.test_coverage.coverage.Coverage;
 import fr.davidson.diff_jjoules.utils.JSONUtils;
+import fr.davidson.diff_jjoules.utils.wrapper.WrapperEnum;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -22,6 +23,7 @@ public class TestCoverageTaskTest {
         final Configuration configuration = new Configuration();
         configuration.setPathToProject(new File("src/test/resources/diff-jjoules-toy-java-project-v2").getAbsolutePath());
         configuration.setOutputPath("target/coverage.json");
+        configuration.setWrapperEnum(WrapperEnum.MAVEN);
         new TestCoverageTask().run(configuration);
         final Coverage coverage = JSONUtils.read("target/coverage.json", Coverage.class);
         assertTrue(coverage.containsTestIdentifier("fr.davidson.AppTest#testRandom"));
