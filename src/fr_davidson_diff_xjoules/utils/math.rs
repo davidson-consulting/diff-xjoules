@@ -12,7 +12,6 @@ pub fn median(data: &mut Vec<f64>) -> f64 {
 mod test {
     use crate::fr_davidson_diff_xjoules::utils::math::median;
 
-
     #[test]
     fn test_median_even() {
         let mut data: Vec<f64> = Vec::new();

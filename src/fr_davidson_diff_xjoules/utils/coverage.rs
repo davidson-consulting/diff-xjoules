@@ -68,15 +68,19 @@ pub fn run_coverage_cmd(path_to_project: &str, coverage_cmd: &str, output_path: 
 
 #[cfg(test)]
 mod tests {
-    use std::path::Path;
     use super::*;
     use crate::fr_davidson_diff_xjoules::utils::json_utils::read_json;
+    use std::path::Path;
 
     #[ignore]
     #[test]
     fn test_run_coverage_cmd() {
-        if !Path::new("diff-jjoules/target/diff-jjoules-*-SNAPSHOT-jar-with-dependencies.jar").exists() {
-            crate::fr_davidson_diff_xjoules::utils::command::run_command("mvn clean package -DskipTests -f diff-jjoules");
+        if !Path::new("diff-jjoules/target/diff-jjoules-*-SNAPSHOT-jar-with-dependencies.jar")
+            .exists()
+        {
+            crate::fr_davidson_diff_xjoules::utils::command::run_command(
+                "mvn clean package -DskipTests -f diff-jjoules",
+            );
         }
         run_coverage_cmd(
             "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project",
