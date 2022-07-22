@@ -2,9 +2,9 @@ package fr.davidson.diff_jjoules.utils.wrapper.properties;
 
 import fr.davidson.diff_jjoules.utils.wrapper.Wrapper;
 import fr.davidson.diff_jjoules.utils.wrapper.WrapperEnum;
-import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -42,7 +42,7 @@ public class PropertiesWrapperInjectionTest extends AbstractPropertiesWrapperTes
         );
     }
 
-    @Ignore
+    @Disabled
     @Test
     void testInjection() {
         // TODO this is one requires to have TLPCSensor as dependency.
