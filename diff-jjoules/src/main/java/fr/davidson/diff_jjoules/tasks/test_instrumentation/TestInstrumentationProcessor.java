@@ -1,7 +1,6 @@
 package fr.davidson.diff_jjoules.tasks.test_instrumentation;
 
 import eu.stamp_project.testrunner.test_framework.TestFramework;
-import fr.davidson.diff_jjoules.utils.ClassFullQualifiedName;
 import fr.davidson.diff_jjoules.utils.Constants;
 import fr.davidson.diff_jjoules.utils.MethodFullQualifiedName;
 import fr.davidson.diff_jjoules.utils.TestsSet;
