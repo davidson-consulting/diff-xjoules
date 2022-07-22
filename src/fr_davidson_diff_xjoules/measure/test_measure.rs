@@ -39,6 +39,51 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_test_measure_get_all_indicators() {
+        let mut test_measure_test_1: TestMeasure = TestMeasure {
+            test_identifier: String::from("test1"),
+            measures: Vec::new(),
+        };
+        let mut data_1 = Vec::new();
+        data_1.push(Data {
+            indicator: String::from("instructions"),
+            value: 20.0,
+        });
+        data_1.push(Data {
+            indicator: String::from("cycles"),
+            value: 2000.0,
+        });
+        test_measure_test_1.measures.push(data_1);
+
+        let mut data_2 = Vec::new();
+        data_2.push(Data {
+            indicator: String::from("instructions"),
+            value: 10.0,
+        });
+        data_2.push(Data {
+            indicator: String::from("cycles"),
+            value: 1000.0,
+        });
+        test_measure_test_1.measures.push(data_2);
+
+        let mut data_3 = Vec::new();
+        data_3.push(Data {
+            indicator: String::from("instructions"),
+            value: 30.0,
+        });
+        data_3.push(Data {
+            indicator: String::from("cycles"),
+            value: 3000.0,
+        });
+        test_measure_test_1.measures.push(data_3);
+
+        let indicators = test_measure_test_1.get_all_indicators();
+        assert_eq!(2, indicators.len());
+        assert!(indicators.contains(&&String::from("cycles")));
+        assert!(indicators.contains(&&String::from("instructions")));
+    }
+
+    #[test]
     fn test_test_measure_get_median() {
         let mut test_measure_test_1: TestMeasure = TestMeasure {
             test_identifier: String::from("test1"),
