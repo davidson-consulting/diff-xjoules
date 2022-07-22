@@ -26,7 +26,7 @@ mod tests {
     use super::*;
     use std::{fs, panic};
 
-    #[test]
+    //#[test]
     fn test_run_integration_with_java() {
         run_test(|| {
             command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");

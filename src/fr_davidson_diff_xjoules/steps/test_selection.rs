@@ -222,7 +222,7 @@ mod tests {
     fn test_compute_coverage() {
         let coverage = compute_coverage(
             "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/",
-            "cp test_resources/coverage.json target/coverage_v1.json",
+            "cp test_resources/coverage_v1.json target/coverage_v1.json",
             "target/",
             SUFFIX_V1,
         );

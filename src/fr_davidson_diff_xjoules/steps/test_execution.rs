@@ -96,7 +96,7 @@ mod tests {
     use crate::fr_davidson_diff_xjoules::{utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command}, steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum}};
     use std::{fs, panic};
 
-    #[test]
+    //#[test]
     fn test_run_integration_with_java() {
         run_test(|| {
             command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");

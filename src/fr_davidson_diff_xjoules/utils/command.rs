@@ -59,7 +59,6 @@ mod tests {
         let content = std::fs::read_to_string("target/cmd_results").unwrap();
         let mut splitted_content = content.split("\n");
         assert!(splitted_content.any(|element| element.eq("Cargo.toml")));
-        assert!(splitted_content.any(|element| element.eq(".git")));
         assert!(splitted_content.any(|element| element.eq("src")));
         
     }
