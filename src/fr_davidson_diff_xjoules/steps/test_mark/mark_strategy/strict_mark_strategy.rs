@@ -37,6 +37,7 @@ impl StrictMarkStrategy {
     }
 }
 
+#[cfg(test)]
 mod test {
     use super::*;
     use crate::fr_davidson_diff_xjoules::{

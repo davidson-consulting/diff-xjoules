@@ -168,6 +168,7 @@ fn handle_diff_operation(
     return find_test_executing_lines(coverage, filename, &modified_lines);
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::fr_davidson_diff_xjoules::{

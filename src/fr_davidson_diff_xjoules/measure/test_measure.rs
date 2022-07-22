@@ -34,9 +34,9 @@ impl TestMeasure {
     }
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::utils::json_utils;
 
     #[test]
     fn test_test_measure_get_median() {

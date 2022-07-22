@@ -66,20 +66,23 @@ pub fn run_coverage_cmd(path_to_project: &str, coverage_cmd: &str, output_path: 
     return json_utils::read_json::<Coverage>(output_path);
 }
 
+#[cfg(test)]
 mod tests {
+    use std::path::Path;
     use super::*;
     use crate::fr_davidson_diff_xjoules::utils::json_utils::read_json;
 
+    #[ignore]
     #[test]
     fn test_run_coverage_cmd() {
-        // if !Path::new("diff-jjoules/target/diff-jjoules-*-SNAPSHOT-jar-with-dependencies.jar").exists() {
-        //     run_command("mvn clean package -DskipTests -f diff-jjoules");
-        // }
-        // run_coverage_cmd(
-        //     "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project",
-        //     "java -jar diff-jjoules/target/diff-jjoules-*-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}",
-        //     "target/coverage.json",
-        // );
+        if !Path::new("diff-jjoules/target/diff-jjoules-*-SNAPSHOT-jar-with-dependencies.jar").exists() {
+            crate::fr_davidson_diff_xjoules::utils::command::run_command("mvn clean package -DskipTests -f diff-jjoules");
+        }
+        run_coverage_cmd(
+            "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project",
+            "java -jar diff-jjoules/target/diff-jjoules-*-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}",
+            "target/coverage.json",
+        );
     }
 
     #[test]

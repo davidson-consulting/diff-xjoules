@@ -31,9 +31,10 @@ impl VersionMeasure {
     }
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::{measure::data::Data, utils::json_utils};
+    use crate::fr_davidson_diff_xjoules::measure::data::Data;
 
     #[test]
     fn test_version_measure_find_test_measure() {

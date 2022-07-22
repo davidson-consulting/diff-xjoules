@@ -20,15 +20,16 @@ pub fn run(configuration: &Configuration) {
     command::run_templated_command(&configuration.instrumentation_cmd, &data);
 }
 
+#[cfg(test)]
 mod tests {
+    use super::*;
     use crate::fr_davidson_diff_xjoules::steps::test_mark::{
         mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum,
     };
-
-    use super::*;
     use std::{fs, panic};
 
-    //#[test]
+    #[ignore]
+    #[test]
     fn test_run_integration_with_java() {
         run_test(|| {
             command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");
@@ -60,6 +61,7 @@ mod tests {
         })
     }
 
+    #[cfg(test)]
     fn run_test<T>(test: T) -> ()
     where
         T: FnOnce() -> () + panic::UnwindSafe,
@@ -69,6 +71,7 @@ mod tests {
         assert!(result.is_ok())
     }
 
+    #[cfg(test)]
     fn teardown() {
         command::run_command("git checkout -- diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/");
     }

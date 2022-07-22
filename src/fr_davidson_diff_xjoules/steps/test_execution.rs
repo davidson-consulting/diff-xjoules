@@ -110,18 +110,17 @@ pub fn run_and_merge_for_version(
     version_data.merge(data);
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::fr_davidson_diff_xjoules::{
         steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
-        utils::{
-            command::run_command,
-            json_utils::{self, read_json, JSON_EXTENSION},
-        },
+        utils::json_utils,
     };
     use std::{fs, panic};
 
-    //#[test]
+    #[ignore]
+    #[test]
     fn test_run_integration_with_java() {
         run_test(|| {
             command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");
@@ -167,6 +166,7 @@ mod tests {
         });
     }
 
+    #[cfg(test)]
     fn run_test<T>(test: T) -> ()
     where
         T: FnOnce() -> () + panic::UnwindSafe,
@@ -176,6 +176,7 @@ mod tests {
         assert!(result.is_ok())
     }
 
+    #[cfg(test)]
     fn teardown() {
         command::run_command("git checkout -- diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/");
     }
