@@ -4,7 +4,7 @@ use serde_derive::{Deserialize, Serialize};
 
 use crate::fr_davidson_diff_xjoules::{
     utils::{
-        command::{run_command_redirect_to_file},
+        command::run_command_redirect_to_file,
         coverage::{find_test_executing_lines, run_coverage_cmd, Coverage, COVERAGE_FILENAME},
         json_utils::{self, JSON_EXTENSION},
     },
@@ -170,7 +170,13 @@ fn handle_diff_operation(
 
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::{utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command}, steps::test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum}};
+    use crate::fr_davidson_diff_xjoules::{
+        steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
+        utils::{
+            command::run_command,
+            json_utils::{self, read_json, JSON_EXTENSION},
+        },
+    };
 
     #[test]
     fn test_run() {
@@ -192,29 +198,19 @@ mod tests {
             time_to_wait_in_millis: 0,
             test_filter: TestFilterEnum::ALL,
             mark_strategy: MarkStrategyEnum::STRICT,
-            indicator_to_consider_for_marking: String::from("cycles")
+            indicator_to_consider_for_marking: String::from("cycles"),
         };
         let mut diff_xjoules_data = DiffXJoulesData::new();
         run(&configuration, &mut diff_xjoules_data);
         let expected_diff_content = fs::read_to_string("test_resources/expected_diff").unwrap();
-        assert_eq!(
-            9,
-            diff_xjoules_data.coverage_v1.test_coverages.len()
-        );
-        assert_eq!(
-            9,
-            diff_xjoules_data.coverage_v2.test_coverages.len()
-        );
+        assert_eq!(9, diff_xjoules_data.coverage_v1.test_coverages.len());
+        assert_eq!(9, diff_xjoules_data.coverage_v2.test_coverages.len());
         assert_eq!(expected_diff_content, diff_xjoules_data.diff);
-        assert_eq!(
-            4,
-            diff_xjoules_data
-                .test_selection
-                .test_selection
-                .len()
-        );
-        let test_selection =
-            read_json::<TestSelection>(&format!("{}/{}{}", "target", TEST_SELECTION_FILENAME, JSON_EXTENSION));
+        assert_eq!(4, diff_xjoules_data.test_selection.test_selection.len());
+        let test_selection = read_json::<TestSelection>(&format!(
+            "{}/{}{}",
+            "target", TEST_SELECTION_FILENAME, JSON_EXTENSION
+        ));
         assert_eq!(4, test_selection.test_selection.len());
     }
 
@@ -227,7 +223,11 @@ mod tests {
             SUFFIX_V1,
         );
         assert_eq!(9, coverage.test_coverages.len());
-        assert!(coverage.test_coverages.iter().any(|test_coverage| test_coverage.test_identifier == "fr.davidson.AppTest#testRandomQuickSort"));
+        assert!(coverage
+            .test_coverages
+            .iter()
+            .any(|test_coverage| test_coverage.test_identifier
+                == "fr.davidson.AppTest#testRandomQuickSort"));
     }
 
     #[test]
@@ -245,8 +245,10 @@ mod tests {
 
     #[test]
     fn test_select_tests() {
-        let coverage_v1: Coverage = json_utils::read_json::<Coverage>("test_resources/coverage_v1.json");
-        let coverage_v2: Coverage = json_utils::read_json::<Coverage>("test_resources/coverage_v2.json");
+        let coverage_v1: Coverage =
+            json_utils::read_json::<Coverage>("test_resources/coverage_v1.json");
+        let coverage_v2: Coverage =
+            json_utils::read_json::<Coverage>("test_resources/coverage_v2.json");
         let diff = fs::read_to_string("test_resources/expected_diff").unwrap();
         let test_selection = select_tests(
             "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project",

@@ -68,7 +68,7 @@ pub fn run_coverage_cmd(path_to_project: &str, coverage_cmd: &str, output_path: 
 
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::utils::{json_utils::read_json};
+    use crate::fr_davidson_diff_xjoules::utils::json_utils::read_json;
 
     #[test]
     fn test_run_coverage_cmd() {

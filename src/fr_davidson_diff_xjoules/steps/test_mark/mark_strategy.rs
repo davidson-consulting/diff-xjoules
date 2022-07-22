@@ -1,7 +1,7 @@
 use serde_derive::Deserialize;
 
 use crate::fr_davidson_diff_xjoules::{
-    steps::test_selection::TestSelection, configuration::Configuration, diff_data::DiffXJoulesData
+    configuration::Configuration, diff_data::DiffXJoulesData, steps::test_selection::TestSelection,
 };
 
 use self::strict_mark_strategy::StrictMarkStrategy;

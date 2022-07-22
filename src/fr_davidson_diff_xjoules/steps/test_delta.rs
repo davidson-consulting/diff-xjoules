@@ -1,5 +1,7 @@
 use crate::fr_davidson_diff_xjoules::{
-    utils::json_utils, Configuration, DiffXJoulesData, measure::{data::Data, test_measure::TestMeasure, version_measure::VersionMeasure}
+    measure::{data::Data, test_measure::TestMeasure, version_measure::VersionMeasure},
+    utils::json_utils,
+    Configuration, DiffXJoulesData,
 };
 
 pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
@@ -40,8 +42,14 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
         test_median_v1.measures.push(medians_v1);
         test_median_v2.measures.push(medians_v2);
         test_delta.measures.push(deltas);
-        diff_xjoules_data.median_v1.test_measures.push(test_median_v1);
-        diff_xjoules_data.median_v2.test_measures.push(test_median_v2);
+        diff_xjoules_data
+            .median_v1
+            .test_measures
+            .push(test_median_v1);
+        diff_xjoules_data
+            .median_v2
+            .test_measures
+            .push(test_median_v2);
         diff_xjoules_data.delta.test_measures.push(test_delta);
         json_utils::write_json::<VersionMeasure>(
             &format!("{}/delta.json", configuration.path_output_dir),

@@ -1,6 +1,9 @@
 use serde_derive::Deserialize;
 
-use super::{utils::yaml_utils::read_yaml, steps::test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum}};
+use super::{
+    steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
+    utils::yaml_utils::read_yaml,
+};
 
 #[derive(Deserialize)]
 pub struct Configuration {

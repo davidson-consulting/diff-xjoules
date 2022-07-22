@@ -1,10 +1,14 @@
-use self::{diff_data::DiffXJoulesData, configuration::Configuration, steps::{test_selection, test_instrumentation, test_execution, test_delta, test_mark}};
+use self::{
+    configuration::Configuration,
+    diff_data::DiffXJoulesData,
+    steps::{test_delta, test_execution, test_instrumentation, test_mark, test_selection},
+};
 
-pub mod steps;
-pub mod utils;
 pub mod configuration;
 pub mod diff_data;
 pub mod measure;
+pub mod steps;
+pub mod utils;
 
 pub const SUFFIX_V1: &str = "_v1";
 pub const SUFFIX_V2: &str = "_v2";

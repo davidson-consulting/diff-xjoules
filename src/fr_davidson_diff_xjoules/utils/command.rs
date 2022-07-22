@@ -1,8 +1,8 @@
-use std::collections::HashMap;
 use handlebars::Handlebars;
-use std::process::{Command, ExitStatus, Stdio};
+use std::collections::HashMap;
 use std::fs::File;
 use std::os::unix::io::{FromRawFd, IntoRawFd};
+use std::process::{Command, ExitStatus, Stdio};
 
 pub fn run_command(str_command: &str) -> ExitStatus {
     println!("{}", str_command);
@@ -34,7 +34,7 @@ pub fn run_command_redirect_to_file(str_command: &str, path_file: &str) -> ExitS
         .expect("Could not wait for the command!");
 }
 
-pub fn run_templated_command(templated_command: &str,  data: &HashMap<&str, &str>) -> ExitStatus {
+pub fn run_templated_command(templated_command: &str, data: &HashMap<&str, &str>) -> ExitStatus {
     let mut handlebars = Handlebars::new();
     handlebars
         .register_template_string("templated_command", templated_command)
@@ -60,7 +60,6 @@ mod tests {
         let mut splitted_content = content.split("\n");
         assert!(splitted_content.any(|element| element.eq("Cargo.toml")));
         assert!(splitted_content.any(|element| element.eq("src")));
-        
     }
 
     #[test]

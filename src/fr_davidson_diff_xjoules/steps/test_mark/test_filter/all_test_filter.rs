@@ -1,4 +1,6 @@
-use crate::fr_davidson_diff_xjoules::{configuration::Configuration, diff_data::DiffXJoulesData, steps::test_selection::TestSelection};
+use crate::fr_davidson_diff_xjoules::{
+    configuration::Configuration, diff_data::DiffXJoulesData, steps::test_selection::TestSelection,
+};
 
 use super::TestFilter;
 

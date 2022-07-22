@@ -21,7 +21,9 @@ pub fn run(configuration: &Configuration) {
 }
 
 mod tests {
-    use crate::fr_davidson_diff_xjoules::steps::test_mark::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum};
+    use crate::fr_davidson_diff_xjoules::steps::test_mark::{
+        mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum,
+    };
 
     use super::*;
     use std::{fs, panic};
@@ -32,7 +34,10 @@ mod tests {
             command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");
             command::run_command_redirect_to_file("ls diff-jjoules/target", "target/list_files");
             let list_files = fs::read_to_string("target/list_files").unwrap();
-            let jar_filename = list_files.lines().find(|file| file.ends_with("SNAPSHOT-jar-with-dependencies.jar")).unwrap();
+            let jar_filename = list_files
+                .lines()
+                .find(|file| file.ends_with("SNAPSHOT-jar-with-dependencies.jar"))
+                .unwrap();
             let configuration = Configuration {
                 path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
                 path_v2: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2"),
@@ -54,13 +59,12 @@ mod tests {
             assert!(diff_xjoules_diff.lines().any(|line| line.contains("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/src/main/java/fr/davidson/App.java")));
         })
     }
-    
+
     fn run_test<T>(test: T) -> ()
-        where T: FnOnce() -> () + panic::UnwindSafe
+    where
+        T: FnOnce() -> () + panic::UnwindSafe,
     {
-        let result = panic::catch_unwind(|| {
-            test()
-        });
+        let result = panic::catch_unwind(|| test());
         teardown();
         assert!(result.is_ok())
     }
@@ -68,5 +72,4 @@ mod tests {
     fn teardown() {
         command::run_command("git checkout -- diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/");
     }
-
 }

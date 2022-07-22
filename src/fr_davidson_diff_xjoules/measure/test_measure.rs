@@ -1,4 +1,4 @@
-use serde_derive::{Serialize, Deserialize};
+use serde_derive::{Deserialize, Serialize};
 
 use crate::fr_davidson_diff_xjoules::utils::math;
 
@@ -33,8 +33,6 @@ impl TestMeasure {
         return math::median(&mut values);
     }
 }
-
-
 
 mod tests {
     use super::*;

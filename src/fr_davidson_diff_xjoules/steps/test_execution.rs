@@ -1,11 +1,12 @@
 use std::collections::HashMap;
 
 use crate::fr_davidson_diff_xjoules::{
+    measure::version_measure::VersionMeasure,
     utils::{
         command,
-        json_utils::{read_json, JSON_EXTENSION, self},
+        json_utils::{self, read_json, JSON_EXTENSION},
     },
-    Configuration, DiffXJoulesData, measure::version_measure::VersionMeasure
+    Configuration, DiffXJoulesData,
 };
 
 use rand::Rng;
@@ -18,8 +19,12 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
         "{}/{}{}",
         configuration.path_output_dir, TEST_SELECTION_FILENAME, JSON_EXTENSION
     );
-    let mut data_v1 = VersionMeasure { test_measures: Vec::new() };
-    let mut data_v2 = VersionMeasure { test_measures: Vec::new() };
+    let mut data_v1 = VersionMeasure {
+        test_measures: Vec::new(),
+    };
+    let mut data_v2 = VersionMeasure {
+        test_measures: Vec::new(),
+    };
     let mut rng = rand::thread_rng();
     let time_to_wait = time::Duration::from_millis(configuration.time_to_wait_in_millis);
 
@@ -31,34 +36,40 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
                 &configuration.path_v1,
                 &tests_set_path,
                 &configuration.execution_cmd,
-                &mut data_v1
+                &mut data_v1,
             );
             run_and_merge_for_version(
                 &configuration.path_v2,
                 &tests_set_path,
                 &configuration.execution_cmd,
-                &mut data_v2
+                &mut data_v2,
             );
         } else {
             run_and_merge_for_version(
                 &configuration.path_v2,
                 &tests_set_path,
                 &configuration.execution_cmd,
-                &mut data_v2
+                &mut data_v2,
             );
             run_and_merge_for_version(
                 &configuration.path_v1,
                 &tests_set_path,
                 &configuration.execution_cmd,
-                &mut data_v1
+                &mut data_v1,
             );
         }
         if i % 3 == 0 {
             thread::sleep(time_to_wait);
         }
     }
-    json_utils::write_json::<VersionMeasure>(&format!("{}/data_v1.json", configuration.path_output_dir), &data_v1);
-    json_utils::write_json::<VersionMeasure>(&format!("{}/data_v2.json", configuration.path_output_dir), &data_v2);
+    json_utils::write_json::<VersionMeasure>(
+        &format!("{}/data_v1.json", configuration.path_output_dir),
+        &data_v1,
+    );
+    json_utils::write_json::<VersionMeasure>(
+        &format!("{}/data_v2.json", configuration.path_output_dir),
+        &data_v2,
+    );
     diff_xjoules_data.data_v1 = data_v1;
     diff_xjoules_data.data_v2 = data_v2;
 }
@@ -85,15 +96,29 @@ pub fn run_once_for_version(path_project: &str, test_set_path: &str, instrumenta
     command::run_templated_command(instrumentation_cmd, &data);
 }
 
-pub fn run_and_merge_for_version(path_project: &str, test_set_path: &str, instrumentation_cmd: &str, version_data: & mut VersionMeasure) {
+pub fn run_and_merge_for_version(
+    path_project: &str,
+    test_set_path: &str,
+    instrumentation_cmd: &str,
+    version_data: &mut VersionMeasure,
+) {
     run_once_for_version(path_project, test_set_path, instrumentation_cmd);
-    let data = read_json::<VersionMeasure>(&format!("{}/diff-measurements/measurements.json", path_project));
+    let data = read_json::<VersionMeasure>(&format!(
+        "{}/diff-measurements/measurements.json",
+        path_project
+    ));
     version_data.merge(data);
 }
 
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::{utils::{json_utils::{self, read_json, JSON_EXTENSION}, command::run_command}, steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum}};
+    use crate::fr_davidson_diff_xjoules::{
+        steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
+        utils::{
+            command::run_command,
+            json_utils::{self, read_json, JSON_EXTENSION},
+        },
+    };
     use std::{fs, panic};
 
     //#[test]
@@ -102,7 +127,10 @@ mod tests {
             command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");
             command::run_command_redirect_to_file("ls diff-jjoules/target", "target/list_files");
             let list_files = fs::read_to_string("target/list_files").unwrap();
-            let jar_filename = list_files.lines().find(|file| file.ends_with("SNAPSHOT-jar-with-dependencies.jar")).unwrap();
+            let jar_filename = list_files
+                .lines()
+                .find(|file| file.ends_with("SNAPSHOT-jar-with-dependencies.jar"))
+                .unwrap();
 
             // copy pre-instrumented classes
             command::run_command("cp test_resources/AppTest.java.v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/src/test/java/fr/davidson/AppTest.java");
@@ -139,10 +167,11 @@ mod tests {
         });
     }
 
-    fn run_test<T>(test: T) -> () where T: FnOnce() -> () + panic::UnwindSafe {
-        let result = panic::catch_unwind(|| {
-            test()
-        });
+    fn run_test<T>(test: T) -> ()
+    where
+        T: FnOnce() -> () + panic::UnwindSafe,
+    {
+        let result = panic::catch_unwind(|| test());
         teardown();
         assert!(result.is_ok())
     }
@@ -150,5 +179,4 @@ mod tests {
     fn teardown() {
         command::run_command("git checkout -- diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/");
     }
-
 }

@@ -1,4 +1,4 @@
-use serde_derive::{Serialize, Deserialize};
+use serde_derive::{Deserialize, Serialize};
 
 use super::test_measure::TestMeasure;
 
@@ -31,11 +31,9 @@ impl VersionMeasure {
     }
 }
 
-
-
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::{utils::json_utils, measure::data::Data};
+    use crate::fr_davidson_diff_xjoules::{measure::data::Data, utils::json_utils};
 
     #[test]
     fn test_version_measure_find_test_measure() {
