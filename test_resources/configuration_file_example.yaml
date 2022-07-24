@@ -14,4 +14,4 @@ execution_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-wi
 test_filter: ALL
 mark_strategy: STRICT
 
-indicator_to_consider_for_marking: "cycles"
+indicator_to_consider_for_marking: "RAPL_ENERGY_PKG"
