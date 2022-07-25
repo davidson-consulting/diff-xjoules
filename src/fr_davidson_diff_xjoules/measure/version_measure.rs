@@ -29,6 +29,11 @@ impl VersionMeasure {
             .iter()
             .find(|test_measure| test_measure.test_identifier.eq(test_identifier));
     }
+    pub fn new() -> VersionMeasure {
+        return VersionMeasure {
+            test_measures: Vec::new(),
+        };
+    }
 }
 
 #[cfg(test)]
@@ -38,9 +43,7 @@ mod tests {
 
     #[test]
     fn test_version_measure_find_test_measure() {
-        let mut version_measure_1: VersionMeasure = VersionMeasure {
-            test_measures: Vec::new(),
-        };
+        let mut version_measure_1 = VersionMeasure::new();
         let test_measure_test_1: TestMeasure = TestMeasure {
             test_identifier: String::from("test1"),
             measures: Vec::new(),
@@ -79,9 +82,7 @@ mod tests {
 
     #[test]
     fn test_version_measure_merge() {
-        let mut version_measure_1: VersionMeasure = VersionMeasure {
-            test_measures: Vec::new(),
-        };
+        let mut version_measure_1: VersionMeasure = VersionMeasure::new();
         let mut test_measure_test_1: TestMeasure = TestMeasure {
             test_identifier: String::from("test1"),
             measures: Vec::new(),
@@ -113,9 +114,7 @@ mod tests {
         test_measure_test_2.measures.push(data_2);
         version_measure_1.test_measures.push(test_measure_test_2);
 
-        let mut version_measure_2: VersionMeasure = VersionMeasure {
-            test_measures: Vec::new(),
-        };
+        let mut version_measure_2 = VersionMeasure::new();
         let mut test_measure_test_3: TestMeasure = TestMeasure {
             test_identifier: String::from("test1"),
             measures: Vec::new(),
