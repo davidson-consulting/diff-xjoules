@@ -113,71 +113,126 @@ pub fn run_and_merge_for_version(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::fr_davidson_diff_xjoules::{
-        steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
-        utils::json_utils,
+    use crate::fr_davidson_diff_xjoules::steps::test_mark::{
+        mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum,
     };
-    use std::{fs, panic};
+    use std::{fs, path::Path};
 
-    #[ignore]
     #[test]
-    fn test_run_integration_with_java() {
-        run_test(|| {
-            command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");
-            command::run_command_redirect_to_file("ls diff-jjoules/target", "target/list_files");
-            let list_files = fs::read_to_string("target/list_files").unwrap();
-            let jar_filename = list_files
-                .lines()
-                .find(|file| file.ends_with("SNAPSHOT-jar-with-dependencies.jar"))
-                .unwrap();
-
-            // copy pre-instrumented classes
-            command::run_command("cp test_resources/AppTest.java.v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/src/test/java/fr/davidson/AppTest.java");
-            command::run_command("cp test_resources/AppTest.java.v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/src/test/java/fr/davidson/AppTest.java");
-            command::run_command("cp test_resources/pom.xml diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/pom.xml");
-            command::run_command("cp test_resources/pom.xml diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/pom.xml");
-
-            let configuration = Configuration {
-                path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
-                path_v2: String::from(
-                    "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2",
-                ),
-                src_folder: String::from("src/main/java"),
-                path_output_dir: String::from("target"),
-                coverage_cmd: String::from(""),
-                instrumentation_cmd: String::from(""),
-                execution_cmd: String::from(format!("java -jar diff-jjoules/target/{} --path-to-project {} --task TEST_EXECUTION --tests-set {}" , jar_filename, "{{ path_project }}", "{{ tests_set_path }}")),
-                iteration_warmup: 1,
-                iteration_run: 3,
-                time_to_wait_in_millis: 500,
-                test_filter: TestFilterEnum::ALL,
-                mark_strategy: MarkStrategyEnum::STRICT,
-                indicator_to_consider_for_marking: String::from("cycles")
-            };
-            run(&configuration, &mut DiffXJoulesData::new());
-            let data_v1 = json_utils::read_json::<VersionMeasure>("target/data_v1.json");
-            let data_v2 = json_utils::read_json::<VersionMeasure>("target/data_v2.json");
-            assert_eq!(4, data_v1.test_measures.len());
-            assert_eq!(4, data_v2.test_measures.len());
-            assert_eq!(3, data_v1.test_measures[0].measures.len());
-            assert_eq!(3, data_v2.test_measures[0].measures.len());
-            assert_eq!(8, data_v1.test_measures[0].measures[0].len());
-            assert_eq!(8, data_v2.test_measures[0].measures[0].len());
-        });
+    fn test_run() {
+        if Path::new("target/v1").exists() {
+            fs::remove_dir_all("target/v1").unwrap();
+            fs::remove_dir_all("target/v2").unwrap();
+        }
+        fs::create_dir("target/v1").unwrap();
+        fs::create_dir("target/v2").unwrap();
+        fs::create_dir_all("target/v1/diff-measurements").unwrap();
+        fs::create_dir_all("target/v2/diff-measurements").unwrap();
+        command::run_command("cp test_resources/measurements_v1.json target/v1/measurements.json");
+        command::run_command("cp test_resources/measurements_v2.json target/v2/measurements.json");
+        let configuration = Configuration {
+            path_v1: String::from("target/v1"),
+            path_v2: String::from("target/v2"),
+            src_folder: String::from("src/main/java"),
+            path_output_dir: String::from("target"),
+            coverage_cmd: String::from(""),
+            instrumentation_cmd: String::from(""),
+            execution_cmd: String::from(format!(
+                "cp {}/measurements.json {}/diff-measurements/measurements.json",
+                "{{ path_project }}", "{{ path_project }}"
+            )),
+            iteration_warmup: 1,
+            iteration_run: 10,
+            time_to_wait_in_millis: 1,
+            test_filter: TestFilterEnum::ALL,
+            mark_strategy: MarkStrategyEnum::STRICT,
+            indicator_to_consider_for_marking: String::from("cycles"),
+        };
+        let diff_xjoules_data = &mut DiffXJoulesData::new();
+        run(&configuration, diff_xjoules_data);
+        assert_eq!(4, diff_xjoules_data.data_v1.test_measures.len());
+        assert_eq!(
+            10,
+            diff_xjoules_data
+                .data_v1
+                .test_measures
+                .get(0)
+                .unwrap()
+                .measures
+                .len()
+        );
+        assert_eq!(4, diff_xjoules_data.data_v2.test_measures.len());
+        assert_eq!(
+            10,
+            diff_xjoules_data
+                .data_v2
+                .test_measures
+                .get(0)
+                .unwrap()
+                .measures
+                .len()
+        );
     }
 
-    #[cfg(test)]
-    fn run_test<T>(test: T) -> ()
-    where
-        T: FnOnce() -> () + panic::UnwindSafe,
-    {
-        let result = panic::catch_unwind(|| test());
-        teardown();
-        assert!(result.is_ok())
-    }
+    // #[ignore]
+    // #[test]
+    // fn test_run_integration_with_java() {
+    //     run_test(|| {
+    //         command::run_command("mvn clean package -DskipTests -f diff-jjoules/pom.xml");
+    //         command::run_command_redirect_to_file("ls diff-jjoules/target", "target/list_files");
+    //         let list_files = fs::read_to_string("target/list_files").unwrap();
+    //         let jar_filename = list_files
+    //             .lines()
+    //             .find(|file| file.ends_with("SNAPSHOT-jar-with-dependencies.jar"))
+    //             .unwrap();
 
-    #[cfg(test)]
-    fn teardown() {
-        command::run_command("git checkout -- diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/");
-    }
+    //         // copy pre-instrumented classes
+    //         command::run_command("cp test_resources/AppTest.java.v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/src/test/java/fr/davidson/AppTest.java");
+    //         command::run_command("cp test_resources/AppTest.java.v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/src/test/java/fr/davidson/AppTest.java");
+    //         command::run_command("cp test_resources/pom.xml diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/pom.xml");
+    //         command::run_command("cp test_resources/pom.xml diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/pom.xml");
+
+    //         let configuration = Configuration {
+    //             path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
+    //             path_v2: String::from(
+    //                 "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2",
+    //             ),
+    //             src_folder: String::from("src/main/java"),
+    //             path_output_dir: String::from("target"),
+    //             coverage_cmd: String::from(""),
+    //             instrumentation_cmd: String::from(""),
+    //             execution_cmd: String::from(format!("java -jar diff-jjoules/target/{} --path-to-project {} --task TEST_EXECUTION --tests-set {}" , jar_filename, "{{ path_project }}", "{{ tests_set_path }}")),
+    //             iteration_warmup: 1,
+    //             iteration_run: 3,
+    //             time_to_wait_in_millis: 500,
+    //             test_filter: TestFilterEnum::ALL,
+    //             mark_strategy: MarkStrategyEnum::STRICT,
+    //             indicator_to_consider_for_marking: String::from("cycles")
+    //         };
+    //         run(&configuration, &mut DiffXJoulesData::new());
+    //         let data_v1 = json_utils::read_json::<VersionMeasure>("target/data_v1.json");
+    //         let data_v2 = json_utils::read_json::<VersionMeasure>("target/data_v2.json");
+    //         assert_eq!(4, data_v1.test_measures.len());
+    //         assert_eq!(4, data_v2.test_measures.len());
+    //         assert_eq!(3, data_v1.test_measures[0].measures.len());
+    //         assert_eq!(3, data_v2.test_measures[0].measures.len());
+    //         assert_eq!(8, data_v1.test_measures[0].measures[0].len());
+    //         assert_eq!(8, data_v2.test_measures[0].measures[0].len());
+    //     });
+    // }
+
+    // #[cfg(test)]
+    // fn run_test<T>(test: T) -> ()
+    // where
+    //     T: FnOnce() -> () + panic::UnwindSafe,
+    // {
+    //     let result = panic::catch_unwind(|| test());
+    //     teardown();
+    //     assert!(result.is_ok())
+    // }
+
+    // #[cfg(test)]
+    // fn teardown() {
+    //     command::run_command("git checkout -- diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/");
+    // }
 }
