@@ -17,9 +17,13 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
 
 #[cfg(test)]
 mod test {
-    use crate::fr_davidson_diff_xjoules::{configuration::Configuration, diff_data::DiffXJoulesData, utils::json_utils, measure::version_measure::VersionMeasure, steps::test_selection::TestSelection};
+    use crate::fr_davidson_diff_xjoules::{
+        configuration::Configuration, diff_data::DiffXJoulesData,
+        measure::version_measure::VersionMeasure, steps::test_selection::TestSelection,
+        utils::json_utils,
+    };
 
-    use super::{test_filter::TestFilterEnum, mark_strategy::MarkStrategyEnum, run};
+    use super::{mark_strategy::MarkStrategyEnum, run, test_filter::TestFilterEnum};
 
     #[test]
     fn test_run() {
@@ -41,16 +45,27 @@ mod test {
             indicator_to_consider_for_marking: String::from("UNHALTED_REFERENCE_CYCLES"),
         };
         let mut data = DiffXJoulesData::new();
-        data.test_selection = json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
+        data.test_selection =
+            json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
         data.delta = json_utils::read_json::<VersionMeasure>("test_resources/delta.json");
         run(&configuration, &mut data);
         assert_eq!(4, data.mark_test_selection.test_selection.len());
-        assert!(data.mark_test_selection.test_selection.contains("fr.davidson.AppTest#testAddedStatement"));
-        assert!(data.mark_test_selection.test_selection.contains("fr.davidson.AppTest#testAddedAndRemovedStatement"));
-        assert!(data.mark_test_selection.test_selection.contains("fr.davidson.AppTest#testUpdatedStatement"));
-        assert!(data.mark_test_selection.test_selection.contains("fr.davidson.AppTest#testRemovedStatement"));
+        assert!(data
+            .mark_test_selection
+            .test_selection
+            .contains("fr.davidson.AppTest#testAddedStatement"));
+        assert!(data
+            .mark_test_selection
+            .test_selection
+            .contains("fr.davidson.AppTest#testAddedAndRemovedStatement"));
+        assert!(data
+            .mark_test_selection
+            .test_selection
+            .contains("fr.davidson.AppTest#testUpdatedStatement"));
+        assert!(data
+            .mark_test_selection
+            .test_selection
+            .contains("fr.davidson.AppTest#testRemovedStatement"));
         assert!(!data.decision);
-
     }
-
 }

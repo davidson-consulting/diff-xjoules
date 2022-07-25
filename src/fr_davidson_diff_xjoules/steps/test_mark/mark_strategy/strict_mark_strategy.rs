@@ -40,8 +40,8 @@ impl StrictMarkStrategy {
 mod test {
     use super::*;
     use crate::fr_davidson_diff_xjoules::{
-        measure::{version_measure::VersionMeasure, test_measure::TestMeasure, data::Data},
-        steps::test_mark::{mark_strategy::{MarkStrategyEnum}, test_filter::TestFilterEnum},
+        measure::{data::Data, test_measure::TestMeasure, version_measure::VersionMeasure},
+        steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
         utils::json_utils,
     };
 

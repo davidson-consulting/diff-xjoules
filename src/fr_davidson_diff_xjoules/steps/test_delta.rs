@@ -87,7 +87,10 @@ mod test {
     use crate::fr_davidson_diff_xjoules::{
         configuration::Configuration,
         diff_data::DiffXJoulesData,
-        steps::{test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum}, test_selection::TestSelection},
+        steps::{
+            test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
+            test_selection::TestSelection,
+        },
     };
 
     use super::*;
@@ -99,10 +102,28 @@ mod test {
         let mut deltas = Vec::<Data>::new();
         let data_v1 = json_utils::read_json::<VersionMeasure>("test_resources/data_v1.json");
         let data_v2 = json_utils::read_json::<VersionMeasure>("test_resources/data_v2.json");
-        let test_measure_v1 = data_v1.find_test_measure("fr.davidson.AppTest#testAddedStatement").unwrap();
-        let test_measure_v2 = data_v2.find_test_measure("fr.davidson.AppTest#testAddedStatement").unwrap();
-        compute_median_and_delta_indicator(&mut medians_v1, &mut medians_v2, &mut deltas, test_measure_v1, test_measure_v2, "duration");
-        compute_median_and_delta_indicator(&mut medians_v1, &mut medians_v2, &mut deltas, test_measure_v1, test_measure_v2, "RAPL_ENERGY_PKG");
+        let test_measure_v1 = data_v1
+            .find_test_measure("fr.davidson.AppTest#testAddedStatement")
+            .unwrap();
+        let test_measure_v2 = data_v2
+            .find_test_measure("fr.davidson.AppTest#testAddedStatement")
+            .unwrap();
+        compute_median_and_delta_indicator(
+            &mut medians_v1,
+            &mut medians_v2,
+            &mut deltas,
+            test_measure_v1,
+            test_measure_v2,
+            "duration",
+        );
+        compute_median_and_delta_indicator(
+            &mut medians_v1,
+            &mut medians_v2,
+            &mut deltas,
+            test_measure_v1,
+            test_measure_v2,
+            "RAPL_ENERGY_PKG",
+        );
         assert_eq!(136359.0, medians_v1.get(0).unwrap().value);
         assert_eq!(142499.0, medians_v2.get(0).unwrap().value);
         assert_eq!(6140.0, deltas.get(0).unwrap().value);
@@ -137,9 +158,12 @@ mod test {
             indicator_to_consider_for_marking: String::from("cycles"),
         };
         let mut diff_xjoules_data = DiffXJoulesData::new();
-        diff_xjoules_data.test_selection = json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
-        diff_xjoules_data.data_v1 = json_utils::read_json::<VersionMeasure>("test_resources/data_v1.json");
-        diff_xjoules_data.data_v2 = json_utils::read_json::<VersionMeasure>("test_resources/data_v2.json");
+        diff_xjoules_data.test_selection =
+            json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
+        diff_xjoules_data.data_v1 =
+            json_utils::read_json::<VersionMeasure>("test_resources/data_v1.json");
+        diff_xjoules_data.data_v2 =
+            json_utils::read_json::<VersionMeasure>("test_resources/data_v2.json");
         assert_eq!(0, diff_xjoules_data.delta.test_measures.len());
         assert_eq!(0, diff_xjoules_data.median_v1.test_measures.len());
         assert_eq!(0, diff_xjoules_data.median_v2.test_measures.len());

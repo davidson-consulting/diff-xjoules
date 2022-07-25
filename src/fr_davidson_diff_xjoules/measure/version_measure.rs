@@ -77,7 +77,9 @@ mod tests {
                 .unwrap()
                 .test_identifier
         );
-        assert!(version_measure_1.find_test_measure("does_not_exist").is_none());
+        assert!(version_measure_1
+            .find_test_measure("does_not_exist")
+            .is_none());
     }
 
     #[test]

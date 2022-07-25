@@ -31,10 +31,13 @@ mod test {
         configuration::Configuration,
         diff_data::DiffXJoulesData,
         measure::version_measure::VersionMeasure,
-        steps::{test_mark::{
-            mark_strategy::MarkStrategyEnum,
-            test_filter::{TestFilter, TestFilterEnum},
-        }, test_selection::TestSelection},
+        steps::{
+            test_mark::{
+                mark_strategy::MarkStrategyEnum,
+                test_filter::{TestFilter, TestFilterEnum},
+            },
+            test_selection::TestSelection,
+        },
         utils::json_utils,
     };
 
@@ -60,12 +63,21 @@ mod test {
         };
         let mut data = DiffXJoulesData::new();
         data.delta = json_utils::read_json::<VersionMeasure>("test_resources/delta.json");
-        data.test_selection = json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
+        data.test_selection =
+            json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
         let test_selection = test_filter.filter(&configuration, &data);
         assert_eq!(4, test_selection.test_selection.len());
-        assert!(test_selection.test_selection.contains("fr.davidson.AppTest#testAddedStatement"));
-        assert!(test_selection.test_selection.contains("fr.davidson.AppTest#testAddedAndRemovedStatement"));
-        assert!(test_selection.test_selection.contains("fr.davidson.AppTest#testUpdatedStatement"));
-        assert!(test_selection.test_selection.contains("fr.davidson.AppTest#testRemovedStatement"));
+        assert!(test_selection
+            .test_selection
+            .contains("fr.davidson.AppTest#testAddedStatement"));
+        assert!(test_selection
+            .test_selection
+            .contains("fr.davidson.AppTest#testAddedAndRemovedStatement"));
+        assert!(test_selection
+            .test_selection
+            .contains("fr.davidson.AppTest#testUpdatedStatement"));
+        assert!(test_selection
+            .test_selection
+            .contains("fr.davidson.AppTest#testRemovedStatement"));
     }
 }

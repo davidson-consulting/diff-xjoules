@@ -73,7 +73,7 @@ mod tests {
 
     #[test]
     fn test_run_coverage_cmd() {
-        let coverage =run_coverage_cmd(
+        let coverage = run_coverage_cmd(
             "target/",
             "cp test_resources/coverage_v1.json {{ output_path }}",
             "target/coverage.json",
