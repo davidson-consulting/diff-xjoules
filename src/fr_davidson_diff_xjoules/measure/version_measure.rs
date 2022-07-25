@@ -74,10 +74,7 @@ mod tests {
                 .unwrap()
                 .test_identifier
         );
-        match version_measure_1.find_test_measure("does_not_exist") {
-            Some(_) => assert!(false),
-            None => assert!(true),
-        }
+        assert!(version_measure_1.find_test_measure("does_not_exist").is_none());
     }
 
     #[test]
