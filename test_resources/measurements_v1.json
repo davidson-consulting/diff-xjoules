@@ -1,0 +1,160 @@
+{
+	"test_measures": [
+		{
+			"test_identifier": "fr.davidson.AppTest#testAddedStatement",
+			"measures": [
+				[
+					{
+						"indicator": "duration",
+						"value": 86569
+					},
+					{
+						"indicator": "UNHALTED_REFERENCE_CYCLES",
+						"value": 128625
+					},
+					{
+						"indicator": "LLC_REFERENCES",
+						"value": 14043
+					},
+					{
+						"indicator": "BRANCH_INSTRUCTIONS_RETIRED",
+						"value": 8117
+					},
+					{
+						"indicator": "LLC_MISSES",
+						"value": 3580
+					},
+					{
+						"indicator": "MISPREDICTED_BRANCH_RETIRED",
+						"value": 1284
+					},
+					{
+						"indicator": "RAPL_ENERGY_PKG",
+						"value": 3580
+					},
+					{
+						"indicator": "INSTRUCTIONS_RETIRED",
+						"value": 44107
+					}
+				]
+			]
+		},
+		{
+			"test_identifier": "fr.davidson.AppTest#testRemovedStatement",
+			"measures": [
+				[
+					{
+						"indicator": "duration",
+						"value": 136803
+					},
+					{
+						"indicator": "UNHALTED_REFERENCE_CYCLES",
+						"value": 221100
+					},
+					{
+						"indicator": "LLC_REFERENCES",
+						"value": 29093
+					},
+					{
+						"indicator": "BRANCH_INSTRUCTIONS_RETIRED",
+						"value": 21000
+					},
+					{
+						"indicator": "LLC_MISSES",
+						"value": 3366
+					},
+					{
+						"indicator": "MISPREDICTED_BRANCH_RETIRED",
+						"value": 2373
+					},
+					{
+						"indicator": "RAPL_ENERGY_PKG",
+						"value": 3366
+					},
+					{
+						"indicator": "INSTRUCTIONS_RETIRED",
+						"value": 110608
+					}
+				]
+			]
+		},
+		{
+			"test_identifier": "fr.davidson.AppTest#testAddedAndRemovedStatement",
+			"measures": [
+				[
+					{
+						"indicator": "duration",
+						"value": 950767
+					},
+					{
+						"indicator": "UNHALTED_REFERENCE_CYCLES",
+						"value": 1687125
+					},
+					{
+						"indicator": "LLC_REFERENCES",
+						"value": 147774
+					},
+					{
+						"indicator": "BRANCH_INSTRUCTIONS_RETIRED",
+						"value": 336370
+					},
+					{
+						"indicator": "LLC_MISSES",
+						"value": 60139
+					},
+					{
+						"indicator": "MISPREDICTED_BRANCH_RETIRED",
+						"value": 14279
+					},
+					{
+						"indicator": "RAPL_ENERGY_PKG",
+						"value": 60139
+					},
+					{
+						"indicator": "INSTRUCTIONS_RETIRED",
+						"value": 1858969
+					}
+				]
+			]
+		},
+		{
+			"test_identifier": "fr.davidson.AppTest#testUpdatedStatement",
+			"measures": [
+				[
+					{
+						"indicator": "duration",
+						"value": 172533
+					},
+					{
+						"indicator": "UNHALTED_REFERENCE_CYCLES",
+						"value": 273750
+					},
+					{
+						"indicator": "LLC_REFERENCES",
+						"value": 20852
+					},
+					{
+						"indicator": "BRANCH_INSTRUCTIONS_RETIRED",
+						"value": 14471
+					},
+					{
+						"indicator": "LLC_MISSES",
+						"value": 1884
+					},
+					{
+						"indicator": "MISPREDICTED_BRANCH_RETIRED",
+						"value": 1755
+					},
+					{
+						"indicator": "RAPL_ENERGY_PKG",
+						"value": 1884
+					},
+					{
+						"indicator": "INSTRUCTIONS_RETIRED",
+						"value": 76609
+					}
+				]
+			]
+		}
+	]
+}
