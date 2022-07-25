@@ -15,3 +15,8 @@ diff-jjoules/spooned
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/*.backup
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/diff-measurements/
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/diff-measurements/
+
+# changelog-generator
+
+changelog-generator/node_modules
+changelog-generator/package-lock.json

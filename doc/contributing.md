@@ -22,3 +22,20 @@ For contributing, we favor the creation of pull request (PR) on GitHub.
 - `doc`: the commits intend to modify the documentation without modifying the code.
 - `ci`: the commits intend to improve or modify the continuous integration workflows.
 - `chore`: the commits intend to modify others files that is nor code nor documentation, _e.g._ configuration files.
+
+## Generating changelog
+
+To generate a fancy and well structured Changelog in Markdown format, you can use the `changelog-generator`.
+
+To do so, run the following command line from `diff-xjoules` root folder:
+
+```sh
+node changelog-generator/changelog.js davidson-consulting diff-xjoules 0.0.0
+```
+
+where `0.0.0` should be the previous tags.
+
+This command will output a changelog from the provided tag to the current version.
+It might need some manual modifications for the classification, authors name, etc.
+
+Please, refer to the dedicated [README.md](https://github.com/davidson-consulting/changelog-generator/README.md) for more information.
