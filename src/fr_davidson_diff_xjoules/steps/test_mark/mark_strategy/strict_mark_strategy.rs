@@ -6,7 +6,6 @@ use super::MarkStrategy;
 
 pub struct StrictMarkStrategy {}
 
-// For now, we base all our MarkStrategy on cycles, but we could give as input which indicator is to be taken into account
 impl MarkStrategy for StrictMarkStrategy {
     fn decide(
         self,
@@ -41,10 +40,46 @@ impl StrictMarkStrategy {
 mod test {
     use super::*;
     use crate::fr_davidson_diff_xjoules::{
-        measure::version_measure::VersionMeasure,
+        measure::{version_measure::VersionMeasure, test_measure::TestMeasure, data::Data},
         steps::test_mark::{mark_strategy::{MarkStrategyEnum}, test_filter::TestFilterEnum},
         utils::json_utils,
     };
+
+    #[test]
+    fn test_decide_pass() {
+        let mark_strategy = MarkStrategyEnum::STRICT.get();
+        let configuration = Configuration {
+            path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
+            path_v2: String::from(
+                "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2",
+            ),
+            src_folder: String::from("src/main/java"),
+            path_output_dir: String::from("target"),
+            coverage_cmd: String::from(""),
+            instrumentation_cmd: String::from(""),
+            execution_cmd: String::from(""),
+            iteration_warmup: 1,
+            iteration_run: 3,
+            time_to_wait_in_millis: 500,
+            test_filter: TestFilterEnum::ALL,
+            mark_strategy: MarkStrategyEnum::STRICT,
+            indicator_to_consider_for_marking: String::from("instructions"),
+        };
+        let mut data = DiffXJoulesData::new();
+        let mut delta = VersionMeasure::new();
+        let mut test_measure = TestMeasure {
+            test_identifier: String::from("test1"),
+            measures: Vec::new(),
+        };
+        let mut data_1 = Vec::new();
+        data_1.push(Data::new("instructions", -1000.0));
+        test_measure.measures.push(data_1);
+        delta.test_measures.push(test_measure);
+        data.delta = delta;
+        let mut test_selection = TestSelection::new();
+        test_selection.test_selection.insert(String::from("test1"));
+        assert!(mark_strategy.decide(&configuration, &data, &test_selection));
+    }
 
     #[test]
     fn test_decide() {
