@@ -27,3 +27,29 @@ impl Configuration {
         return read_yaml::<Configuration>(path_to_configuration_file);
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::Configuration;
+
+    #[test]
+    fn test_new() {
+        let configuration = Configuration::new(std::path::PathBuf::from(
+            "test_resources/configuration_file_example.yaml",
+        ));
+        // Partial checking to not failing (at least less often) when we modify the test resources
+        assert_eq!(
+            "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project",
+            configuration.path_v1
+        );
+        assert_eq!(
+            "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2",
+            configuration.path_v2
+        );
+        assert_eq!("target", configuration.path_output_dir);
+        assert_eq!(
+            "RAPL_ENERGY_PKG",
+            configuration.indicator_to_consider_for_marking
+        );
+    }
+}
