@@ -11,6 +11,12 @@ pub struct TestMeasure {
 }
 
 impl TestMeasure {
+    pub fn new(test_identifier: &str) -> TestMeasure {
+        return TestMeasure {
+            test_identifier: String::from(test_identifier),
+            measures: (Vec::new()),
+        };
+    }
     pub fn get_all_indicators(&self) -> Vec<&String> {
         let mut indicators = Vec::<&String>::new();
         self.measures[0]
@@ -84,10 +90,7 @@ mod tests {
     }
 
     fn build_test_measure_for_test() -> TestMeasure {
-        let mut test_measure_test_1: TestMeasure = TestMeasure {
-            test_identifier: String::from("test1"),
-            measures: Vec::new(),
-        };
+        let mut test_measure_test_1 = TestMeasure::new("test1");
         let mut data_1 = Vec::new();
         data_1.push(Data {
             indicator: String::from("instructions"),
