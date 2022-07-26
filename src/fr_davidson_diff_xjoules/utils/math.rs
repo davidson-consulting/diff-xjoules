@@ -8,9 +8,37 @@ pub fn median(data: &mut Vec<f64>) -> f64 {
     }
 }
 
+pub fn max(data: &mut Vec<f64>) -> f64 {
+    return *data.iter().max_by(|a, b| a.total_cmp(b)).unwrap();
+}
+
+pub fn min(data: &mut Vec<f64>) -> f64 {
+    return *data.iter().min_by(|a, b| a.total_cmp(b)).unwrap();
+}
+
 #[cfg(test)]
 mod test {
-    use crate::fr_davidson_diff_xjoules::utils::math::median;
+    use super::*;
+
+    #[test]
+    fn test_max() {
+        let mut data: Vec<f64> = Vec::new();
+        data.push(1.0);
+        data.push(10.0);
+        data.push(5.0);
+        data.push(30.0);
+        assert_eq!(30.0, min(&mut data));
+    }
+
+    #[test]
+    fn test_min() {
+        let mut data: Vec<f64> = Vec::new();
+        data.push(1.0);
+        data.push(10.0);
+        data.push(5.0);
+        data.push(30.0);
+        assert_eq!(1.0, min(&mut data));
+    }
 
     #[test]
     fn test_median_even() {
