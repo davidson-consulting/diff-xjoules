@@ -44,7 +44,7 @@ mod tests {
             iteration_warmup: 0,
             iteration_run: 3,
             time_to_wait_in_millis: 0,
-            test_filter: TestFilterEnum::ALL,
+            test_filter: TestFilterEnum::All,
             mark_strategy: MarkStrategyEnum::STRICT,
             indicator_to_consider_for_marking: String::from("cycles"),
         };

@@ -1,13 +1,15 @@
 use crate::fr_davidson_diff_xjoules::{Configuration, DiffXJoulesData};
 
-use self::{mark_strategy::MarkStrategy, test_filter::TestFilter};
+use self::mark_strategy::MarkStrategy;
 
 pub mod mark_strategy;
 pub mod test_filter;
 
 pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
-    let test_filter = configuration.test_filter.get();
-    let test_selection = test_filter.filter(&configuration, diff_xjoules_data);
+    let test_selection = configuration
+        .test_filter
+        .get()
+        .filter(&configuration, diff_xjoules_data);
     if test_selection.test_selection.is_empty() {}
     let mark_strategy = configuration.mark_strategy.get();
     let decision = mark_strategy.decide(configuration, diff_xjoules_data, &test_selection);
@@ -40,7 +42,7 @@ mod test {
             iteration_warmup: 1,
             iteration_run: 3,
             time_to_wait_in_millis: 500,
-            test_filter: TestFilterEnum::ALL,
+            test_filter: TestFilterEnum::All,
             mark_strategy: MarkStrategyEnum::STRICT,
             indicator_to_consider_for_marking: String::from("UNHALTED_REFERENCE_CYCLES"),
         };
