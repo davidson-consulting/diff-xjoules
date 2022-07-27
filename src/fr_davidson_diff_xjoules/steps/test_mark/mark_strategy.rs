@@ -5,21 +5,30 @@ use crate::fr_davidson_diff_xjoules::{
 };
 
 use self::{
-    aggregate_mark_strategy::AggregateMarkStrategy, strict_mark_strategy::StrictMarkStrategy,
+    aggregate_mark_strategy::AggregateMarkStrategy, strict_mark_strategy::StrictMarkStrategy, vote_mark_strategy::VoteMarkStrategy, code_coverage_mark_strategy::CodeCoverageMarkStrategy, diff_coverage_mark_strategy::DiffCodeCoverageMarkStrategy,
 };
 
 pub mod aggregate_mark_strategy;
 pub mod strict_mark_strategy;
+pub mod code_coverage_mark_strategy;
+pub mod diff_coverage_mark_strategy;
+pub mod vote_mark_strategy;
 
 #[derive(Deserialize)]
 pub enum MarkStrategyEnum {
     Strict,
     Aggregate,
+    Vote,
+    CodeCov,
+    DiffCov
 }
 
 pub enum MarkStrategyTypedEnum {
     Strict(StrictMarkStrategy),
     Aggregate(AggregateMarkStrategy),
+    Vote(VoteMarkStrategy),
+    CodeCov(CodeCoverageMarkStrategy),
+    DiffCov(DiffCodeCoverageMarkStrategy)
 }
 
 impl MarkStrategyEnum {
@@ -29,6 +38,9 @@ impl MarkStrategyEnum {
             MarkStrategyEnum::Aggregate => {
                 MarkStrategyTypedEnum::Aggregate(AggregateMarkStrategy::new())
             }
+            MarkStrategyEnum::Vote => MarkStrategyTypedEnum::Vote(VoteMarkStrategy::new()),
+            MarkStrategyEnum::CodeCov => MarkStrategyTypedEnum::CodeCov(CodeCoverageMarkStrategy::new()),
+            MarkStrategyEnum::DiffCov => MarkStrategyTypedEnum::DiffCov(DiffCodeCoverageMarkStrategy::new())
         }
     }
     pub fn decide(
@@ -54,6 +66,15 @@ impl MarkStrategyTypedEnum {
             }
             MarkStrategyTypedEnum::Aggregate(ref aggregate_mark_strategy) => {
                 aggregate_mark_strategy.decide(configuration, data, test_selection)
+            }
+            MarkStrategyTypedEnum::Vote(ref vote_mark_strategy) => {
+                vote_mark_strategy.decide(configuration, data, test_selection)
+            }
+            MarkStrategyTypedEnum::CodeCov(ref code_coverage_mark_strategy) => {
+                code_coverage_mark_strategy.decide(configuration, data, test_selection)
+            }
+            MarkStrategyTypedEnum::DiffCov(ref diff_coverage_mark_strategy) => {
+                diff_coverage_mark_strategy.decide(configuration, data, test_selection)
             }
         }
     }
