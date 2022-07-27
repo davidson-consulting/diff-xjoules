@@ -27,7 +27,7 @@ mod test {
         data.push(10.0);
         data.push(5.0);
         data.push(30.0);
-        assert_eq!(30.0, min(&mut data));
+        assert_eq!(30.0, max(&mut data));
     }
 
     #[test]
