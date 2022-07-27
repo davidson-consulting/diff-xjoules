@@ -177,9 +177,7 @@ mod test {
         data.data_v2 = version_measure_2;
         data.test_selection = test_selection;
         json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
-        let filter_test_selection = configuration
-            .test_filter
-            .filter(&configuration, &data);
+        let filter_test_selection = configuration.test_filter.filter(&configuration, &data);
         assert_eq!(2, filter_test_selection.test_selection.len());
     }
 

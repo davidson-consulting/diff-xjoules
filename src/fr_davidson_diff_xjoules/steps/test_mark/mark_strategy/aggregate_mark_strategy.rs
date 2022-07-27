@@ -106,6 +106,8 @@ mod test {
         data.delta = json_utils::read_json::<VersionMeasure>("test_resources/delta.json");
         let test_selection =
             json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
-        assert!(!configuration.mark_strategy.decide(&configuration, &data, &test_selection));
+        assert!(!configuration
+            .mark_strategy
+            .decide(&configuration, &data, &test_selection));
     }
 }

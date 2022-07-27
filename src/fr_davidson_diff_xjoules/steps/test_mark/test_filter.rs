@@ -5,7 +5,8 @@ use crate::fr_davidson_diff_xjoules::{
 };
 
 use self::{
-    all_test_filter::AllTestFilter, empty_intersection_test_filter::EmptyIntersectionTestFilter, student_t_test_test_filter::StudentTTestTestFilter,
+    all_test_filter::AllTestFilter, empty_intersection_test_filter::EmptyIntersectionTestFilter,
+    student_t_test_test_filter::StudentTTestTestFilter,
 };
 
 pub mod all_test_filter;
@@ -16,12 +17,12 @@ pub mod student_t_test_test_filter;
 pub enum TestFilterEnum {
     All,
     EmptyIntersection,
-    StudentTTest
+    StudentTTest,
 }
 pub enum TestFilterTypedEnum {
     All(AllTestFilter),
     EmptyIntersection(EmptyIntersectionTestFilter),
-    StudentTTest(StudentTTestTestFilter)
+    StudentTTest(StudentTTestTestFilter),
 }
 
 impl TestFilterEnum {
@@ -30,8 +31,10 @@ impl TestFilterEnum {
             TestFilterEnum::All => TestFilterTypedEnum::All(AllTestFilter::new()),
             TestFilterEnum::EmptyIntersection => {
                 TestFilterTypedEnum::EmptyIntersection(EmptyIntersectionTestFilter::new())
-            },
-            TestFilterEnum::StudentTTest => TestFilterTypedEnum::StudentTTest(StudentTTestTestFilter::new())
+            }
+            TestFilterEnum::StudentTTest => {
+                TestFilterTypedEnum::StudentTTest(StudentTTestTestFilter::new())
+            }
         }
     }
     pub fn filter(&self, configuration: &Configuration, data: &DiffXJoulesData) -> TestSelection {
