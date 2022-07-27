@@ -25,17 +25,19 @@ impl TestMeasure {
         return indicators;
     }
     pub fn get_all_measures(&self, indicator: &str) -> Vec<f64> {
-        return self
-            .measures
-            .iter()
-            .map(|datas| {
-                datas
-                    .iter()
-                    .find(|data| data.indicator == indicator)
-                    .unwrap()
-                    .value
-            })
-            .collect();
+        let mut all_measures = Vec::<f64>::new();
+        all_measures.extend(
+            self.measures
+                .iter()
+                .map(|datas| {
+                    return datas
+                        .iter()
+                        .filter(|data| data.indicator.eq(&String::from(indicator)))
+                        .map(|data| data.value);
+                })
+                .flatten(),
+        );
+        return all_measures;
     }
     pub fn get_median(&self, indicator: &str) -> f64 {
         return math::median(&mut self.get_all_measures(indicator));
