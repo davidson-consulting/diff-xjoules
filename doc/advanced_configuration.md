@@ -17,8 +17,8 @@ These strategies are based on the energy consumption of the tests filtered by th
 
 We describe in the following, the mark strategies implemented in **Diff-XJoules**:
 
-- `STRICT`: considers a commit as **breaking** if there is at least one delta test-wise is greater than zero: $\exists\Delta(t) > 0$,
-- `AGG`: considers a commit as **breaking** if the sum of the delta is greater than zero: there is at least one $(\sum^{t_n}_{t_{0}} \Delta(t)) > 0$,
-- `VOTE`: considers a commit as **breaking** if the number of test that have a positive delta is greater than the number of test that have a negative delta: $nb(\Delta(t) > 0) > nb(\Delta(t) < 0)$
-- `COCOV`: considers a commit as **breaking** if the sum of the delta, weighted by the code coverage of the test is greater than zero: $(\sum^{t_n}_{t_{0}} \Delta(t) \times \omega_{cocov}) > 0$,
-- `DICOV`: considers a commit as **breaking** if the sum of the delta, weighted by the diff coverage of the test is greater than zero: $(\sum^{t_n}_{t_{0}} \Delta(t) \times \omega_{dicov}) > 0$.
+- `Strict`: considers a commit as **breaking** if there is at least one delta test-wise is greater than zero: $\exists\Delta(t) > 0$,
+- `Aggregate`: considers a commit as **breaking** if the sum of the delta is greater than zero: there is at least one $(\sum^{t_n}_{t_{0}} \Delta(t)) > 0$,
+- `Vote`: considers a commit as **breaking** if the number of test that have a positive delta is greater than the number of test that have a negative delta: $nb(\Delta(t) > 0) > nb(\Delta(t) < 0)$
+- `CodeCov`: considers a commit as **breaking** if the sum of the delta, weighted by the code coverage of the test is greater than zero: $(\sum^{t_n}_{t_{0}} \Delta(t) \times \omega_{cocov}) > 0$,
+- `DiffCov`: considers a commit as **breaking** if the sum of the delta, weighted by the diff coverage of the test is greater than zero: $(\sum^{t_n}_{t_{0}} \Delta(t) \times \omega_{dicov}) > 0$.

@@ -33,7 +33,7 @@ The configuration YAML file requires the following properties:
 - `instrumentation_cmd`: the command to be executed to instrument the tests
 - `execution_cmd`: the command to execute the tests
 - `test_filter`: the test filter to use for the decision process. Values avalaible: `All`, `EmptyIntersection`.
-- `mark_strategy`: the strategy for marking the decision. Values avalaible: `STRICT`.
+- `mark_strategy`: the strategy for marking the decision. Values avalaible: `Strict`, `Aggregate`, `Vote`, `CodeCov`, `DiffCove`
 - `indicator_to_consider_for_marking`: the indicator (energy, cycles, instructions, etc) to use for the decision process
 
 Following, an example of configuration YAML file for Java (using [diff-jjoules](https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-jjoules)):
@@ -49,8 +49,8 @@ iteration_run: 3
 coverage_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}"
 instrumentation_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}"
 execution_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}"
-test_filter: ALL
-mark_strategy: STRICT
+test_filter: All
+mark_strategy: Strict
 indicator_to_consider_for_marking: "cycles"
 ```
 
@@ -77,7 +77,7 @@ Here, the supported languages, with the link to the plugins:
 
 If you have any questions, remarks, suggestions or bug reports, please do not hesitate to open an issue. 
 **Diff-XJoules** is licensed under **TODO**. 
-Contributions and pull requests are very welcome smiley. 
+Contributions and pull requests are very welcome :smiley:. 
 For more information on contributing, see the dedicated [documentation](https://github.com/davidson-consulting/diff-xjoules/tree/main/doc/contributing.md).
 
 ## Full fist of documentations:
