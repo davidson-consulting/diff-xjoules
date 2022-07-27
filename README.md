@@ -28,7 +28,7 @@ The configuration YAML file requires the following properties:
 - `coverage_cmd`: the command to be executed to compute the code coverage of the tests
 - `instrumentation_cmd`: the command to be executed to instrument the tests
 - `execution_cmd`: the command to execute the tests
-- `test_filter`: the test filter to use for the decision process. Values avalaible: `ALL`.
+- `test_filter`: the test filter to use for the decision process. Values avalaible: `All`, `EmptyIntersection`.
 - `mark_strategy`: the strategy for marking the decision. Values avalaible: `STRICT`.
 - `indicator_to_consider_for_marking`: the indicator (energy, cycles, instructions, etc) to use for the decision process
 

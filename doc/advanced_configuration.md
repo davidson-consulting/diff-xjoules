@@ -6,9 +6,9 @@ In **Diff-XJoules**, test filters are strategy to discard tests that give (too) 
 
 We describe in the following, the test filters implemented in **Diff-XJoules**:
 
-- `ALL`: takes all the tests regardless the stability of their data.
-- `EMPTY_INTERSECTION`: for each test, it takes the two sets of energy measurement: $v_1$ and $v_2$, then it computes the intersection of the two sets. This filter takes only the tests that the intersection is empty.
-- `STUDENT_T_TEST`: uses a statistical $t$-test to determine if the measurements of the test for both versions are distinct. It also uses Cohen's D to takes into account the magnitude of the difference.
+- `All`: takes all the tests regardless the stability of their data.
+- `EmptyIntersection`: for each test, it takes the two sets of energy measurement: $v_1$ and $v_2$, then it computes the intersection of the two sets. This filter takes only the tests that the intersection is empty.
+- `StudentTTest`: :warning: **this test filter is not yet implemented** :warning: uses a statistical $t$-test to determine if the measurements of the test for both versions are distinct. It also uses Cohen's D to takes into account the magnitude of the difference.
 
 ## Mark Strategies
 
