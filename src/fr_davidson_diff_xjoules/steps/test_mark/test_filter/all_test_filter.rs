@@ -63,7 +63,6 @@ mod test {
             json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
         let test_selection = configuration
             .test_filter
-            .get()
             .filter(&configuration, &data);
         assert_eq!(4, test_selection.test_selection.len());
         assert!(test_selection

@@ -179,7 +179,6 @@ mod test {
         json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
         let filter_test_selection = configuration
             .test_filter
-            .get()
             .filter(&configuration, &data);
         assert_eq!(2, filter_test_selection.test_selection.len());
     }

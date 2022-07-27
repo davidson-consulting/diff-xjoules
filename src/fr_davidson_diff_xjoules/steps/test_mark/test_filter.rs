@@ -5,30 +5,37 @@ use crate::fr_davidson_diff_xjoules::{
 };
 
 use self::{
-    all_test_filter::AllTestFilter, empty_intersection_test_filter::EmptyIntersectionTestFilter,
+    all_test_filter::AllTestFilter, empty_intersection_test_filter::EmptyIntersectionTestFilter, student_t_test::StudentTTestTestFilter,
 };
 
 pub mod all_test_filter;
 pub mod empty_intersection_test_filter;
+pub mod student_t_test;
 
 #[derive(Deserialize)]
 pub enum TestFilterEnum {
     All,
     EmptyIntersection,
+    StudentTTest
 }
 pub enum TestFilterTypedEnum {
     All(AllTestFilter),
     EmptyIntersection(EmptyIntersectionTestFilter),
+    StudentTTest(StudentTTestTestFilter)
 }
 
 impl TestFilterEnum {
-    pub fn get(&self) -> TestFilterTypedEnum {
+    fn get(&self) -> TestFilterTypedEnum {
         match self {
             TestFilterEnum::All => TestFilterTypedEnum::All(AllTestFilter::new()),
             TestFilterEnum::EmptyIntersection => {
                 TestFilterTypedEnum::EmptyIntersection(EmptyIntersectionTestFilter::new())
-            }
+            },
+            TestFilterEnum::StudentTTest => TestFilterTypedEnum::StudentTTest(StudentTTestTestFilter::new())
         }
+    }
+    pub fn filter(&self, configuration: &Configuration, data: &DiffXJoulesData) -> TestSelection {
+        return self.get().filter(configuration, data);
     }
 }
 
@@ -40,6 +47,9 @@ impl TestFilterTypedEnum {
             }
             TestFilterTypedEnum::EmptyIntersection(ref empty_intersection_test_filter) => {
                 empty_intersection_test_filter.filter(configuration, data)
+            }
+            TestFilterTypedEnum::StudentTTest(ref student_t_test_test_filter) => {
+                student_t_test_test_filter.filter(configuration, data)
             }
         }
     }

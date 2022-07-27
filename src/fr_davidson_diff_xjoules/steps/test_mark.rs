@@ -8,7 +8,6 @@ pub mod test_filter;
 pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
     let test_selection = configuration
         .test_filter
-        .get()
         .filter(&configuration, diff_xjoules_data);
     if test_selection.test_selection.is_empty() {}
     let mark_strategy = configuration.mark_strategy.get();
