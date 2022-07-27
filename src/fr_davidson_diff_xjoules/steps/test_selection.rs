@@ -198,7 +198,7 @@ mod tests {
             iteration_run: 0,
             time_to_wait_in_millis: 0,
             test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::STRICT,
+            mark_strategy: MarkStrategyEnum::Strict,
             indicator_to_consider_for_marking: String::from("cycles"),
         };
         let mut diff_xjoules_data = DiffXJoulesData::new();

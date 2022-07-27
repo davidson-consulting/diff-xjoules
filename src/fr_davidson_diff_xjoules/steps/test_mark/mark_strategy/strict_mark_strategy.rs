@@ -8,7 +8,7 @@ pub struct StrictMarkStrategy {}
 
 impl MarkStrategy for StrictMarkStrategy {
     fn decide(
-        self,
+        &self,
         configuration: &Configuration,
         data: &DiffXJoulesData,
         test_selection: &TestSelection,
@@ -47,7 +47,7 @@ mod test {
 
     #[test]
     fn test_decide_pass() {
-        let mark_strategy = MarkStrategyEnum::STRICT.get();
+        let mark_strategy = MarkStrategyEnum::Strict.get();
         let configuration = Configuration {
             path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
             path_v2: String::from(
@@ -62,7 +62,7 @@ mod test {
             iteration_run: 3,
             time_to_wait_in_millis: 500,
             test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::STRICT,
+            mark_strategy: MarkStrategyEnum::Strict,
             indicator_to_consider_for_marking: String::from("instructions"),
         };
         let mut data = DiffXJoulesData::new();
@@ -83,7 +83,6 @@ mod test {
 
     #[test]
     fn test_decide() {
-        let mark_strategy = MarkStrategyEnum::STRICT.get();
         let configuration = Configuration {
             path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
             path_v2: String::from(
@@ -98,13 +97,13 @@ mod test {
             iteration_run: 3,
             time_to_wait_in_millis: 500,
             test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::STRICT,
+            mark_strategy: MarkStrategyEnum::Strict,
             indicator_to_consider_for_marking: String::from("UNHALTED_REFERENCE_CYCLES"),
         };
         let mut data = DiffXJoulesData::new();
         data.delta = json_utils::read_json::<VersionMeasure>("test_resources/delta.json");
         let test_selection =
             json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
-        assert!(!mark_strategy.decide(&configuration, &data, &test_selection));
+        assert!(!configuration.mark_strategy.decide(&configuration, &data, &test_selection));
     }
 }

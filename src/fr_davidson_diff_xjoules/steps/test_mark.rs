@@ -1,7 +1,5 @@
 use crate::fr_davidson_diff_xjoules::{Configuration, DiffXJoulesData};
 
-use self::mark_strategy::MarkStrategy;
-
 pub mod mark_strategy;
 pub mod test_filter;
 
@@ -10,8 +8,10 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
         .test_filter
         .filter(&configuration, diff_xjoules_data);
     if test_selection.test_selection.is_empty() {}
-    let mark_strategy = configuration.mark_strategy.get();
-    let decision = mark_strategy.decide(configuration, diff_xjoules_data, &test_selection);
+    let decision =
+        configuration
+            .mark_strategy
+            .decide(configuration, diff_xjoules_data, &test_selection);
     diff_xjoules_data.mark_test_selection = test_selection;
     diff_xjoules_data.decision = decision;
 }
@@ -42,7 +42,7 @@ mod test {
             iteration_run: 3,
             time_to_wait_in_millis: 500,
             test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::STRICT,
+            mark_strategy: MarkStrategyEnum::Strict,
             indicator_to_consider_for_marking: String::from("UNHALTED_REFERENCE_CYCLES"),
         };
         let mut data = DiffXJoulesData::new();
