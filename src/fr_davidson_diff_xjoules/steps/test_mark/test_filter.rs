@@ -5,12 +5,12 @@ use crate::fr_davidson_diff_xjoules::{
 };
 
 use self::{
-    all_test_filter::AllTestFilter, empty_intersection_test_filter::EmptyIntersectionTestFilter, student_t_test::StudentTTestTestFilter,
+    all_test_filter::AllTestFilter, empty_intersection_test_filter::EmptyIntersectionTestFilter, student_t_test_test_filter::StudentTTestTestFilter,
 };
 
 pub mod all_test_filter;
 pub mod empty_intersection_test_filter;
-pub mod student_t_test;
+pub mod student_t_test_test_filter;
 
 #[derive(Deserialize)]
 pub enum TestFilterEnum {
