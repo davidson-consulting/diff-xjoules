@@ -13,20 +13,28 @@ impl MarkStrategy for VoteMarkStrategy {
         data: &DiffXJoulesData,
         test_selection: &TestSelection,
     ) -> bool {
-        for selected_test in test_selection.test_selection.iter() {
-            let delta_test = data.delta.find_test_measure(selected_test).unwrap();
-            let considered_delta = delta_test.measures[0]
-                .iter()
-                .find(|data| {
-                    data.indicator
-                        .eq(&configuration.indicator_to_consider_for_marking)
-                })
-                .unwrap();
-            if considered_delta.value > 0.0 {
-                return false;
-            }
-        }
-        return true;
+        return test_selection
+            .test_selection
+            .iter()
+            .map(|selected_test| {
+                let delta_test = data.delta.find_test_measure(selected_test).unwrap();
+                if delta_test.measures[0]
+                    .iter()
+                    .find(|data| {
+                        data.indicator
+                            .eq(&configuration.indicator_to_consider_for_marking)
+                    })
+                    .unwrap()
+                    .value
+                    > 0.0
+                {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            })
+            .sum::<i32>()
+            < 0;
     }
 }
 
@@ -35,3 +43,4 @@ impl VoteMarkStrategy {
         VoteMarkStrategy {}
     }
 }
+
