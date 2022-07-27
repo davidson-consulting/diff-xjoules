@@ -5,7 +5,7 @@ use serde_derive::{Deserialize, Serialize};
 use crate::fr_davidson_diff_xjoules::{
     utils::{
         command::run_command_redirect_to_file,
-        coverage::{find_test_executing_lines, run_coverage_cmd, Coverage, COVERAGE_FILENAME},
+        coverage::{run_coverage_cmd, Coverage, COVERAGE_FILENAME},
         json_utils::{self, JSON_EXTENSION},
     },
     Configuration, DiffXJoulesData, SUFFIX_V1, SUFFIX_V2,
@@ -165,7 +165,7 @@ fn handle_diff_operation(
         .parse()
         .unwrap();
     let modified_lines: Vec<i16> = (starting_line..starting_line + nb_modified_line).collect();
-    return find_test_executing_lines(coverage, filename, &modified_lines);
+    return coverage.find_test_executing_lines(filename, &modified_lines);
 }
 
 #[cfg(test)]
