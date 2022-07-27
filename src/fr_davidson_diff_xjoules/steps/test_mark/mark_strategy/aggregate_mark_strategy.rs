@@ -28,7 +28,7 @@ impl MarkStrategy for AggregateMarkStrategy {
                     .value;
             })
             .sum::<f64>()
-            > 0.0;
+            < 0.0;
     }
 }
 
@@ -49,7 +49,6 @@ mod test {
 
     #[test]
     fn test_decide_pass() {
-        let mark_strategy = MarkStrategyEnum::Strict.get();
         let configuration = Configuration {
             path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
             path_v2: String::from(
@@ -64,7 +63,7 @@ mod test {
             iteration_run: 3,
             time_to_wait_in_millis: 500,
             test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::Strict,
+            mark_strategy: MarkStrategyEnum::Aggregate,
             indicator_to_consider_for_marking: String::from("instructions"),
         };
         let mut data = DiffXJoulesData::new();
@@ -80,7 +79,7 @@ mod test {
         data.delta = delta;
         let mut test_selection = TestSelection::new();
         test_selection.test_selection.insert(String::from("test1"));
-        assert!(mark_strategy.decide(&configuration, &data, &test_selection));
+        assert!(configuration.mark_strategy.decide(&configuration, &data, &test_selection));
     }
 
     #[test]
@@ -99,7 +98,7 @@ mod test {
             iteration_run: 3,
             time_to_wait_in_millis: 500,
             test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::Strict,
+            mark_strategy: MarkStrategyEnum::Aggregate,
             indicator_to_consider_for_marking: String::from("UNHALTED_REFERENCE_CYCLES"),
         };
         let mut data = DiffXJoulesData::new();
