@@ -1,4 +1,4 @@
-name: Diff-XJoules CI
+name: XJoules CI
 
 on:
   push:

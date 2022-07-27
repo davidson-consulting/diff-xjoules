@@ -1,4 +1,4 @@
-name: Diff-JJoules Checkstyle
+name: JJoules Checkstyle
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Diff-JJoules CI
+name: JJoules CI
 
 on:
   pull_request:
