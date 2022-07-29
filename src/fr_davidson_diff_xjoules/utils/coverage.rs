@@ -93,6 +93,24 @@ mod tests {
     use crate::fr_davidson_diff_xjoules::utils::json_utils::read_json;
 
     #[test]
+    fn test_get_test_coverage_by_test_identifier() {
+        let coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1.json");
+        let test_coverage = coverage
+            .get_test_coverage_by_test_identifier("fr.davidson.AppTest#testRandomQuickSortLarge");
+        assert_eq!(2, test_coverage.file_coverages.len());
+        let file_coverage = test_coverage
+            .file_coverages
+            .iter()
+            .find(|file_coverage| {
+                file_coverage
+                    .filename
+                    .eq("src/main/java/fr/davidson/App.java")
+            })
+            .unwrap();
+        assert_eq!(21, file_coverage.covered_lines.len());
+    }
+
+    #[test]
     fn test_new_file_coverage() {
         let file_coverage = FileCoverage::new("this_a_source_filename");
         assert_eq!("this_a_source_filename", file_coverage.filename);
