@@ -17,11 +17,23 @@ impl Coverage {
     pub fn find_test_executing_lines(&self, filename: &str, lines: &Vec<i16>) -> HashSet<String> {
         let mut tests = HashSet::new();
         for (_, test_coverage) in self.test_coverages.iter().enumerate() {
-            if test_coverage.execute_lines_of_file( filename, lines) {
+            if test_coverage.execute_lines_of_file(filename, lines) {
                 tests.insert(test_coverage.test_identifier.clone());
             }
         }
         return tests;
+    }
+    pub fn get_total_nb_lines_covered(&self) -> i32 {
+        let mut covered_lines_in_filename = HashSet::<String>::new();
+        for test_coverage in self.test_coverages.iter() {
+            for file_coverage in test_coverage.file_coverages.iter() {
+                for covered_line in file_coverage.covered_lines.iter() {
+                    covered_lines_in_filename
+                        .insert(file_coverage.filename.clone() + ":" + &covered_line.to_string());
+                }
+            }
+        }
+        return covered_lines_in_filename.len().try_into().unwrap();
     }
 }
 
@@ -34,7 +46,7 @@ pub struct TestCoverage {
 impl TestCoverage {
     pub fn execute_lines_of_file(&self, filename: &str, lines: &Vec<i16>) -> bool {
         for (_, file_coverage) in self.file_coverages.iter().enumerate() {
-            if file_coverage.filename.eq(filename) && file_coverage.any_lines_is_covered( lines) {
+            if file_coverage.filename.eq(filename) && file_coverage.any_lines_is_covered(lines) {
                 return true;
             }
         }
@@ -49,6 +61,12 @@ pub struct FileCoverage {
 }
 
 impl FileCoverage {
+    pub fn new(filename: &str) -> FileCoverage {
+        return FileCoverage {
+            filename: String::from(filename),
+            covered_lines: Vec::<i16>::new(),
+        };
+    }
     pub fn any_lines_is_covered(&self, lines: &Vec<i16>) -> bool {
         return lines.iter().any(|line| self.covered_lines.contains(line));
     }
