@@ -11,17 +11,14 @@ use super::MarkStrategy;
 pub struct CodeCoverageMarkStrategy {}
 
 impl CodeCoverageMarkStrategy {
-    fn get_considered_data<'a>(
+    fn get_considered_data(
         &self,
-        selected_test: &'a str,
-        data: &'a VersionMeasure,
-        indicator_to_consider_for_marking: &'a str,
-    ) -> &'a Data {
+        selected_test: &str,
+        data: &VersionMeasure,
+        indicator_to_consider_for_marking: &str,
+    ) -> f64 {
         let test_data_v1 = data.find_test_measure(selected_test).unwrap();
-        return test_data_v1.measures[0]
-            .iter()
-            .find(|data| data.indicator.eq(indicator_to_consider_for_marking))
-            .unwrap();
+        return test_data_v1.get_median(indicator_to_consider_for_marking);
     }
     fn compute_weight(
         &self,
@@ -44,7 +41,7 @@ impl CodeCoverageMarkStrategy {
         let considered_test_data =
             self.get_considered_data(selected_test, &data, &indicator_to_consider_for_marking);
         let weight = self.compute_weight(&coverage, &selected_test, total_nb_covered_lines);
-        return weight as f64 * considered_test_data.value;
+        return weight as f64 * considered_test_data;
     }
 }
 
@@ -85,5 +82,111 @@ impl MarkStrategy for CodeCoverageMarkStrategy {
 impl CodeCoverageMarkStrategy {
     pub fn new() -> CodeCoverageMarkStrategy {
         CodeCoverageMarkStrategy {}
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::fr_davidson_diff_xjoules::{
+        measure::test_measure::TestMeasure,
+        steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
+        utils::json_utils,
+    };
+
+    #[test]
+    fn test_get_considered_data() {
+        let mut version_measure = VersionMeasure::new();
+        let mut test_measure = TestMeasure::new("test");
+        let mut data = Vec::<Data>::new();
+        data.push(Data::new("cycles", 1000.0));
+        data.push(Data::new("cycles", 1200.0));
+        data.push(Data::new("not_used", 1.0));
+        data.push(Data::new("not_used", 3.0));
+        test_measure.measures.push(data);
+        version_measure.test_measures.push(test_measure);
+        let mut test_measure = TestMeasure::new("test2");
+        let mut data = Vec::<Data>::new();
+        data.push(Data::new("cycles", 10.0));
+        data.push(Data::new("cycles", 12.0));
+        data.push(Data::new("not_used", 1.0));
+        data.push(Data::new("not_used", 3.0));
+        test_measure.measures.push(data);
+        version_measure.test_measures.push(test_measure);
+        let code_coverage_mark_strategy = CodeCoverageMarkStrategy::new();
+        assert_eq!(
+            1100.0,
+            code_coverage_mark_strategy.get_considered_data("test", &version_measure, "cycles")
+        );
+    }
+
+    #[test]
+    fn test_compute_weight() {
+        let code_coverage_mark_strategy = CodeCoverageMarkStrategy::new();
+        let coverage = json_utils::read_json::<Coverage>("test_resources/coverage_v1.json");
+        assert_eq!(
+            1.0,
+            code_coverage_mark_strategy.compute_weight(
+                &coverage,
+                "fr.davidson.AppTest#testRandomQuickSortLarge",
+                41,
+            )
+        );
+        assert_eq!(
+            0.5,
+            code_coverage_mark_strategy.compute_weight(
+                &coverage,
+                "fr.davidson.AppTest#testRandomQuickSortLarge",
+                82,
+            )
+        );
+    }
+
+    #[test]
+    fn test_compute_weighted_data() {
+        let coverage = json_utils::read_json::<Coverage>("test_resources/coverage_v1.json");
+        let data = json_utils::read_json::<VersionMeasure>("test_resources/data_v1.json");
+        let code_coverage_mark_strategy = CodeCoverageMarkStrategy::new();
+        assert_eq!(
+            21021.951219512197,
+            code_coverage_mark_strategy.compute_weighted_data(
+                &coverage,
+                "fr.davidson.AppTest#testAddedStatement",
+                41,
+                "UNHALTED_REFERENCE_CYCLES",
+                &data,
+            )
+        );
+    }
+
+    #[test]
+    fn test_decide() {
+        let configuration = Configuration {
+            path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"),
+            path_v2: String::from(
+                "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2",
+            ),
+            src_folder: String::from("src/main/java"),
+            path_output_dir: String::from("target"),
+            coverage_cmd: String::from(""),
+            instrumentation_cmd: String::from(""),
+            execution_cmd: String::from(""),
+            iteration_warmup: 1,
+            iteration_run: 3,
+            time_to_wait_in_millis: 500,
+            test_filter: TestFilterEnum::All,
+            mark_strategy: MarkStrategyEnum::CodeCov,
+            indicator_to_consider_for_marking: String::from("UNHALTED_REFERENCE_CYCLES"),
+        };
+        let mut data = DiffXJoulesData::new();
+        data.coverage_v1 = json_utils::read_json::<Coverage>("test_resources/coverage_v1.json");
+        data.coverage_v2 = json_utils::read_json::<Coverage>("test_resources/coverage_v2.json");
+        data.data_v1 = json_utils::read_json::<VersionMeasure>("test_resources/data_v1.json");
+        data.data_v2 = json_utils::read_json::<VersionMeasure>("test_resources/data_v2.json");
+        let test_selection =
+            json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
+        assert!(configuration
+            .mark_strategy
+            .decide(&configuration, &data, &test_selection));
     }
 }
