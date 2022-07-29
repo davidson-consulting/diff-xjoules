@@ -86,6 +86,12 @@ mod tests {
     use crate::fr_davidson_diff_xjoules::utils::json_utils::read_json;
 
     #[test]
+    fn test_get_total_nb_lines_covered() {
+        let coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1.json");
+        assert_eq!(74, coverage.get_total_nb_lines_covered())
+    }
+
+    #[test]
     fn test_run_coverage_cmd() {
         let coverage = run_coverage_cmd(
             "target/",
