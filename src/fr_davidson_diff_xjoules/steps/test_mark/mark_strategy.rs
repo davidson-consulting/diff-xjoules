@@ -5,13 +5,16 @@ use crate::fr_davidson_diff_xjoules::{
 };
 
 use self::{
-    aggregate_mark_strategy::AggregateMarkStrategy, strict_mark_strategy::StrictMarkStrategy, vote_mark_strategy::VoteMarkStrategy, code_coverage_mark_strategy::CodeCoverageMarkStrategy, diff_coverage_mark_strategy::DiffCodeCoverageMarkStrategy,
+    aggregate_mark_strategy::AggregateMarkStrategy,
+    code_coverage_mark_strategy::CodeCoverageMarkStrategy,
+    diff_coverage_mark_strategy::DiffCodeCoverageMarkStrategy,
+    strict_mark_strategy::StrictMarkStrategy, vote_mark_strategy::VoteMarkStrategy,
 };
 
 pub mod aggregate_mark_strategy;
-pub mod strict_mark_strategy;
 pub mod code_coverage_mark_strategy;
 pub mod diff_coverage_mark_strategy;
+pub mod strict_mark_strategy;
 pub mod vote_mark_strategy;
 
 #[derive(Deserialize)]
@@ -20,7 +23,7 @@ pub enum MarkStrategyEnum {
     Aggregate,
     Vote,
     CodeCov,
-    DiffCov
+    DiffCov,
 }
 
 pub enum MarkStrategyTypedEnum {
@@ -28,7 +31,7 @@ pub enum MarkStrategyTypedEnum {
     Aggregate(AggregateMarkStrategy),
     Vote(VoteMarkStrategy),
     CodeCov(CodeCoverageMarkStrategy),
-    DiffCov(DiffCodeCoverageMarkStrategy)
+    DiffCov(DiffCodeCoverageMarkStrategy),
 }
 
 impl MarkStrategyEnum {
@@ -39,8 +42,12 @@ impl MarkStrategyEnum {
                 MarkStrategyTypedEnum::Aggregate(AggregateMarkStrategy::new())
             }
             MarkStrategyEnum::Vote => MarkStrategyTypedEnum::Vote(VoteMarkStrategy::new()),
-            MarkStrategyEnum::CodeCov => MarkStrategyTypedEnum::CodeCov(CodeCoverageMarkStrategy::new()),
-            MarkStrategyEnum::DiffCov => MarkStrategyTypedEnum::DiffCov(DiffCodeCoverageMarkStrategy::new())
+            MarkStrategyEnum::CodeCov => {
+                MarkStrategyTypedEnum::CodeCov(CodeCoverageMarkStrategy::new())
+            }
+            MarkStrategyEnum::DiffCov => {
+                MarkStrategyTypedEnum::DiffCov(DiffCodeCoverageMarkStrategy::new())
+            }
         }
     }
     pub fn decide(

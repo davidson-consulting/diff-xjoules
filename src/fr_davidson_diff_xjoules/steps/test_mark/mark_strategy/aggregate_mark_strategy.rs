@@ -79,7 +79,9 @@ mod test {
         data.delta = delta;
         let mut test_selection = TestSelection::new();
         test_selection.test_selection.insert(String::from("test1"));
-        assert!(configuration.mark_strategy.decide(&configuration, &data, &test_selection));
+        assert!(configuration
+            .mark_strategy
+            .decide(&configuration, &data, &test_selection));
     }
 
     #[test]

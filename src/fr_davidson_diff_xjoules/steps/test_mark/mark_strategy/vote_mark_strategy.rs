@@ -100,7 +100,9 @@ mod test {
         test_selection.test_selection.insert(String::from("test2"));
         test_selection.test_selection.insert(String::from("test3"));
         test_selection.test_selection.insert(String::from("test4"));
-        assert!(configuration.mark_strategy.decide(&configuration, &data, &test_selection));
+        assert!(configuration
+            .mark_strategy
+            .decide(&configuration, &data, &test_selection));
     }
 
     #[test]

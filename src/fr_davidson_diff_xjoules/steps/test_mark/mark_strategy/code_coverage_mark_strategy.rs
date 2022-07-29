@@ -87,7 +87,7 @@ impl CodeCoverageMarkStrategy {
 mod test {
     use super::*;
     use crate::fr_davidson_diff_xjoules::{
-        measure::{test_measure::TestMeasure, data::Data},
+        measure::{data::Data, test_measure::TestMeasure},
         steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
         utils::json_utils,
     };
