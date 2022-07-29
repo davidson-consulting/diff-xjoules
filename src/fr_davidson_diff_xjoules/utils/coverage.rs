@@ -35,6 +35,13 @@ impl Coverage {
         }
         return covered_lines_in_filename.len().try_into().unwrap();
     }
+    pub fn get_test_coverage_by_test_identifier(&self, test_identifier: &str) -> &TestCoverage {
+        return self
+            .test_coverages
+            .iter()
+            .find(|test_coverage| test_coverage.test_identifier.eq(test_identifier))
+            .unwrap();
+    }
 }
 
 #[derive(Serialize, Deserialize)]
