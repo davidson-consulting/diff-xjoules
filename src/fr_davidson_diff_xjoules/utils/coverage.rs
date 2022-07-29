@@ -59,6 +59,13 @@ impl TestCoverage {
         }
         return false;
     }
+    pub fn get_total_nb_lines_covered(&self) -> i32 {
+        return self
+            .file_coverages
+            .iter()
+            .map(|file_coverage| file_coverage.covered_lines.len() as i32)
+            .sum();
+    }
 }
 
 #[derive(Serialize, Deserialize)]
