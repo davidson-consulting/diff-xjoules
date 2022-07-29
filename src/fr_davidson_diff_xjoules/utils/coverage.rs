@@ -100,6 +100,14 @@ mod tests {
     use crate::fr_davidson_diff_xjoules::utils::json_utils::read_json;
 
     #[test]
+    fn test_test_coverage_get_total_nb_lines_covered() {
+        let coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1.json");
+        let test_coverage = coverage
+            .get_test_coverage_by_test_identifier("fr.davidson.AppTest#testRandomQuickSortLarge");
+        assert_eq!(41, test_coverage.get_total_nb_lines_covered());
+    }
+
+    #[test]
     fn test_get_test_coverage_by_test_identifier() {
         let coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1.json");
         let test_coverage = coverage
