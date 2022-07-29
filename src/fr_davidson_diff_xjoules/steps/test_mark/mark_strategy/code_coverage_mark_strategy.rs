@@ -1,8 +1,6 @@
 use crate::fr_davidson_diff_xjoules::{
-    configuration::Configuration,
-    diff_data::DiffXJoulesData,
-    measure::{data::Data, version_measure::VersionMeasure},
-    steps::test_selection::TestSelection,
+    configuration::Configuration, diff_data::DiffXJoulesData,
+    measure::version_measure::VersionMeasure, steps::test_selection::TestSelection,
     utils::coverage::Coverage,
 };
 
@@ -89,7 +87,7 @@ impl CodeCoverageMarkStrategy {
 mod test {
     use super::*;
     use crate::fr_davidson_diff_xjoules::{
-        measure::test_measure::TestMeasure,
+        measure::{test_measure::TestMeasure, data::Data},
         steps::test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
         utils::json_utils,
     };
