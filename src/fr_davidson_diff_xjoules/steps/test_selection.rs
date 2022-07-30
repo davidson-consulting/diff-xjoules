@@ -1,4 +1,7 @@
-use std::{collections::HashSet, fs};
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+};
 
 use serde_derive::{Deserialize, Serialize};
 
@@ -27,7 +30,10 @@ impl TestSelection {
     }
 }
 
-pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
+pub fn run(
+    configuration: &Configuration,
+    mut diff_xjoules_data: DiffXJoulesData,
+) -> DiffXJoulesData {
     diff_xjoules_data.coverage_v1 = compute_coverage(
         &configuration.path_v1,
         &configuration.coverage_cmd,
@@ -46,12 +52,7 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
         &configuration.src_folder,
         &configuration.path_output_dir,
     );
-    diff_xjoules_data.test_selection = select_tests(
-        &configuration.path_v1,
-        &diff_xjoules_data.coverage_v1,
-        &diff_xjoules_data.coverage_v2,
-        &diff_xjoules_data.diff,
-    );
+    diff_xjoules_data = select_tests(&configuration.path_v1, diff_xjoules_data);
     json_utils::write_json(
         &format!(
             "{}/{}{}",
@@ -59,6 +60,7 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
         ),
         &diff_xjoules_data.test_selection,
     );
+    return diff_xjoules_data;
 }
 
 fn compute_coverage(
@@ -88,15 +90,14 @@ fn compute_diff(path_v1: &str, path_v2: &str, src_folder: &str, path_output_dir:
     return fs::read_to_string(format!("{}/{}", path_output_dir, DIFF_FILENAME)).unwrap();
 }
 
-fn select_tests(
-    path_to_project: &str,
-    coverage_v1: &Coverage,
-    coverage_v2: &Coverage,
-    diff: &str,
-) -> TestSelection {
+fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -> DiffXJoulesData {
+    let coverage_v1 = &diff_xjoules_data.coverage_v1;
+    let coverage_v2 = &diff_xjoules_data.coverage_v2;
+    let diff = &diff_xjoules_data.diff;
     let mut test_selection: TestSelection = TestSelection::new();
     let lines_diff = Vec::from_iter(diff.lines());
     let mut i = 0;
+    let mut total_nb_modified_lines = 0;
     while i < lines_diff.len() {
         let filename =
             &lines_diff[i].split_whitespace().nth(2).unwrap()[path_to_project.len() + 1..];
@@ -109,46 +110,62 @@ fn select_tests(
                 && (lines_diff[i].starts_with(">") || lines_diff[i].starts_with("<"))
             {
                 nb_modified_line = nb_modified_line + 1;
+                total_nb_modified_lines = total_nb_modified_lines + 1;
                 i = i + 1;
             }
+            let mut selected_tests: HashSet<String> = HashSet::<String>::new();
             if operation.contains("a") {
-                test_selection.test_selection.extend(handle_diff_operation(
-                    operation,
-                    "a",
-                    nb_modified_line,
-                    filename,
-                    &coverage_v2,
-                ));
+                selected_tests =
+                    handle_diff_operation(operation, "a", nb_modified_line, filename, &coverage_v2);
             } else if operation.contains("d") {
-                test_selection.test_selection.extend(handle_diff_operation(
-                    operation,
-                    "d",
-                    nb_modified_line,
-                    filename,
-                    &coverage_v1,
-                ));
+                selected_tests =
+                    handle_diff_operation(operation, "d", nb_modified_line, filename, &coverage_v1);
             } else if operation.contains("c") {
-                test_selection.test_selection.extend(handle_diff_operation(
-                    operation,
-                    "c",
-                    nb_modified_line,
-                    filename,
-                    &coverage_v1,
-                ));
-                test_selection.test_selection.extend(handle_diff_operation(
+                selected_tests =
+                    handle_diff_operation(operation, "c", nb_modified_line, filename, &coverage_v1);
+                selected_tests.extend(handle_diff_operation(
                     operation,
                     "c",
                     nb_modified_line,
                     filename,
                     &coverage_v2,
                 ));
+            }
+            if !selected_tests.is_empty() {
+                diff_xjoules_data.nb_modified_lines_exec_per_test_identifier =
+                    update_nb_modified_lines_exec_per_test_identifier(
+                        diff_xjoules_data.nb_modified_lines_exec_per_test_identifier,
+                        &selected_tests,
+                    );
+                test_selection.test_selection.extend(selected_tests);
             }
             if i >= lines_diff.len() || lines_diff[i].starts_with("diff -r") {
                 break;
             }
         }
     }
-    return test_selection;
+    diff_xjoules_data.nb_total_nb_modified_lines = total_nb_modified_lines;
+    diff_xjoules_data.test_selection = test_selection;
+    return diff_xjoules_data;
+}
+
+fn update_nb_modified_lines_exec_per_test_identifier(
+    mut nb_modified_lines_exec_per_test_identifier: HashMap<String, i32>,
+    selected_tests: &HashSet<String>,
+) -> HashMap<String, i32> {
+    selected_tests.iter().for_each(|selected_test| {
+        if !nb_modified_lines_exec_per_test_identifier.contains_key(selected_test) {
+            nb_modified_lines_exec_per_test_identifier.insert(selected_test.clone(), 0);
+        }
+        nb_modified_lines_exec_per_test_identifier.insert(
+            selected_test.clone(),
+            nb_modified_lines_exec_per_test_identifier
+                .get(selected_test)
+                .unwrap()
+                .clone(),
+        );
+    });
+    return nb_modified_lines_exec_per_test_identifier;
 }
 
 fn handle_diff_operation(
@@ -201,8 +218,7 @@ mod tests {
             mark_strategy: MarkStrategyEnum::Strict,
             indicator_to_consider_for_marking: String::from("cycles"),
         };
-        let mut diff_xjoules_data = DiffXJoulesData::new();
-        run(&configuration, &mut diff_xjoules_data);
+        let diff_xjoules_data = run(&configuration, DiffXJoulesData::new());
         let expected_diff_content = fs::read_to_string("test_resources/expected_diff").unwrap();
         assert_eq!(9, diff_xjoules_data.coverage_v1.test_coverages.len());
         assert_eq!(9, diff_xjoules_data.coverage_v2.test_coverages.len());
@@ -246,17 +262,17 @@ mod tests {
 
     #[test]
     fn test_select_tests() {
-        let coverage_v1: Coverage =
+        let mut diff_xjoules_data = DiffXJoulesData::new();
+        diff_xjoules_data.coverage_v1 =
             json_utils::read_json::<Coverage>("test_resources/coverage_v1.json");
-        let coverage_v2: Coverage =
+        diff_xjoules_data.coverage_v2 =
             json_utils::read_json::<Coverage>("test_resources/coverage_v2.json");
-        let diff = fs::read_to_string("test_resources/expected_diff").unwrap();
-        let test_selection = select_tests(
+        diff_xjoules_data.diff = fs::read_to_string("test_resources/expected_diff").unwrap();
+        let diff_xjoules_data = select_tests(
             "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project",
-            &coverage_v1,
-            &coverage_v2,
-            &diff,
+            diff_xjoules_data,
         );
+        let test_selection = diff_xjoules_data.test_selection;
         assert_eq!(4, test_selection.test_selection.len());
         assert!(test_selection
             .test_selection
