@@ -14,7 +14,7 @@ pub struct Coverage {
 }
 
 impl Coverage {
-    pub fn find_test_executing_lines(&self, filename: &str, lines: &Vec<i16>) -> HashSet<String> {
+    pub fn find_test_executing_lines(&self, filename: &str, lines: &Vec<i32>) -> HashSet<String> {
         let mut tests = HashSet::new();
         for (_, test_coverage) in self.test_coverages.iter().enumerate() {
             if test_coverage.execute_lines_of_file(filename, lines) {
@@ -51,7 +51,7 @@ pub struct TestCoverage {
 }
 
 impl TestCoverage {
-    pub fn execute_lines_of_file(&self, filename: &str, lines: &Vec<i16>) -> bool {
+    pub fn execute_lines_of_file(&self, filename: &str, lines: &Vec<i32>) -> bool {
         for (_, file_coverage) in self.file_coverages.iter().enumerate() {
             if file_coverage.filename.eq(filename) && file_coverage.any_lines_is_covered(lines) {
                 return true;
@@ -71,17 +71,17 @@ impl TestCoverage {
 #[derive(Serialize, Deserialize)]
 pub struct FileCoverage {
     pub filename: String,
-    pub covered_lines: Vec<i16>,
+    pub covered_lines: Vec<i32>,
 }
 
 impl FileCoverage {
     pub fn new(filename: &str) -> FileCoverage {
         return FileCoverage {
             filename: String::from(filename),
-            covered_lines: Vec::<i16>::new(),
+            covered_lines: Vec::<i32>::new(),
         };
     }
-    pub fn any_lines_is_covered(&self, lines: &Vec<i16>) -> bool {
+    pub fn any_lines_is_covered(&self, lines: &Vec<i32>) -> bool {
         return lines.iter().any(|line| self.covered_lines.contains(line));
     }
 }

@@ -105,7 +105,7 @@ fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -
         loop {
             let operation = lines_diff[i];
             i = i + 1;
-            let mut nb_modified_line = 0;
+            let mut nb_modified_line: i32 = 0;
             while i < lines_diff.len()
                 && (lines_diff[i].starts_with(">") || lines_diff[i].starts_with("<"))
             {
@@ -136,6 +136,7 @@ fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -
                     update_nb_modified_lines_exec_per_test_identifier(
                         diff_xjoules_data.nb_modified_lines_exec_per_test_identifier,
                         &selected_tests,
+                        nb_modified_line
                     );
                 test_selection.test_selection.extend(selected_tests);
             }
@@ -152,17 +153,33 @@ fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -
 fn update_nb_modified_lines_exec_per_test_identifier(
     mut nb_modified_lines_exec_per_test_identifier: HashMap<String, i32>,
     selected_tests: &HashSet<String>,
+    nb_modified_line: i32,
 ) -> HashMap<String, i32> {
     selected_tests.iter().for_each(|selected_test| {
         if !nb_modified_lines_exec_per_test_identifier.contains_key(selected_test) {
             nb_modified_lines_exec_per_test_identifier.insert(selected_test.clone(), 0);
         }
+        println!(
+            "a{} {}",
+            selected_test,
+            nb_modified_lines_exec_per_test_identifier
+                .get(selected_test)
+                .unwrap()
+        );
         nb_modified_lines_exec_per_test_identifier.insert(
             selected_test.clone(),
             nb_modified_lines_exec_per_test_identifier
                 .get(selected_test)
                 .unwrap()
-                .clone(),
+                .clone()
+                + nb_modified_line,
+        );
+        println!(
+            "b{} {}",
+            selected_test,
+            nb_modified_lines_exec_per_test_identifier
+                .get(selected_test)
+                .unwrap()
         );
     });
     return nb_modified_lines_exec_per_test_identifier;
@@ -171,7 +188,7 @@ fn update_nb_modified_lines_exec_per_test_identifier(
 fn handle_diff_operation(
     full_operation: &str,
     operation: &str,
-    nb_modified_line: i16,
+    nb_modified_line: i32,
     filename: &str,
     coverage: &Coverage,
 ) -> HashSet<String> {
@@ -181,7 +198,7 @@ fn handle_diff_operation(
         .unwrap()
         .parse()
         .unwrap();
-    let modified_lines: Vec<i16> = (starting_line..starting_line + nb_modified_line).collect();
+    let modified_lines: Vec<i32> = (starting_line..starting_line + nb_modified_line).collect();
     return coverage.find_test_executing_lines(filename, &modified_lines);
 }
 
@@ -286,5 +303,20 @@ mod tests {
         assert!(test_selection.test_selection.contains(&String::from(
             "fr.davidson.AppTest#testAddedAndRemovedStatement"
         )));
+        assert_eq!(12, diff_xjoules_data.nb_total_nb_modified_lines);
+        assert_eq!(
+            1,
+            *diff_xjoules_data
+                .nb_modified_lines_exec_per_test_identifier
+                .get("fr.davidson.AppTest#testUpdatedStatement")
+                .unwrap()
+        );
+        assert_eq!(
+            2,
+            *diff_xjoules_data
+                .nb_modified_lines_exec_per_test_identifier
+                .get("fr.davidson.AppTest#testAddedAndRemovedStatement")
+                .unwrap()
+        );
     }
 }
