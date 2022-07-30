@@ -136,7 +136,7 @@ fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -
                     update_nb_modified_lines_exec_per_test_identifier(
                         diff_xjoules_data.nb_modified_lines_exec_per_test_identifier,
                         &selected_tests,
-                        nb_modified_line
+                        nb_modified_line,
                     );
                 test_selection.test_selection.extend(selected_tests);
             }
