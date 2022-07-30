@@ -15,8 +15,7 @@ pub const SUFFIX_V2: &str = "_v2";
 
 pub fn run(path_to_configuration_yaml_file: std::path::PathBuf) {
     let configuration = Configuration::new(path_to_configuration_yaml_file);
-    let mut diff_xjoules_data = DiffXJoulesData::new();
-    test_selection::run(&configuration, &mut diff_xjoules_data);
+    let mut diff_xjoules_data = test_selection::run(&configuration, DiffXJoulesData::new());
     test_instrumentation::run(&configuration);
     test_execution::run(&configuration, &mut diff_xjoules_data);
     test_delta::run(&configuration, &mut diff_xjoules_data);
