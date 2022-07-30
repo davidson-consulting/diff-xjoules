@@ -159,13 +159,6 @@ fn update_nb_modified_lines_exec_per_test_identifier(
         if !nb_modified_lines_exec_per_test_identifier.contains_key(selected_test) {
             nb_modified_lines_exec_per_test_identifier.insert(selected_test.clone(), 0);
         }
-        println!(
-            "a{} {}",
-            selected_test,
-            nb_modified_lines_exec_per_test_identifier
-                .get(selected_test)
-                .unwrap()
-        );
         nb_modified_lines_exec_per_test_identifier.insert(
             selected_test.clone(),
             nb_modified_lines_exec_per_test_identifier
@@ -173,13 +166,6 @@ fn update_nb_modified_lines_exec_per_test_identifier(
                 .unwrap()
                 .clone()
                 + nb_modified_line,
-        );
-        println!(
-            "b{} {}",
-            selected_test,
-            nb_modified_lines_exec_per_test_identifier
-                .get(selected_test)
-                .unwrap()
         );
     });
     return nb_modified_lines_exec_per_test_identifier;
@@ -304,6 +290,20 @@ mod tests {
             "fr.davidson.AppTest#testAddedAndRemovedStatement"
         )));
         assert_eq!(12, diff_xjoules_data.nb_total_nb_modified_lines);
+        assert_eq!(
+            1,
+            *diff_xjoules_data
+                .nb_modified_lines_exec_per_test_identifier
+                .get("fr.davidson.AppTest#testAddedStatement")
+                .unwrap()
+        );
+        assert_eq!(
+            1,
+            *diff_xjoules_data
+                .nb_modified_lines_exec_per_test_identifier
+                .get("fr.davidson.AppTest#testRemovedStatement")
+                .unwrap()
+        );
         assert_eq!(
             1,
             *diff_xjoules_data
