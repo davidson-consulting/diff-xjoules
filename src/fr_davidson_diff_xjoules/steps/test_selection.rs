@@ -99,6 +99,12 @@ fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -
     let mut i = 0;
     let mut total_nb_modified_lines = 0;
     while i < lines_diff.len() {
+        while i < lines_diff.len() && lines_diff[i].starts_with("Only") {
+            i = i + 1;
+        }
+        if i >= lines_diff.len() {
+            break;
+        }
         let filename =
             &lines_diff[i].split_whitespace().nth(2).unwrap()[path_to_project.len() + 1..];
         i = i + 1;
@@ -140,7 +146,10 @@ fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -
                     );
                 test_selection.test_selection.extend(selected_tests);
             }
-            if i >= lines_diff.len() || lines_diff[i].starts_with("diff -r") {
+            if i >= lines_diff.len()
+                || lines_diff[i].starts_with("diff -r")
+                || lines_diff[i].starts_with("Only")
+            {
                 break;
             }
         }
@@ -180,6 +189,9 @@ fn handle_diff_operation(
 ) -> HashSet<String> {
     let starting_line = full_operation
         .split(operation)
+        .nth(0)
+        .unwrap()
+        .split(",")
         .nth(0)
         .unwrap()
         .parse()
@@ -261,6 +273,19 @@ mod tests {
         let expected_diff_content = fs::read_to_string("test_resources/expected_diff").unwrap();
         let diff_content = fs::read_to_string(format!("{}/{}", "target", DIFF_FILENAME)).unwrap();
         assert_eq!(expected_diff_content, diff_content);
+    }
+
+    #[test]
+    fn test_select_tests_from_gson() {
+        let mut diff_xjoules_data = DiffXJoulesData::new();
+        diff_xjoules_data.coverage_v1 =
+            json_utils::read_json::<Coverage>("test_resources/coverage_gson_v1.json");
+        diff_xjoules_data.coverage_v2 =
+            json_utils::read_json::<Coverage>("test_resources/coverage_gson_v2.json");
+        diff_xjoules_data.diff = fs::read_to_string("test_resources/gson_diff").unwrap();
+        let diff_xjoules_data = select_tests("/tmp/v1/gson", diff_xjoules_data);
+        let test_selection = diff_xjoules_data.test_selection;
+        assert_eq!(550, test_selection.test_selection.len());
     }
 
     #[test]

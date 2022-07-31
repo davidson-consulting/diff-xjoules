@@ -1,0 +1,118 @@
+Only in /tmp/v1/gson/src/main/java/com/google/gson: DefaultDateTypeAdapter.java
+diff -r /tmp/v1/gson/src/main/java/com/google/gson/GsonBuilder.java /tmp/v2/gson/src/main/java/com/google/gson/GsonBuilder.java
+20d19
+< import java.sql.Timestamp;
+30a30
+> import com.google.gson.internal.bind.DefaultDateTypeAdapter;
+32a33
+> import com.google.gson.internal.sql.SqlTypesSupport;
+420,421c421,422
+<    * <p>The date format will be used to serialize and deserialize {@link java.util.Date}, {@link
+<    * java.sql.Timestamp} and {@link java.sql.Date}.
+---
+>    * <p>The date format will be used to serialize and deserialize {@link java.util.Date} and in case
+>    * the {@code java.sql} module is present, also {@link java.sql.Timestamp} and {@link java.sql.Date}.
+605d605
+<   @SuppressWarnings("unchecked")
+608,614c608,619
+<     DefaultDateTypeAdapter dateTypeAdapter;
+<     TypeAdapter<Timestamp> timestampTypeAdapter;
+<     TypeAdapter<java.sql.Date> javaSqlDateTypeAdapter;
+<     if (datePattern != null && !"".equals(datePattern.trim())) {
+<       dateTypeAdapter = new DefaultDateTypeAdapter(Date.class, datePattern);
+<       timestampTypeAdapter = (TypeAdapter) new DefaultDateTypeAdapter(Timestamp.class, datePattern);
+<       javaSqlDateTypeAdapter = (TypeAdapter) new DefaultDateTypeAdapter(java.sql.Date.class, datePattern);
+---
+>     TypeAdapterFactory dateAdapterFactory;
+>     boolean sqlTypesSupported = SqlTypesSupport.SUPPORTS_SQL_TYPES;
+>     TypeAdapterFactory sqlTimestampAdapterFactory = null;
+>     TypeAdapterFactory sqlDateAdapterFactory = null;
+> 
+>     if (datePattern != null && !datePattern.trim().isEmpty()) {
+>       dateAdapterFactory = DefaultDateTypeAdapter.DateType.DATE.createAdapterFactory(datePattern);
+> 
+>       if (sqlTypesSupported) {
+>         sqlTimestampAdapterFactory = SqlTypesSupport.TIMESTAMP_DATE_TYPE.createAdapterFactory(datePattern);
+>         sqlDateAdapterFactory = SqlTypesSupport.DATE_DATE_TYPE.createAdapterFactory(datePattern);
+>       }
+616,618c621,626
+<       dateTypeAdapter = new DefaultDateTypeAdapter(Date.class, dateStyle, timeStyle);
+<       timestampTypeAdapter = (TypeAdapter) new DefaultDateTypeAdapter(Timestamp.class, dateStyle, timeStyle);
+<       javaSqlDateTypeAdapter = (TypeAdapter) new DefaultDateTypeAdapter(java.sql.Date.class, dateStyle, timeStyle);
+---
+>       dateAdapterFactory = DefaultDateTypeAdapter.DateType.DATE.createAdapterFactory(dateStyle, timeStyle);
+> 
+>       if (sqlTypesSupported) {
+>         sqlTimestampAdapterFactory = SqlTypesSupport.TIMESTAMP_DATE_TYPE.createAdapterFactory(dateStyle, timeStyle);
+>         sqlDateAdapterFactory = SqlTypesSupport.DATE_DATE_TYPE.createAdapterFactory(dateStyle, timeStyle);
+>       }
+623,625c631,635
+<     factories.add(TypeAdapters.newFactory(Date.class, dateTypeAdapter));
+<     factories.add(TypeAdapters.newFactory(Timestamp.class, timestampTypeAdapter));
+<     factories.add(TypeAdapters.newFactory(java.sql.Date.class, javaSqlDateTypeAdapter));
+---
+>     factories.add(dateAdapterFactory);
+>     if (sqlTypesSupported) {
+>       factories.add(sqlTimestampAdapterFactory);
+>       factories.add(sqlDateAdapterFactory);
+>     }
+diff -r /tmp/v1/gson/src/main/java/com/google/gson/Gson.java /tmp/v2/gson/src/main/java/com/google/gson/Gson.java
+52,53d51
+< import com.google.gson.internal.bind.SqlDateTypeAdapter;
+< import com.google.gson.internal.bind.TimeTypeAdapter;
+54a53
+> import com.google.gson.internal.sql.SqlTypesSupport;
+265,267c264,270
+<     factories.add(TimeTypeAdapter.FACTORY);
+<     factories.add(SqlDateTypeAdapter.FACTORY);
+<     factories.add(TypeAdapters.TIMESTAMP_FACTORY);
+---
+> 
+>     if (SqlTypesSupport.SUPPORTS_SQL_TYPES) {
+>       factories.add(SqlTypesSupport.TIME_FACTORY);
+>       factories.add(SqlTypesSupport.DATE_FACTORY);
+>       factories.add(SqlTypesSupport.TIMESTAMP_FACTORY);
+>     }
+> 
+diff -r /tmp/v1/gson/src/main/java/com/google/gson/internal/$Gson$Types.java /tmp/v2/gson/src/main/java/com/google/gson/internal/$Gson$Types.java
+341a342
+> 
+Only in /tmp/v2/gson/src/main/java/com/google/gson/internal/bind: DefaultDateTypeAdapter.java
+Only in /tmp/v1/gson/src/main/java/com/google/gson/internal/bind: SqlDateTypeAdapter.java
+Only in /tmp/v1/gson/src/main/java/com/google/gson/internal/bind: TimeTypeAdapter.java
+diff -r /tmp/v1/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java /tmp/v2/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java
+29d28
+< import java.sql.Timestamp;
+34d32
+< import java.util.Date;
+412c410
+<   
+---
+> 
+430c428
+<   
+---
+> 
+574,594d571
+< 
+<   public static final TypeAdapterFactory TIMESTAMP_FACTORY = new TypeAdapterFactory() {
+<     @SuppressWarnings("unchecked") // we use a runtime check to make sure the 'T's equal
+<     @Override public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
+<       if (typeToken.getRawType() != Timestamp.class) {
+<         return null;
+<       }
+< 
+<       final TypeAdapter<Date> dateTypeAdapter = gson.getAdapter(Date.class);
+<       return (TypeAdapter<T>) new TypeAdapter<Timestamp>() {
+<         @Override public Timestamp read(JsonReader in) throws IOException {
+<           Date date = dateTypeAdapter.read(in);
+<           return date != null ? new Timestamp(date.getTime()) : null;
+<         }
+< 
+<         @Override public void write(JsonWriter out, Timestamp value) throws IOException {
+<           dateTypeAdapter.write(out, value);
+<         }
+<       };
+<     }
+<   };
+Only in /tmp/v2/gson/src/main/java/com/google/gson/internal: sql
