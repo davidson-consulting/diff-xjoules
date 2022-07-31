@@ -15,8 +15,8 @@ impl CodeCoverageMarkStrategy {
         data: &VersionMeasure,
         indicator_to_consider_for_marking: &str,
     ) -> f64 {
-        let test_data_v1 = data.find_test_measure(selected_test).unwrap();
-        return test_data_v1.get_median(indicator_to_consider_for_marking);
+        let test_data = data.find_test_measure(selected_test).unwrap();
+        return test_data.get_median(indicator_to_consider_for_marking);
     }
     fn compute_weight(
         &self,
@@ -24,9 +24,11 @@ impl CodeCoverageMarkStrategy {
         selected_test: &str,
         total_nb_covered_lines: i32,
     ) -> f64 {
-        let test_coverage_v1 = coverage.get_test_coverage_by_test_identifier(&selected_test);
-        let nb_coverage_line_test_v1 = test_coverage_v1.get_total_nb_lines_covered();
-        return (nb_coverage_line_test_v1 as f64) / (total_nb_covered_lines as f64);
+        let test_coverage = coverage
+            .get_test_coverage_by_test_identifier(&selected_test)
+            .unwrap();
+        let nb_coverage_line_test = test_coverage.get_total_nb_lines_covered();
+        return (nb_coverage_line_test as f64) / (total_nb_covered_lines as f64);
     }
     fn compute_weighted_data(
         &self,
@@ -55,6 +57,15 @@ impl MarkStrategy for CodeCoverageMarkStrategy {
         return test_selection
             .test_selection
             .iter()
+            .filter(|selected_test| {
+                data.coverage_v1
+                    .get_test_coverage_by_test_identifier(&selected_test)
+                    .is_some()
+                    && data
+                        .coverage_v2
+                        .get_test_coverage_by_test_identifier(&selected_test)
+                        .is_some()
+            })
             .map(|selected_test| {
                 let weighted_considered_test_data_v1 = self.compute_weighted_data(
                     &data.coverage_v1,

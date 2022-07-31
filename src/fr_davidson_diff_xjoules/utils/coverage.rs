@@ -35,12 +35,14 @@ impl Coverage {
         }
         return covered_lines_in_filename.len().try_into().unwrap();
     }
-    pub fn get_test_coverage_by_test_identifier(&self, test_identifier: &str) -> &TestCoverage {
+    pub fn get_test_coverage_by_test_identifier(
+        &self,
+        test_identifier: &str,
+    ) -> Option<&TestCoverage> {
         return self
             .test_coverages
             .iter()
-            .find(|test_coverage| test_coverage.test_identifier.eq(test_identifier))
-            .unwrap();
+            .find(|test_coverage| test_coverage.test_identifier.eq(test_identifier));
     }
 }
 
@@ -103,7 +105,8 @@ mod tests {
     fn test_test_coverage_get_total_nb_lines_covered() {
         let coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1.json");
         let test_coverage = coverage
-            .get_test_coverage_by_test_identifier("fr.davidson.AppTest#testRandomQuickSortLarge");
+            .get_test_coverage_by_test_identifier("fr.davidson.AppTest#testRandomQuickSortLarge")
+            .unwrap();
         assert_eq!(41, test_coverage.get_total_nb_lines_covered());
     }
 
@@ -111,7 +114,8 @@ mod tests {
     fn test_get_test_coverage_by_test_identifier() {
         let coverage: Coverage = read_json::<Coverage>("test_resources/coverage_v1.json");
         let test_coverage = coverage
-            .get_test_coverage_by_test_identifier("fr.davidson.AppTest#testRandomQuickSortLarge");
+            .get_test_coverage_by_test_identifier("fr.davidson.AppTest#testRandomQuickSortLarge")
+            .unwrap();
         assert_eq!(2, test_coverage.file_coverages.len());
         let file_coverage = test_coverage
             .file_coverages

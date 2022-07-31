@@ -6,14 +6,13 @@ use crate::fr_davidson_diff_xjoules::{
 
 pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
     for selected_test in diff_xjoules_data.test_selection.test_selection.iter() {
-        let test_measure_v1 = diff_xjoules_data
-            .data_v1
-            .find_test_measure(&selected_test)
-            .unwrap();
-        let test_measure_v2 = diff_xjoules_data
-            .data_v2
-            .find_test_measure(&selected_test)
-            .unwrap();
+        let test_measure_v1_opt = diff_xjoules_data.data_v1.find_test_measure(&selected_test);
+        let test_measure_v2_opt = diff_xjoules_data.data_v2.find_test_measure(&selected_test);
+        if test_measure_v1_opt.is_none() || test_measure_v2_opt.is_none() {
+            continue;
+        }
+        let test_measure_v1 = test_measure_v1_opt.unwrap();
+        let test_measure_v2 = test_measure_v2_opt.unwrap();
         let mut medians_v1 = Vec::<Data>::new();
         let mut medians_v2 = Vec::<Data>::new();
         let mut deltas = Vec::<Data>::new();
