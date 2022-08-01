@@ -11,9 +11,11 @@ const DECISION_DATA_FILENAME: &str = "decisions";
 
 pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesData) {
     for test_filter in configuration.test_filters.iter() {
+        println!("Applying {} to keep stable tests", test_filter.to_string());
         let test_selection = test_filter.filter(&configuration, diff_xjoules_data);
         if !test_selection.test_selection.is_empty() {
             for mark_strategy in configuration.mark_strategies.iter() {
+                println!("Deciding using {}", mark_strategy.to_string());
                 let decision =
                     mark_strategy.decide(configuration, diff_xjoules_data, &test_selection);
                 diff_xjoules_data.decisions.push(DecisionData::new(

@@ -15,8 +15,7 @@ pub mod all_test_filter;
 pub mod empty_intersection_test_filter;
 pub mod student_t_test_test_filter;
 
-#[derive(Debug, Clone, Copy)]
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum TestFilterEnum {
     All,
     EmptyIntersection,
