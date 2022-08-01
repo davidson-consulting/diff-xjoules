@@ -28,6 +28,13 @@ impl TestSelection {
             test_selection: (HashSet::new()),
         }
     }
+    pub fn clone(test_selection: &TestSelection) -> TestSelection {
+        let mut clone = TestSelection::new();
+        for test_identifier in test_selection.test_selection.iter() {
+            clone.test_selection.insert(test_identifier.clone());
+        }
+        return clone;
+    }
 }
 
 pub fn run(
@@ -212,6 +219,18 @@ mod tests {
     };
 
     #[test]
+    fn test_clone_test_selection() {
+        let original =
+            json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
+        let clone = TestSelection::clone(&original);
+        assert_eq!(original.test_selection.len(), clone.test_selection.len());
+        assert!(original
+            .test_selection
+            .iter()
+            .all(|test_identifier| clone.test_selection.contains(test_identifier)));
+    }
+
+    #[test]
     fn test_run() {
         run_command("cp test_resources/coverage_v2.json target/coverage_v2.json");
         let configuration = Configuration {
@@ -229,8 +248,8 @@ mod tests {
             iteration_warmup: 0,
             iteration_run: 0,
             time_to_wait_in_millis: 0,
-            test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::Strict,
+            test_filters: vec![TestFilterEnum::All],
+            mark_strategies: vec![MarkStrategyEnum::Strict],
             indicator_to_consider_for_marking: String::from("cycles"),
         };
         let diff_xjoules_data = run(&configuration, DiffXJoulesData::new());
