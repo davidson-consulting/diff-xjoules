@@ -1,7 +1,16 @@
 use std::collections::HashMap;
 
+use serde_derive::Serialize;
+
 use super::{
-    measure::version_measure::VersionMeasure, steps::test_selection::TestSelection,
+    measure::version_measure::VersionMeasure,
+    steps::{
+        test_mark::{
+            mark_strategy::{MarkStrategyEnum},
+            test_filter::{TestFilterEnum},
+        },
+        test_selection::{TestSelection},
+    },
     utils::coverage::Coverage,
 };
 
@@ -17,8 +26,7 @@ pub struct DiffXJoulesData {
     pub median_v1: VersionMeasure,
     pub median_v2: VersionMeasure,
     pub delta: VersionMeasure,
-    pub mark_test_selection: TestSelection,
-    pub decision: bool,
+    pub decisions: Vec<DecisionData>,
 }
 
 impl DiffXJoulesData {
@@ -49,8 +57,58 @@ impl DiffXJoulesData {
             delta: VersionMeasure {
                 test_measures: Vec::new(),
             },
-            mark_test_selection: TestSelection::new(),
-            decision: false,
+            decisions: Vec::new(),
+        };
+    }
+}
+
+#[derive(Serialize)]
+pub enum Decision {
+    Pass,
+    Break,
+    NotApplicable
+}
+
+impl Decision {
+    pub fn from_bool(decision: bool) -> Decision {
+        if decision {
+            return Decision::Pass;
+        } else {
+            return Decision::Break;
+        }
+    }
+}
+
+#[derive(Serialize)]
+pub struct DecisionData {
+    pub decision: Decision,
+    pub test_selection: TestSelection,
+    pub test_filter: String,
+    pub mark_strategy: String,
+}
+
+impl DecisionData {
+    pub fn not_applicable(
+        test_filter: &TestFilterEnum,
+    ) -> DecisionData {
+        return DecisionData {
+            decision: Decision::NotApplicable,
+            test_selection: TestSelection::new(),
+            test_filter: test_filter.to_string(),
+            mark_strategy: String::from(""),
+        };
+    }
+    pub fn new(
+        decision: Decision,
+        test_selection: &TestSelection,
+        test_filter: &TestFilterEnum,
+        mark_strategy: &MarkStrategyEnum,
+    ) -> DecisionData {
+        return DecisionData {
+            decision,
+            test_selection: TestSelection::clone(test_selection),
+            test_filter: test_filter.to_string(),
+            mark_strategy: mark_strategy.to_string(),
         };
     }
 }

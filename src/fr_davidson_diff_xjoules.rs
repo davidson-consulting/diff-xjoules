@@ -26,9 +26,4 @@ pub fn run(path_to_configuration_yaml_file: std::path::PathBuf) {
     test_execution::run(&configuration, &mut diff_xjoules_data);
     test_delta::run(&configuration, &mut diff_xjoules_data);
     test_mark::run(&configuration, &mut diff_xjoules_data);
-    if diff_xjoules_data.decision {
-        println!("PASS");
-    } else {
-        println!("BREAK");
-    }
 }

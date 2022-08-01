@@ -21,8 +21,10 @@ pub struct Configuration {
     pub iteration_run: i8,
     #[serde(default = "default_time_to_wait_in_millis")]
     pub time_to_wait_in_millis: u64,
-    pub test_filter: TestFilterEnum,
-    pub mark_strategy: MarkStrategyEnum,
+    #[serde(default = "default_test_filters")]
+    pub test_filters: Vec<TestFilterEnum>,
+    #[serde(default = "default_mark_strategies")]
+    pub mark_strategies: Vec<MarkStrategyEnum>,
     #[serde(default = "default_indicator_to_consider_for_marking")]
     pub indicator_to_consider_for_marking: String,
 }
@@ -41,6 +43,24 @@ fn default_iteration_run() -> i8 {
 
 fn default_time_to_wait_in_millis() -> u64 {
     return 3000;
+}
+
+fn default_test_filters() -> Vec<TestFilterEnum> {
+    return vec![
+        TestFilterEnum::All,
+        TestFilterEnum::EmptyIntersection,
+        //TestFilterEnum::StudentTTest,
+    ];
+}
+
+fn default_mark_strategies() -> Vec<MarkStrategyEnum> {
+    return vec![
+        MarkStrategyEnum::Strict,
+        MarkStrategyEnum::Aggregate,
+        MarkStrategyEnum::Vote,
+        MarkStrategyEnum::CodeCov,
+        MarkStrategyEnum::DiffCov,
+    ]
 }
 
 fn default_indicator_to_consider_for_marking() -> String {

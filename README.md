@@ -32,8 +32,8 @@ The configuration YAML file requires the following properties:
 - `coverage_cmd`: the command to be executed to compute the code coverage of the tests
 - `instrumentation_cmd`: the command to be executed to instrument the tests
 - `execution_cmd`: the command to execute the tests
-- `test_filter`: the test filter to use for the decision process. Values avalaible: `All`, `EmptyIntersection`.
-- `mark_strategy`: the strategy for marking the decision. Values avalaible: `Strict`, `Aggregate`, `Vote`, `CodeCov`, `DiffCove`
+- `test_filters`: this is an array. Specify the test filters to use for the decision process. Values avalaible: `All`, `EmptyIntersection`.
+- `mark_strategies`: this is an array. Specify the strategies for marking the decision. Values avalaible: `Strict`, `Aggregate`, `Vote`, `CodeCov`, `DiffCove`
 - `indicator_to_consider_for_marking`: the indicator (energy, cycles, instructions, etc) to use for the decision process
 
 Following, an example of configuration YAML file for Java (using [diff-jjoules](https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-jjoules)):
@@ -45,8 +45,6 @@ src_folder: "src/main/java"
 coverage_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}"
 instrumentation_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}"
 execution_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}"
-test_filter: All
-mark_strategy: Strict
 ```
 
 ### Languages-specific parts

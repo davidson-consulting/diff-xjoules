@@ -1,4 +1,6 @@
-use serde_derive::Deserialize;
+use core::fmt;
+
+use serde_derive::{Deserialize, Serialize};
 
 use crate::fr_davidson_diff_xjoules::{
     steps::test_selection::TestSelection, utils::json_utils, Configuration, DiffXJoulesData,
@@ -13,7 +15,8 @@ pub mod all_test_filter;
 pub mod empty_intersection_test_filter;
 pub mod student_t_test_test_filter;
 
-#[derive(Deserialize)]
+#[derive(Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize)]
 pub enum TestFilterEnum {
     All,
     EmptyIntersection,
@@ -23,6 +26,16 @@ pub enum TestFilterTypedEnum {
     All(AllTestFilter),
     EmptyIntersection(EmptyIntersectionTestFilter),
     StudentTTest(StudentTTestTestFilter),
+}
+
+impl fmt::Display for TestFilterEnum {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            TestFilterEnum::All => write!(f, "all_test"),
+            TestFilterEnum::EmptyIntersection => write!(f, "empty_intersection"),
+            TestFilterEnum::StudentTTest => write!(f, "student_t_test"),
+        }
+    }
 }
 
 impl TestFilterEnum {

@@ -44,8 +44,8 @@ mod tests {
             iteration_warmup: 0,
             iteration_run: 3,
             time_to_wait_in_millis: 0,
-            test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::Strict,
+            test_filters: vec![TestFilterEnum::All],
+            mark_strategies: vec![MarkStrategyEnum::Strict],
             indicator_to_consider_for_marking: String::from("cycles"),
         };
         assert!(!Path::new("target/path_v1").exists());

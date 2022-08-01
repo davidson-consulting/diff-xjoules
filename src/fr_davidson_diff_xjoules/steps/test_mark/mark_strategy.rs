@@ -1,4 +1,6 @@
-use serde_derive::Deserialize;
+use core::fmt;
+
+use serde_derive::{Deserialize, Serialize};
 
 use crate::fr_davidson_diff_xjoules::{
     configuration::Configuration, diff_data::DiffXJoulesData, steps::test_selection::TestSelection,
@@ -17,7 +19,7 @@ pub mod diff_coverage_mark_strategy;
 pub mod strict_mark_strategy;
 pub mod vote_mark_strategy;
 
-#[derive(Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum MarkStrategyEnum {
     Strict,
     Aggregate,
@@ -32,6 +34,18 @@ pub enum MarkStrategyTypedEnum {
     Vote(VoteMarkStrategy),
     CodeCov(CodeCoverageMarkStrategy),
     DiffCov(DiffCodeCoverageMarkStrategy),
+}
+
+impl fmt::Display for MarkStrategyEnum {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            MarkStrategyEnum::Strict => write!(f, "strict"),
+            MarkStrategyEnum::Aggregate => write!(f, "aggregate"),
+            MarkStrategyEnum::Vote => write!(f, "vote"),
+            MarkStrategyEnum::CodeCov => write!(f, "code_coverage"),
+            MarkStrategyEnum::DiffCov => write!(f, "diff_coverage"),
+        }
+    }
 }
 
 impl MarkStrategyEnum {

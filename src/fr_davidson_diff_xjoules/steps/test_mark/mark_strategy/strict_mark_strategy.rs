@@ -64,8 +64,8 @@ mod test {
             iteration_warmup: 1,
             iteration_run: 3,
             time_to_wait_in_millis: 500,
-            test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::Strict,
+            test_filters: vec![TestFilterEnum::All],
+            mark_strategies: vec![MarkStrategyEnum::Strict],
             indicator_to_consider_for_marking: String::from("instructions"),
         };
         let mut data = DiffXJoulesData::new();
@@ -99,8 +99,8 @@ mod test {
             iteration_warmup: 1,
             iteration_run: 3,
             time_to_wait_in_millis: 500,
-            test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::Strict,
+            test_filters: vec![TestFilterEnum::All],
+            mark_strategies: vec![MarkStrategyEnum::Strict],
             indicator_to_consider_for_marking: String::from("UNHALTED_REFERENCE_CYCLES"),
         };
         let mut data = DiffXJoulesData::new();
@@ -108,7 +108,7 @@ mod test {
         let test_selection =
             json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
         assert!(!configuration
-            .mark_strategy
+            .mark_strategies[0]
             .decide(&configuration, &data, &test_selection));
     }
 }

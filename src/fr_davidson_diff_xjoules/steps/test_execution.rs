@@ -144,8 +144,8 @@ mod tests {
             iteration_warmup: 1,
             iteration_run: 10,
             time_to_wait_in_millis: 1,
-            test_filter: TestFilterEnum::All,
-            mark_strategy: MarkStrategyEnum::Strict,
+            test_filters: vec![TestFilterEnum::All],
+            mark_strategies: vec![MarkStrategyEnum::Strict],
             indicator_to_consider_for_marking: String::from("cycles"),
         };
         let diff_xjoules_data = &mut DiffXJoulesData::new();
