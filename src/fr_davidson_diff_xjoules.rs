@@ -2,12 +2,12 @@ use std::{fs, path::Path};
 
 use self::{
     configuration::Configuration,
-    diff_data::DiffXJoulesData,
+    diff_xjoules_data::DiffXJoulesData,
     steps::{test_delta, test_execution, test_instrumentation, test_mark, test_selection},
 };
 
 pub mod configuration;
-pub mod diff_data;
+pub mod diff_xjoules_data;
 pub mod measure;
 pub mod steps;
 pub mod utils;

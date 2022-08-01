@@ -1,5 +1,6 @@
 use crate::fr_davidson_diff_xjoules::{
-    configuration::Configuration, diff_data::DiffXJoulesData, steps::test_selection::TestSelection,
+    configuration::Configuration, diff_xjoules_data::DiffXJoulesData,
+    steps::test_selection::TestSelection,
 };
 
 use super::TestFilter;
@@ -29,7 +30,7 @@ impl AllTestFilter {
 mod test {
     use crate::fr_davidson_diff_xjoules::{
         configuration::Configuration,
-        diff_data::DiffXJoulesData,
+        diff_xjoules_data::DiffXJoulesData,
         measure::version_measure::VersionMeasure,
         steps::{
             test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},

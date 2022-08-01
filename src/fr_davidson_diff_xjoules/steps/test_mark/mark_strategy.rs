@@ -3,7 +3,8 @@ use core::fmt;
 use serde_derive::{Deserialize, Serialize};
 
 use crate::fr_davidson_diff_xjoules::{
-    configuration::Configuration, diff_data::DiffXJoulesData, steps::test_selection::TestSelection,
+    configuration::Configuration, diff_xjoules_data::DiffXJoulesData,
+    steps::test_selection::TestSelection,
 };
 
 use self::{

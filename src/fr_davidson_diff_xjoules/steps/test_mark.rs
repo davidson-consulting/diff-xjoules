@@ -1,5 +1,5 @@
 use crate::fr_davidson_diff_xjoules::{
-    diff_data::{Decision, DecisionData},
+    diff_xjoules_data::{Decision, DecisionData},
     utils::json_utils::{self, JSON_EXTENSION},
     Configuration, DiffXJoulesData,
 };
@@ -44,7 +44,7 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
 mod test {
     use crate::fr_davidson_diff_xjoules::{
         configuration::Configuration,
-        diff_data::{Decision, DiffXJoulesData},
+        diff_xjoules_data::{Decision, DiffXJoulesData},
         measure::version_measure::VersionMeasure,
         steps::test_selection::TestSelection,
         utils::json_utils,

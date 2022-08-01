@@ -1,5 +1,6 @@
 use crate::fr_davidson_diff_xjoules::{
-    configuration::Configuration, diff_data::DiffXJoulesData, steps::test_selection::TestSelection,
+    configuration::Configuration, diff_xjoules_data::DiffXJoulesData,
+    steps::test_selection::TestSelection,
 };
 
 use super::MarkStrategy;
@@ -90,8 +91,6 @@ mod test {
             String::from("fr.davidson.AppTest#testAddedAndRemovedStatement"),
             2,
         );
-        assert!(!configuration
-            .mark_strategies[0]
-            .decide(&configuration, &data, &test_selection));
+        assert!(!configuration.mark_strategies[0].decide(&configuration, &data, &test_selection));
     }
 }

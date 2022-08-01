@@ -1,5 +1,5 @@
 use crate::fr_davidson_diff_xjoules::{
-    configuration::Configuration, diff_data::DiffXJoulesData,
+    configuration::Configuration, diff_xjoules_data::DiffXJoulesData,
     measure::version_measure::VersionMeasure, steps::test_selection::TestSelection,
     utils::coverage::Coverage,
 };
@@ -194,8 +194,6 @@ mod test {
         data.data_v2 = json_utils::read_json::<VersionMeasure>("test_resources/data_v2.json");
         let test_selection =
             json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
-        assert!(configuration
-            .mark_strategies[0]
-            .decide(&configuration, &data, &test_selection));
+        assert!(configuration.mark_strategies[0].decide(&configuration, &data, &test_selection));
     }
 }

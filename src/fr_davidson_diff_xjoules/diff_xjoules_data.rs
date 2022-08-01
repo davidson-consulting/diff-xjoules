@@ -5,11 +5,8 @@ use serde_derive::Serialize;
 use super::{
     measure::version_measure::VersionMeasure,
     steps::{
-        test_mark::{
-            mark_strategy::{MarkStrategyEnum},
-            test_filter::{TestFilterEnum},
-        },
-        test_selection::{TestSelection},
+        test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
+        test_selection::TestSelection,
     },
     utils::coverage::Coverage,
 };
@@ -66,7 +63,7 @@ impl DiffXJoulesData {
 pub enum Decision {
     Pass,
     Break,
-    NotApplicable
+    NotApplicable,
 }
 
 impl Decision {
@@ -88,9 +85,7 @@ pub struct DecisionData {
 }
 
 impl DecisionData {
-    pub fn not_applicable(
-        test_filter: &TestFilterEnum,
-    ) -> DecisionData {
+    pub fn not_applicable(test_filter: &TestFilterEnum) -> DecisionData {
         return DecisionData {
             decision: Decision::NotApplicable,
             test_selection: TestSelection::new(),

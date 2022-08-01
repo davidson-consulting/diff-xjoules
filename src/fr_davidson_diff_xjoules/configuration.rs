@@ -60,7 +60,7 @@ fn default_mark_strategies() -> Vec<MarkStrategyEnum> {
         MarkStrategyEnum::Vote,
         MarkStrategyEnum::CodeCov,
         MarkStrategyEnum::DiffCov,
-    ]
+    ];
 }
 
 fn default_indicator_to_consider_for_marking() -> String {

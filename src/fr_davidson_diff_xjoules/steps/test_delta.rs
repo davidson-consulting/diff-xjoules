@@ -85,7 +85,7 @@ fn compute_median_and_delta_indicator(
 mod test {
     use crate::fr_davidson_diff_xjoules::{
         configuration::Configuration,
-        diff_data::DiffXJoulesData,
+        diff_xjoules_data::DiffXJoulesData,
         steps::{
             test_mark::{mark_strategy::MarkStrategyEnum, test_filter::TestFilterEnum},
             test_selection::TestSelection,

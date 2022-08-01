@@ -1,5 +1,6 @@
 use crate::fr_davidson_diff_xjoules::{
-    configuration::Configuration, diff_data::DiffXJoulesData, steps::test_selection::TestSelection,
+    configuration::Configuration, diff_xjoules_data::DiffXJoulesData,
+    steps::test_selection::TestSelection,
 };
 
 use super::MarkStrategy;
@@ -80,9 +81,7 @@ mod test {
         data.delta = delta;
         let mut test_selection = TestSelection::new();
         test_selection.test_selection.insert(String::from("test1"));
-        assert!(configuration
-            .mark_strategies[0]
-            .decide(&configuration, &data, &test_selection));
+        assert!(configuration.mark_strategies[0].decide(&configuration, &data, &test_selection));
     }
 
     #[test]
@@ -108,8 +107,6 @@ mod test {
         data.delta = json_utils::read_json::<VersionMeasure>("test_resources/delta.json");
         let test_selection =
             json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
-        assert!(!configuration
-            .mark_strategies[0]
-            .decide(&configuration, &data, &test_selection));
+        assert!(!configuration.mark_strategies[0].decide(&configuration, &data, &test_selection));
     }
 }
