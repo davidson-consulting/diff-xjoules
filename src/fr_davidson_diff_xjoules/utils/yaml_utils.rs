@@ -26,6 +26,6 @@ mod tests {
         );
         assert_eq!("target", configuration.path_output_dir);
         assert_eq!("src/main/java", configuration.src_folder);
-        assert_eq!("java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}", configuration.coverage_cmd);
+        assert_eq!("java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}", configuration.coverage_cmd);
     }
 }

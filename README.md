@@ -42,9 +42,9 @@ Following, an example of configuration YAML file for Java (using [diff-jjoules](
 path_v1: "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"
 path_v2: "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2"
 src_folder: "src/main/java"
-coverage_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}"
-instrumentation_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}"
-execution_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}"
+coverage_cmd: "java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}"
+instrumentation_cmd: "java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}"
+execution_cmd: "java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}"
 ```
 
 ### Languages-specific parts

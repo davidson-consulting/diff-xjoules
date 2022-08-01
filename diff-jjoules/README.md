@@ -74,7 +74,7 @@ coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  delta.json  diff
 ## Command line usage
 
 ```
-java -jar target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --help
+java -jar target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --help
 Usage: fr.davidson.diff_jjoules.Main [-hV] -o=<outputPath> -p=<pathToProject> --step=<step>
     -h, --help          Show this help message and exit.
     -o, --output-path=<outputPath>

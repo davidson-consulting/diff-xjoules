@@ -29,7 +29,7 @@ It is adviced to modifies directly the test code within the project in order to 
 Below, a command line example for Java:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}
 ```
 
 **Diff-XJoules** will execute this command twice, once per version of the program (before and after the commit).
@@ -39,10 +39,10 @@ The former will be replaced sequentially by the values of the properties `path_v
 If we consider [this](https://github.com/davidson-consulting/diff-xjoules/blob/main/test_resources/configuration_file_example.yaml) configuration YAML file example, the two resulting command executed will be:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --task TEST_INSTRUMENTATION --tests-set target/test_selection.json
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --task TEST_INSTRUMENTATION --tests-set target/test_selection.json
 ```
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_INSTRUMENTATION --tests-set target/test_selection.json
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_INSTRUMENTATION --tests-set target/test_selection.json
 ```
 
 ## Instrumentation Details
