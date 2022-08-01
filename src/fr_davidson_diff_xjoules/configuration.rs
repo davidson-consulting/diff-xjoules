@@ -10,16 +10,41 @@ pub struct Configuration {
     pub path_v1: String,
     pub path_v2: String,
     pub src_folder: String,
+    #[serde(default = "path_output_dir")]
     pub path_output_dir: String,
     pub coverage_cmd: String,
     pub instrumentation_cmd: String,
     pub execution_cmd: String,
+    #[serde(default = "default_iteration_warmup")]
     pub iteration_warmup: i8,
+    #[serde(default = "default_iteration_run")]
     pub iteration_run: i8,
+    #[serde(default = "default_time_to_wait_in_millis")]
     pub time_to_wait_in_millis: u64,
     pub test_filter: TestFilterEnum,
     pub mark_strategy: MarkStrategyEnum,
+    #[serde(default = "default_indicator_to_consider_for_marking")]
     pub indicator_to_consider_for_marking: String,
+}
+
+fn path_output_dir() -> String {
+    return String::from("target");
+}
+
+fn default_iteration_warmup() -> i8 {
+    return 3;
+}
+
+fn default_iteration_run() -> i8 {
+    return 30;
+}
+
+fn default_time_to_wait_in_millis() -> u64 {
+    return 3000;
+}
+
+fn default_indicator_to_consider_for_marking() -> String {
+    return String::from("RAPL_ENERGY_PKG");
 }
 
 impl Configuration {

@@ -41,17 +41,12 @@ Following, an example of configuration YAML file for Java (using [diff-jjoules](
 ```yaml
 path_v1: "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project"
 path_v2: "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2"
-path_output_dir: "target"
 src_folder: "src/main/java"
-time_to_wait_in_millis: 3000
-iteration_warmup: 0
-iteration_run: 3
 coverage_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}"
 instrumentation_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}"
 execution_cmd: "java -jar diff-jjoules/target/diff-jjoules-0.1.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}"
 test_filter: All
 mark_strategy: Strict
-indicator_to_consider_for_marking: "cycles"
 ```
 
 ### Languages-specific parts
