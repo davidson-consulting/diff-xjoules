@@ -16,6 +16,7 @@ impl MarkStrategy for AggregateMarkStrategy {
         return test_selection
             .test_selection
             .iter()
+            .filter(|selected_test| data.delta.find_test_measure(selected_test).is_some())
             .map(|selected_test| {
                 let delta_test = data.delta.find_test_measure(selected_test).unwrap();
                 return delta_test.measures[0]

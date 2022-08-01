@@ -14,16 +14,19 @@ impl MarkStrategy for StrictMarkStrategy {
         test_selection: &TestSelection,
     ) -> bool {
         for selected_test in test_selection.test_selection.iter() {
-            let delta_test = data.delta.find_test_measure(selected_test).unwrap();
-            let considered_delta = delta_test.measures[0]
-                .iter()
-                .find(|data| {
-                    data.indicator
-                        .eq(&configuration.indicator_to_consider_for_marking)
-                })
-                .unwrap();
-            if considered_delta.value > 0.0 {
-                return false;
+            let delta_test_opt = data.delta.find_test_measure(selected_test);
+            if delta_test_opt.is_some() {
+                let delta_test = delta_test_opt.unwrap();
+                let considered_delta = delta_test.measures[0]
+                    .iter()
+                    .find(|data| {
+                        data.indicator
+                            .eq(&configuration.indicator_to_consider_for_marking)
+                    })
+                    .unwrap();
+                if considered_delta.value > 0.0 {
+                    return false;
+                }
             }
         }
         return true;
