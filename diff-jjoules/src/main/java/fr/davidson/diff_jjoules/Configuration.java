@@ -24,6 +24,9 @@ public class Configuration {
     @CommandLine.Option(names = {"-p", "--path-to-project"}, description = "Path to the program.", required = true)
     private String pathToProject;
 
+    @CommandLine.Option(names = {"-s", "--second-path-to-project"}, description = "Path to the program in another version.", required = false)
+    private String pathToProjectSecondVersion;
+
     @CommandLine.Option(names = {"-o", "--output-path"}, description = "Path to the output.", required = false)
     private String outputPath;
 
@@ -56,6 +59,14 @@ public class Configuration {
 
     public void setPathToProject(String pathToProject) {
         this.pathToProject = pathToProject;
+    }
+
+    public String getPathToProjectSecondVersion() {
+        return pathToProjectSecondVersion;
+    }
+
+    public void setPathToProjectSecondVersion(String pathToProjectSecondVersion) {
+        this.pathToProjectSecondVersion = pathToProjectSecondVersion;
     }
 
     public String getOutputPath() {
