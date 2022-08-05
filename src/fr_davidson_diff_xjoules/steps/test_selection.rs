@@ -7,8 +7,8 @@ use serde_derive::{Deserialize, Serialize};
 
 use crate::fr_davidson_diff_xjoules::{
     utils::{
-        command::run_command_redirect_to_file,
-        coverage::{run_coverage_cmd, Coverage, COVERAGE_FILENAME},
+        command::{self, run_command_redirect_to_file},
+        coverage::{Coverage, COVERAGE_FILENAME},
         json_utils::{self, JSON_EXTENSION},
     },
     Configuration, DiffXJoulesData, SUFFIX_V1, SUFFIX_V2,
@@ -41,24 +41,21 @@ pub fn run(
     configuration: &Configuration,
     mut diff_xjoules_data: DiffXJoulesData,
 ) -> DiffXJoulesData {
-    diff_xjoules_data.coverage_v1 = compute_coverage(
-        &configuration.path_v1,
-        &configuration.coverage_cmd,
-        &configuration.path_output_dir,
-        SUFFIX_V1,
-    );
-    diff_xjoules_data.coverage_v2 = compute_coverage(
-        &configuration.path_v2,
-        &configuration.coverage_cmd,
-        &configuration.path_output_dir,
-        SUFFIX_V2,
-    );
     diff_xjoules_data.diff = compute_diff(
         &configuration.path_v1,
         &configuration.path_v2,
         &configuration.src_folder,
         &configuration.path_output_dir,
     );
+    compute_coverages(&configuration);
+    diff_xjoules_data.coverage_v1 = json_utils::read_json::<Coverage>(&format!(
+        "{}/{}{}{}",
+        &configuration.path_output_dir, COVERAGE_FILENAME, SUFFIX_V1, JSON_EXTENSION
+    ));
+    diff_xjoules_data.coverage_v1 = json_utils::read_json::<Coverage>(&format!(
+        "{}/{}{}{}",
+        &configuration.path_output_dir, COVERAGE_FILENAME, SUFFIX_V2, JSON_EXTENSION
+    ));
     diff_xjoules_data = select_tests(&configuration.path_v1, diff_xjoules_data);
     json_utils::write_json(
         &format!(
@@ -70,20 +67,14 @@ pub fn run(
     return diff_xjoules_data;
 }
 
-fn compute_coverage(
-    path_to_project: &str,
-    coverage_cmd: &str,
-    path_output_dir: &str,
-    suffix_version: &str,
-) -> Coverage {
-    return run_coverage_cmd(
-        path_to_project,
-        coverage_cmd,
-        &format!(
-            "{}/{}{}{}",
-            path_output_dir, COVERAGE_FILENAME, suffix_version, JSON_EXTENSION
-        ),
-    );
+fn compute_coverages(configuration: &Configuration) {
+    let mut data: HashMap<&str, &str> = HashMap::new();
+    data.insert("path_project_v1", &configuration.path_v1);
+    data.insert("path_project_v2", &configuration.path_v2);
+    let path_diff_file = &format!("{}/{}", &configuration.path_output_dir, DIFF_FILENAME);
+    data.insert("path_diff_file", path_diff_file);
+    data.insert("output_path", &configuration.path_output_dir);
+    command::run_templated_command(&configuration.coverage_cmd, &data);
 }
 
 fn compute_diff(path_v1: &str, path_v2: &str, src_folder: &str, path_output_dir: &str) -> String {
@@ -266,13 +257,26 @@ mod tests {
     }
 
     #[test]
-    fn test_compute_coverage() {
-        let coverage = compute_coverage(
-            "diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/",
-            "cp test_resources/coverage_v1.json target/coverage_v1.json",
-            "target/",
-            SUFFIX_V1,
-        );
+    fn test_compute_coverages() {
+        let configuration = Configuration {
+            path_v1: String::from("diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/"),
+            path_v2: String::from(""),
+            src_folder: String::from(""),
+            path_output_dir: String::from("target/"),
+            coverage_cmd: String::from(
+                "cp test_resources/coverage_v1.json target/coverage_v1.json",
+            ),
+            instrumentation_cmd: String::from(""),
+            execution_cmd: String::from(""),
+            iteration_warmup: 0,
+            iteration_run: 0,
+            time_to_wait_in_millis: 0,
+            test_filters: vec![TestFilterEnum::All],
+            mark_strategies: vec![MarkStrategyEnum::Strict],
+            indicator_to_consider_for_marking: String::from(""),
+        };
+        compute_coverages(&configuration);
+        let coverage = json_utils::read_json::<Coverage>(&"target/coverage_v1.json");
         assert_eq!(9, coverage.test_coverages.len());
         assert!(coverage
             .test_coverages
