@@ -52,7 +52,7 @@ pub fn run(
         "{}/{}{}{}",
         &configuration.path_output_dir, COVERAGE_FILENAME, SUFFIX_V1, JSON_EXTENSION
     ));
-    diff_xjoules_data.coverage_v1 = json_utils::read_json::<Coverage>(&format!(
+    diff_xjoules_data.coverage_v2 = json_utils::read_json::<Coverage>(&format!(
         "{}/{}{}{}",
         &configuration.path_output_dir, COVERAGE_FILENAME, SUFFIX_V2, JSON_EXTENSION
     ));
@@ -69,8 +69,8 @@ pub fn run(
 
 fn compute_coverages(configuration: &Configuration) {
     let mut data: HashMap<&str, &str> = HashMap::new();
-    data.insert("path_project_v1", &configuration.path_v1);
-    data.insert("path_project_v2", &configuration.path_v2);
+    data.insert("path_project", &configuration.path_v1);
+    data.insert("second_path_project", &configuration.path_v2);
     let path_diff_file = &format!("{}/{}", &configuration.path_output_dir, DIFF_FILENAME);
     data.insert("path_diff_file", path_diff_file);
     data.insert("output_path", &configuration.path_output_dir);
