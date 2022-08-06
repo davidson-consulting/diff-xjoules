@@ -7,7 +7,7 @@ time_to_wait_in_millis: 3000
 iteration_warmup: 1
 iteration_run: 10
 
-coverage_cmd: "java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}"
+coverage_cmd: "java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --second-path-to-project {{ second_path_project }} --task TEST_COVERAGE --output-path {{ output_path }}"
 instrumentation_cmd: "java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}"
 execution_cmd: "java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}"
 
