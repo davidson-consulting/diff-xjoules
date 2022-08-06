@@ -14,8 +14,8 @@ impl TestFilter for EmptyIntersectionTestFilter {
             let test_measure_v1_opt = data.data_v1.find_test_measure(&selected_test);
             let test_measure_v2_opt = data.data_v2.find_test_measure(&selected_test);
             if test_measure_v1_opt.is_some() && test_measure_v2_opt.is_some() {
-                let test_measure_v1 = data.data_v1.find_test_measure(&selected_test).unwrap();
-                let test_measure_v2 = data.data_v2.find_test_measure(&selected_test).unwrap();
+                let test_measure_v1 = test_measure_v1_opt.unwrap();
+                let test_measure_v2 = test_measure_v2_opt.unwrap();
                 let min_v1 =
                     test_measure_v1.get_min(&configuration.indicator_to_consider_for_marking);
                 let min_v2 =
