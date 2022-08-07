@@ -26,9 +26,15 @@ You should obtain, in the `"diff-jjoules/output_example"` folder, the following 
 
 ```sh
 ...
-BREAK
+Applying all_test to keep stable tests
+Deciding using strict
+Deciding using aggregate
+Deciding using vote
+Deciding using code_coverage
+Deciding using diff_coverage
+Applying empty_intersection to keep stable tests
 $ ls "diff-jjoules/output_example"/
-coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  delta.json  diff  test_filter_selection.json  test_selection.json
+coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  decisions.json  delta.json  diff  test_filter_selection.json  test_selection.json
 ```
 
 ## Configuration file for google/gson example
@@ -66,9 +72,20 @@ cargo run diff-jjoules/gson.yaml
 5. After a while, you should observe the following:
 
 ```sh
-BREAK
-ls diff-jjoules/output_gson 
-coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  delta.json  diff  test_filter_selection.json  test_selection.json
+Applying all_test to keep stable tests
+Deciding using strict
+Deciding using aggregate
+Deciding using vote
+Deciding using code_coverage
+Deciding using diff_coverage
+Applying empty_intersection to keep stable tests
+Deciding using strict
+Deciding using aggregate
+Deciding using vote
+Deciding using code_coverage
+Deciding using diff_coverage
+$ ls diff-jjoules/output_gson
+coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  decisions.json  delta.json  diff  test_filter_selection.json  test_selection.json
 ```
 
 ## Command line usage
