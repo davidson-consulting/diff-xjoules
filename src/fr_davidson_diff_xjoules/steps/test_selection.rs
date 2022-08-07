@@ -41,13 +41,14 @@ pub fn run(
     configuration: &Configuration,
     mut diff_xjoules_data: DiffXJoulesData,
 ) -> DiffXJoulesData {
-    diff_xjoules_data.diff = compute_diff(
+    let diff_file_path = compute_diff(
         &configuration.path_v1,
         &configuration.path_v2,
         &configuration.src_folder,
         &configuration.path_output_dir,
     );
-    compute_coverages(&configuration);
+    diff_xjoules_data.diff = fs::read_to_string(&diff_file_path).unwrap();
+    compute_coverages(&configuration, &diff_file_path);
     diff_xjoules_data.coverage_v1 = json_utils::read_json::<Coverage>(&format!(
         "{}/{}{}{}",
         &configuration.path_output_dir, COVERAGE_FILENAME, SUFFIX_V1, JSON_EXTENSION
@@ -67,25 +68,25 @@ pub fn run(
     return diff_xjoules_data;
 }
 
-fn compute_coverages(configuration: &Configuration) {
+fn compute_coverages(configuration: &Configuration, diff_file_path: &str) {
     let mut data: HashMap<&str, &str> = HashMap::new();
     data.insert("path_project", &configuration.path_v1);
     data.insert("second_path_project", &configuration.path_v2);
-    let path_diff_file = &format!("{}/{}", &configuration.path_output_dir, DIFF_FILENAME);
-    data.insert("path_diff_file", path_diff_file);
+    data.insert("path_diff_file", diff_file_path);
     data.insert("output_path", &configuration.path_output_dir);
     command::run_templated_command(&configuration.coverage_cmd, &data);
 }
 
 fn compute_diff(path_v1: &str, path_v2: &str, src_folder: &str, path_output_dir: &str) -> String {
+    let diff_file_path = format!("{}/{}", path_output_dir, DIFF_FILENAME);
     run_command_redirect_to_file(
         &format!(
             "diff -r {}/{} {}/{}",
             path_v1, src_folder, path_v2, src_folder
         ),
-        &format!("{}/{}", path_output_dir, DIFF_FILENAME),
+        &diff_file_path,
     );
-    return fs::read_to_string(format!("{}/{}", path_output_dir, DIFF_FILENAME)).unwrap();
+    return diff_file_path;
 }
 
 fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -> DiffXJoulesData {
@@ -275,7 +276,7 @@ mod tests {
             mark_strategies: vec![MarkStrategyEnum::Strict],
             indicator_to_consider_for_marking: String::from(""),
         };
-        compute_coverages(&configuration);
+        compute_coverages(&configuration, "");
         let coverage = json_utils::read_json::<Coverage>(&"target/coverage_v1.json");
         assert_eq!(9, coverage.test_coverages.len());
         assert!(coverage

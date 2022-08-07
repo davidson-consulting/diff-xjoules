@@ -1,18 +1,20 @@
 # Coverage
 
 The **Coverage computation** should produces a json file that gives the coverage of each source file for every tests, identified by a unique string.
-The **Coverage computation** is executed for each version of the program, before and after the code changes.
+The **Coverage computation** is executed for both versions of the program, before and after the code changes, in a single run.
 
 ## Input
 
-The process of coverage should take as input two parameters, which **Diff-XJoules** will provide according to its configuration.
+The process of coverage can take as input four parameters, which **Diff-XJoules** will provide according to its configuration and its running state.
 
-- `{{ path_project }}`: the path to the root of the project. This input is replaced once by the property `path_v1` and once by the property `path_v2`.
-- `{{ output_path }}`: the path to the output json file folder. This input is replaced once by the property `path_output_dir` concatenated to `coverage_v1.json`, and once concatenated to `coverage_v2.json`.
+- `{{ path_project }}`: the path to the root of the project in **the version before** the commit. This input is replaced by the property `path_v1`.
+- `{{ second_path_project }}`: the path to the root of the project in **the version after** the commit. This input is replaced by the property `path_v2`.
+- `{{ path_diff_file }}`: the path to the file that contains the diff, obtained running UNIX command: `diff -r`. This file is automatically computed by **Diff-XJoules**.
+- `{{ output_path }}`: the path to the output json file folder. This input is replaced once by the property `path_output_dir`.
 
 ## Output
 
-The output of the process should be a json file per version of the program that associates test identifiers (_i.e._ unique string identify a test case) to the coverage per file name.
+The output of the process should be two json files, one per version of the program, that associate test identifiers (_i.e._ unique string identify a test case) to the coverage per file name.
 The coverage per filename is an association between the file path from the root of the project to the line covered by the considered test case.
 
 Below, an excerpt of an example of coverage for Java:
@@ -65,18 +67,19 @@ Then, the field `covered_lines` is an array containing all the covered line in t
 Below, a command line example for Java:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_COVERAGE --output-path {{ output_path }}
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --second-path-to-project {{ second_path_project }} --task TEST_COVERAGE --output-path {{ output_path }}
 ```
 
-**Diff-XJoules** will execute this command twice, once per version of the program (before and after the commit).
-In this command, we can observe the two templates `{{ path_project }}` and `{{ output_path }}`.
-The former will be replaced sequentially by the values of the properties `path_v1` and `path_v2`, while the latter will be replaced by the value of the property `path_output_dir` once concatenated to `coverage_v1.json`, and once concatenated to `coverage_v2.json`.
+**Diff-XJoules** will execute this command once.
+In this command, we can observe the three templates `{{ path_project }}`, `{{ second_path_project }}`, and `{{ output_path }}`.
+- `{{ path_project }}`: will be replaced by the value of the property `path_v1`.
+- `{{ second_path_project }}`: will be replaced by the value of the property `path_v2`.
+- `{{ output_path }}`: will be replaced by the value of the property `path_output_dir`.
 
-If we consider [this](https://github.com/davidson-consulting/diff-xjoules/blob/main/test_resources/configuration_file_example.yaml) configuration YAML file example, the two resulting command executed will be:
+Notice that the command line for Java does not use the input `{{ path_diff_file }}` which is not necessary.
+
+If we consider [this](https://github.com/davidson-consulting/diff-xjoules/blob/main/test_resources/configuration_file_example.yaml) configuration YAML file example, the resulting command executed will be:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --task TEST_COVERAGE --output-path path_output_dir/coverage_v1.json
-```
-```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_COVERAGE --output-path path_output_dir/coverage_v2.json
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --second-path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_COVERAGE --output-path path_output_dir/coverage_v1.json
 ```
