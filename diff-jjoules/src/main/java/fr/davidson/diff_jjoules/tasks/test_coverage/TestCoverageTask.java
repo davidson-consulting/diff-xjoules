@@ -1,6 +1,5 @@
 package fr.davidson.diff_jjoules.tasks.test_coverage;
 
-import eu.stamp_project.testrunner.EntryPoint;
 import fr.davidson.diff_jjoules.Configuration;
 import fr.davidson.diff_jjoules.tasks.Task;
 import fr.davidson.diff_jjoules.tasks.test_coverage.clover.CloverExecutor;
