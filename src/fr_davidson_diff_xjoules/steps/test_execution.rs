@@ -136,7 +136,9 @@ mod tests {
         fs::create_dir_all("target/v2/diff-measurements").unwrap();
         command::run_command("cp test_resources/measurements_v1.json target/v1/measurements.json");
         command::run_command("cp test_resources/measurements_v2.json target/v2/measurements.json");
-        command::run_command("cp test_resources/measurements_v2.json target/v2/diff-measurements/measurements.json");
+        command::run_command(
+            "cp test_resources/measurements_v2.json target/v2/diff-measurements/measurements.json",
+        );
         let configuration = Configuration {
             path_v1: String::from("target/v1"),
             path_v2: String::from("target/v2"),
