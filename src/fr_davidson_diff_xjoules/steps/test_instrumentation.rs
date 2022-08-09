@@ -9,14 +9,13 @@ use super::test_selection::TEST_SELECTION_FILENAME;
 
 pub fn run(configuration: &Configuration) {
     let mut data: HashMap<&str, &str> = HashMap::new();
-    data.insert("path_project", &configuration.path_v1);
+    data.insert("path_project_v1", &configuration.path_v1);
+    data.insert("path_project_v2", &configuration.path_v2);
     let tests_set_path = format!(
         "{}/{}{}",
         configuration.path_output_dir, TEST_SELECTION_FILENAME, JSON_EXTENSION
     );
     data.insert("tests_set_path", &tests_set_path);
-    command::run_templated_command(&configuration.instrumentation_cmd, &data);
-    data.insert("path_project", &configuration.path_v2);
     command::run_templated_command(&configuration.instrumentation_cmd, &data);
 }
 
@@ -32,14 +31,13 @@ mod tests {
     fn test_run() {
         // In this test, we check that the step calls twice the instrumentation_cmd with once the path_v1 and once path_v2
         command::run_command("rm target/path_v1");
-        command::run_command("rm target/path_v2");
         let configuration = Configuration {
             path_v1: String::from("path_v1"),
-            path_v2: String::from("path_v2"),
+            path_v2: String::from(""),
             src_folder: String::from("src/main/java"),
             path_output_dir: String::from("target"),
             coverage_cmd: String::from(""),
-            instrumentation_cmd: String::from(format!("touch target/{}", "{{ path_project }}")),
+            instrumentation_cmd: String::from(format!("touch target/{}", "{{ path_project_v1 }}")),
             execution_cmd: String::from(""),
             iteration_warmup: 0,
             iteration_run: 3,
@@ -49,10 +47,8 @@ mod tests {
             indicator_to_consider_for_marking: String::from("cycles"),
         };
         assert!(!Path::new("target/path_v1").exists());
-        assert!(!Path::new("target/path_v2").exists());
         run(&configuration);
         assert!(Path::new("target/path_v1").exists());
-        assert!(Path::new("target/path_v2").exists());
     }
 
     // #[ignore]
