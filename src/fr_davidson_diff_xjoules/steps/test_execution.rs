@@ -34,27 +34,19 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
         if rng.gen_bool(0.5) {
             run_and_merge_for_version(
                 &configuration.path_v1,
-                &tests_set_path,
-                &configuration.execution_cmd,
-                &mut data_v1,
-            );
-            run_and_merge_for_version(
                 &configuration.path_v2,
                 &tests_set_path,
                 &configuration.execution_cmd,
+                &mut data_v1,
                 &mut data_v2,
             );
         } else {
             run_and_merge_for_version(
                 &configuration.path_v2,
-                &tests_set_path,
-                &configuration.execution_cmd,
-                &mut data_v2,
-            );
-            run_and_merge_for_version(
                 &configuration.path_v1,
                 &tests_set_path,
                 &configuration.execution_cmd,
+                &mut data_v2,
                 &mut data_v1,
             );
         }
@@ -76,33 +68,47 @@ pub fn run(configuration: &Configuration, diff_xjoules_data: &mut DiffXJoulesDat
 
 pub fn warmup(configuration: &Configuration, tests_set_path: &str) {
     for _ in 0..configuration.iteration_warmup {
-        run_once_for_version(
+        run_once(
             &configuration.path_v1,
-            &tests_set_path,
-            &configuration.execution_cmd,
-        );
-        run_once_for_version(
             &configuration.path_v2,
-            &tests_set_path,
+            tests_set_path,
             &configuration.execution_cmd,
         );
     }
 }
 
-pub fn run_once_for_version(path_project: &str, test_set_path: &str, instrumentation_cmd: &str) {
+pub fn run_once(
+    path_project_v1: &str,
+    path_project_v2: &str,
+    test_set_path: &str,
+    execution_cmd: &str,
+) {
     let mut data: HashMap<&str, &str> = HashMap::new();
-    data.insert("path_project", path_project);
+    data.insert("path_project_v1", path_project_v1);
+    data.insert("path_project_v2", path_project_v2);
     data.insert("tests_set_path", test_set_path);
-    command::run_templated_command(instrumentation_cmd, &data);
+    command::run_templated_command(&execution_cmd, &data);
 }
 
 pub fn run_and_merge_for_version(
-    path_project: &str,
-    test_set_path: &str,
-    instrumentation_cmd: &str,
-    version_data: &mut VersionMeasure,
+    path_project_v1: &str,
+    path_project_v2: &str,
+    tests_set_path: &str,
+    execution_cmd: &str,
+    version_data_v1: &mut VersionMeasure,
+    version_data_v2: &mut VersionMeasure,
 ) {
-    run_once_for_version(path_project, test_set_path, instrumentation_cmd);
+    run_once(
+        path_project_v1,
+        path_project_v2,
+        tests_set_path,
+        execution_cmd,
+    );
+    read_and_merge_version(version_data_v1, path_project_v1);
+    read_and_merge_version(version_data_v2, path_project_v2);
+}
+
+fn read_and_merge_version(version_data: &mut VersionMeasure, path_project: &str) {
     let data = read_json::<VersionMeasure>(&format!(
         "{}/diff-measurements/measurements.json",
         path_project
@@ -130,6 +136,7 @@ mod tests {
         fs::create_dir_all("target/v2/diff-measurements").unwrap();
         command::run_command("cp test_resources/measurements_v1.json target/v1/measurements.json");
         command::run_command("cp test_resources/measurements_v2.json target/v2/measurements.json");
+        command::run_command("cp test_resources/measurements_v2.json target/v2/diff-measurements/measurements.json");
         let configuration = Configuration {
             path_v1: String::from("target/v1"),
             path_v2: String::from("target/v2"),
@@ -139,7 +146,7 @@ mod tests {
             instrumentation_cmd: String::from(""),
             execution_cmd: String::from(format!(
                 "cp {}/measurements.json {}/diff-measurements/measurements.json",
-                "{{ path_project }}", "{{ path_project }}"
+                "{{ path_project_v1 }}", "{{ path_project_v1 }}"
             )),
             iteration_warmup: 1,
             iteration_run: 10,
