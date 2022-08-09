@@ -17,8 +17,8 @@ public class TestCoverageTask implements Task {
 
     @Override
     public void run(Configuration configuration) {
-        this.run(configuration, configuration.getPathToProject(), "coverage_v1.json");
-        this.run(configuration, configuration.getPathToProjectSecondVersion(), "coverage_v2.json");
+        this.run(configuration, configuration.getPathToProjectV1(), "coverage_v1.json");
+        this.run(configuration, configuration.getPathToProjectV2(), "coverage_v2.json");
     }
 
     private void run(final Configuration configuration, final String pathToProject, final String jsonFilename) {

@@ -23,7 +23,7 @@ public class JSONUtilsTest {
     void testWrite() throws IOException {
         final String jsonFilePath = "target/test_write_json.json";
         final Configuration configuration = new Configuration();
-        configuration.setPathToProject("this.is.a.path.to.project");
+        configuration.setPathToProjectV1("this.is.a.path.to.project");
         configuration.setOutputPath("this.is.a.output.path");
         configuration.setTask(TaskEnum.TEST_EXECUTION);
         JSONUtils.write(jsonFilePath, configuration);
@@ -39,14 +39,14 @@ public class JSONUtilsTest {
     void testRead() {
         final String jsonFilePath = "src/test/resources/test_read_json.json";
         final Configuration configurationLoadFromJSON = JSONUtils.read(jsonFilePath, Configuration.class);
-        assertEquals("this.is.a.path.to.project", configurationLoadFromJSON.getPathToProject());
+        assertEquals("this.is.a.path.to.project", configurationLoadFromJSON.getPathToProjectV1());
         assertEquals("this.is.a.output.path", configurationLoadFromJSON.getOutputPath());
         assertEquals(TaskEnum.TEST_EXECUTION, configurationLoadFromJSON.getTask());
     }
 
     public static final String EXPECTED_CONFIGURATION_JSON = "{" + Constants.NEW_LINE +
             "  \"task\": \"TEST_EXECUTION\"," + Constants.NEW_LINE +
-            "  \"pathToProject\": \"this.is.a.path.to.project\"," + Constants.NEW_LINE +
+            "  \"pathToProjectV1\": \"this.is.a.path.to.project\"," + Constants.NEW_LINE +
             "  \"outputPath\": \"this.is.a.output.path\"" + Constants.NEW_LINE +
             "}";
 }

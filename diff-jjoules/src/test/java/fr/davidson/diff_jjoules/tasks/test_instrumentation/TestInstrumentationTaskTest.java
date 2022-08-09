@@ -35,7 +35,8 @@ public class TestInstrumentationTaskTest {
     @Test
     void test() {
         final Configuration configuration = new Configuration();
-        configuration.setPathToProject("src/test/resources/diff-jjoules-toy-java-project");
+        configuration.setPathToProjectV1("src/test/resources/diff-jjoules-toy-java-project");
+        configuration.setPathToProjectV2("src/test/resources/diff-jjoules-toy-java-project-v2");
         configuration.setWrapperEnum(WrapperEnum.MAVEN);
         configuration.setTestsSetPath("src/test/resources/test_selection.json");
         new TestInstrumentationTask().run(configuration);

@@ -24,10 +24,13 @@ public class TestInstrumentationTask implements Task {
     public void run(Configuration configuration) {
         final TestsSet testsSet = JSONUtils.read(configuration.getTestsSetPath(), TestsSet.class);
         final Wrapper wrapper = configuration.getWrapper();
-        final String pathToProject = configuration.getPathToProject();
+        this._run(configuration.getPathToProjectV1(), wrapper, testsSet);
+        this._run(configuration.getPathToProjectV2(), wrapper, testsSet);
+    }
+
+    private void _run(final String pathToProject, final Wrapper wrapper, final TestsSet testsSet) {
         wrapper.cleanAndCompile(pathToProject);
         final String classpath = wrapper.buildClasspath(pathToProject);
-
         final TestInstrumentationProcessor processor = new TestInstrumentationProcessor(
                 testsSet,
                 pathToProject,

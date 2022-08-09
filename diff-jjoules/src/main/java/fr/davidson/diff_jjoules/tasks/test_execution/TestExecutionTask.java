@@ -19,17 +19,20 @@ import java.util.concurrent.TimeoutException;
 public class TestExecutionTask implements Task {
     @Override
     public void run(Configuration configuration) {
-        final String pathToProject = configuration.getPathToProject();
+        final TestsSet testsSet = JSONUtils.read(configuration.getTestsSetPath(), TestsSet.class);
+        final Wrapper wrapper = configuration.getWrapper();
+        this._run(configuration.getPathToProjectV1(), wrapper, testsSet);
+        this._run(configuration.getPathToProjectV2(), wrapper, testsSet);
+    }
+
+    private void _run(final String pathToProject, final Wrapper wrapper, final TestsSet testsSet) {
         EntryPoint.verbose = true;
         EntryPoint.timeoutInMs = 100000;
         EntryPoint.workingDirectory = new File(pathToProject);
         EntryPoint.nbFailingLoadClass = 5;
         try {
-            final Wrapper wrapper = configuration.getWrapper();
             wrapper.cleanAndCompile(pathToProject);
             final String classpath = wrapper.buildClasspath(pathToProject);
-
-            final TestsSet testsSet = JSONUtils.read(configuration.getTestsSetPath(), TestsSet.class);
             EntryPoint.runTests(
                     Constants.joinPaths(wrapper.getBinaries(), classpath),
                     testsSet.getTestClassNames(),

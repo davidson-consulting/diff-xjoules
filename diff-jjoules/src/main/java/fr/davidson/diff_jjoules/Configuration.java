@@ -21,11 +21,11 @@ public class Configuration {
     )
     private TaskEnum task;
 
-    @CommandLine.Option(names = {"-p", "--path-to-project"}, description = "Path to the program.", required = true)
-    private String pathToProject;
+    @CommandLine.Option(names = {"-f", "--path-to-project-v1"}, description = "Path to the program in the first version.", required = true)
+    private String pathToProjectV1;
 
-    @CommandLine.Option(names = {"-s", "--second-path-to-project"}, description = "Path to the program in another version.", required = false)
-    private String pathToProjectSecondVersion;
+    @CommandLine.Option(names = {"-s", "--path-to-project-v2"}, description = "Path to the program in the second version.", required = true)
+    private String pathToProjectV2;
 
     @CommandLine.Option(names = {"-o", "--output-path"}, description = "Path to the output.", required = false)
     private String outputPath;
@@ -53,20 +53,20 @@ public class Configuration {
         this.task = task;
     }
 
-    public String getPathToProject() {
-        return pathToProject;
+    public String getPathToProjectV1() {
+        return pathToProjectV1;
     }
 
-    public void setPathToProject(String pathToProject) {
-        this.pathToProject = pathToProject;
+    public void setPathToProjectV1(String pathToProjectV1) {
+        this.pathToProjectV1 = pathToProjectV1;
     }
 
-    public String getPathToProjectSecondVersion() {
-        return pathToProjectSecondVersion;
+    public String getPathToProjectV2() {
+        return pathToProjectV2;
     }
 
-    public void setPathToProjectSecondVersion(String pathToProjectSecondVersion) {
-        this.pathToProjectSecondVersion = pathToProjectSecondVersion;
+    public void setPathToProjectV2(String pathToProjectV2) {
+        this.pathToProjectV2 = pathToProjectV2;
     }
 
     public String getOutputPath() {

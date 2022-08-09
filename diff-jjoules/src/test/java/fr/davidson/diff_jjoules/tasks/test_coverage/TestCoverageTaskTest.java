@@ -21,8 +21,8 @@ public class TestCoverageTaskTest {
     @Test
     public void test() {
         final Configuration configuration = new Configuration();
-        configuration.setPathToProjectSecondVersion(new File("src/test/resources/diff-jjoules-toy-java-project").getAbsolutePath());
-        configuration.setPathToProject(new File("src/test/resources/diff-jjoules-toy-java-project-v2").getAbsolutePath());
+        configuration.setPathToProjectV2(new File("src/test/resources/diff-jjoules-toy-java-project").getAbsolutePath());
+        configuration.setPathToProjectV1(new File("src/test/resources/diff-jjoules-toy-java-project-v2").getAbsolutePath());
         configuration.setOutputPath("target");
         configuration.setWrapperEnum(WrapperEnum.MAVEN);
         new TestCoverageTask().run(configuration);
