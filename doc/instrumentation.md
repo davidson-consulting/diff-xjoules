@@ -1,13 +1,14 @@
 # Instrumentation
 
 The **Instrumentation of Tests** should modifies the source code of test in order to be able to measure their energy consumption.
-The **Instrumentation of Tests** is executed for each version of the program, before and after the code changes.
+The **Instrumentation of Tests** is executed for both versions of the program, before and after the code changes.
 
 ## Input
 
 The process of instrumentation should take as input two parameters, which **Diff-XJoules** will provide according to its configuration.
 
-- `{{ path_project }}`: the path to the root of the project. This input is replaced once by the property `path_v1` and once by the property `path_v2`.
+- `{{ path_project_v1 }}`: the path to the root of the project in **the version before** the commit. This input is replaced by the property `path_v1`.
+- `{{ path_project_v2 }}`: the path to the root of the project in **the version after** the commit. This input is replaced by the property `path_v2`.
 - `{{ tests_set_path }}`: the path to a json files contains the test identifiers to be instrumented. This json file is produces by **Diff-XJoules** and has the following structures:
 
 ```json
@@ -29,20 +30,19 @@ It is adviced to modifies directly the test code within the project in order to 
 Below, a command line example for Java:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --task TEST_INSTRUMENTATION --tests-set {{ tests_set_path }}
 ```
 
 **Diff-XJoules** will execute this command twice, once per version of the program (before and after the commit).
-In this command, we can observe the two templates `{{ path_project }}` and `{{ tests_set_path }}`.
-The former will be replaced sequentially by the values of the properties `path_v1` and `path_v2`, while the latter will be replaced by the path to the json computed by **Diff-XJoules**, which is the concatenation of the property `{{ output_path }}` and `test_selection.json`.
+In this command, we can observe the three templates `{{ path_project_v1 }}`, `{{ path_project_v2 }}`, and `{{ tests_set_path }}`.
+- `{{ path_project_v1 }}`: will be replaced by the value of the property `path_v1`.
+- `{{ path_project_v2 }}`: will be replaced by the value of the property `path_v2`.
+- `{{ tests_set_path }}`: will be replaced by the path to the json computed by **Diff-XJoules**, which is the concatenation of the property `{{ output_path }}` and `test_selection.json`.
 
-If we consider [this](https://github.com/davidson-consulting/diff-xjoules/blob/main/test_resources/configuration_file_example.yaml) configuration YAML file example, the two resulting command executed will be:
+If we consider [this](https://github.com/davidson-consulting/diff-xjoules/blob/main/test_resources/configuration_file_example.yaml) configuration YAML file example, the resulting command executed will be:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --task TEST_INSTRUMENTATION --tests-set target/test_selection.json
-```
-```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_INSTRUMENTATION --tests-set target/test_selection.json
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project-v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --path-to-project-v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_INSTRUMENTATION --tests-set target/test_selection.json
 ```
 
 ## Instrumentation Details

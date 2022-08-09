@@ -91,13 +91,19 @@ coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  decisions.json  
 ## Command line usage
 
 ```
-java -jar target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --help
-Usage: fr.davidson.diff_jjoules.Main [-hV] -o=<outputPath> -p=<pathToProject> --step=<step>
-    -h, --help          Show this help message and exit.
-    -o, --output-path=<outputPath>
-    Path to the output.
-    -p, --path-to-project=<pathToProject>
-    Path to the program.
-    --step=<step>   Specify the step to perform.Valid values: TEST_SELECTION, TEST_INSTRUMENTATION, TEST_EXECUTION
-    -V, --version       Print version information and exit.
+usage: fr.davidson.diff_jjoules.Main [-hV] -f=<pathToProjectV1> [-o=<outputPath>] -s=<pathToProjectV2>
+                                     [-t=<testsSetPath>] --task=<task> [--wrapper=<wrapperEnum>]
+  -f, --path-to-project-v1=<pathToProjectV1>
+                      Path to the program in the first version.
+  -h, --help          Show this help message and exit.
+  -o, --output-path=<outputPath>
+                      Path to the output.
+  -s, --path-to-project-v2=<pathToProjectV2>
+                      Path to the program in the second version.
+  -t, --tests-set=<testsSetPath>
+                      Path to the json file of tests set.
+      --task=<task>   Specify the task to perform.Valid values: TEST_COVERAGE, TEST_INSTRUMENTATION, TEST_EXECUTION
+  -V, --version       Print version information and exit.
+      --wrapper=<wrapperEnum>
+                      Specify the task to perform.Valid values: MAVEN, PROPERTIES.Default value: null
 ```

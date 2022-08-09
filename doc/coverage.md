@@ -7,8 +7,8 @@ The **Coverage computation** is executed for both versions of the program, befor
 
 The process of coverage can take as input four parameters, which **Diff-XJoules** will provide according to its configuration and its running state.
 
-- `{{ path_project }}`: the path to the root of the project in **the version before** the commit. This input is replaced by the property `path_v1`.
-- `{{ second_path_project }}`: the path to the root of the project in **the version after** the commit. This input is replaced by the property `path_v2`.
+- `{{ path_project_v1 }}`: the path to the root of the project in **the version before** the commit. This input is replaced by the property `path_v1`.
+- `{{ path_project_v2 }}`: the path to the root of the project in **the version after** the commit. This input is replaced by the property `path_v2`.
 - `{{ path_diff_file }}`: the path to the file that contains the diff, obtained running UNIX command: `diff -r`. This file is automatically computed by **Diff-XJoules**.
 - `{{ output_path }}`: the path to the output json file folder. This input is replaced once by the property `path_output_dir`.
 
@@ -67,13 +67,13 @@ Then, the field `covered_lines` is an array containing all the covered line in t
 Below, a command line example for Java:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project {{ path_project }} --second-path-to-project {{ second_path_project }} --task TEST_COVERAGE --output-path {{ output_path }}
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --second-path-to-project {{ second_path_project }} --task TEST_COVERAGE --output-path {{ output_path }}
 ```
 
 **Diff-XJoules** will execute this command once.
-In this command, we can observe the three templates `{{ path_project }}`, `{{ second_path_project }}`, and `{{ output_path }}`.
-- `{{ path_project }}`: will be replaced by the value of the property `path_v1`.
-- `{{ second_path_project }}`: will be replaced by the value of the property `path_v2`.
+In this command, we can observe the three templates `{{ path_project_v1 }}`, `{{ path_project_v2 }}`, and `{{ output_path }}`.
+- `{{ path_project_v1 }}`: will be replaced by the value of the property `path_v1`.
+- `{{ path_project_v2 }}`: will be replaced by the value of the property `path_v2`.
 - `{{ output_path }}`: will be replaced by the value of the property `path_output_dir`.
 
 Notice that the command line for Java does not use the input `{{ path_diff_file }}` which is not necessary.
@@ -81,5 +81,5 @@ Notice that the command line for Java does not use the input `{{ path_diff_file 
 If we consider [this](https://github.com/davidson-consulting/diff-xjoules/blob/main/test_resources/configuration_file_example.yaml) configuration YAML file example, the resulting command executed will be:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --second-path-to-project diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_COVERAGE --output-path path_output_dir/coverage_v1.json
+java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project-v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --path-to-project-v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_COVERAGE --output-path path_output_dir/coverage_v1.json
 ```
