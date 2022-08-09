@@ -17,6 +17,7 @@ diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/classpath
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/classpath
 diff-jjoules/spooned
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/*.backup
+diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/*.backup
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project/diff-measurements/
 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2/diff-measurements/
 diff-jjoules/output_example/

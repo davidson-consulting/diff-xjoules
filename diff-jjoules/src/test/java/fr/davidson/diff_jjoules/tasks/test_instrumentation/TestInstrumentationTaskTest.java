@@ -26,10 +26,21 @@ public class TestInstrumentationTaskTest {
                 StandardCopyOption.REPLACE_EXISTING
         );
         Files.copy(
+                Paths.get("src/test/resources/diff-jjoules-toy-java-project-v2/src/test/java/fr/davidson/AppTest.java"),
+                Paths.get("src/test/resources/diff-jjoules-toy-java-project-v2/AppTest.java.backup"),
+                StandardCopyOption.REPLACE_EXISTING
+        );
+        Files.copy(
                 Paths.get("src/test/resources/diff-jjoules-toy-java-project/pom.xml"),
                 Paths.get("src/test/resources/diff-jjoules-toy-java-project/pom.xml.backup"),
                 StandardCopyOption.REPLACE_EXISTING
         );
+        Files.copy(
+                Paths.get("src/test/resources/diff-jjoules-toy-java-project-v2/pom.xml"),
+                Paths.get("src/test/resources/diff-jjoules-toy-java-project-v2/pom.xml.backup"),
+                StandardCopyOption.REPLACE_EXISTING
+        );
+
     }
 
     @Test
@@ -52,6 +63,16 @@ public class TestInstrumentationTaskTest {
         Files.copy(
                 Paths.get("src/test/resources/diff-jjoules-toy-java-project/pom.xml.backup"),
                 Paths.get("src/test/resources/diff-jjoules-toy-java-project/pom.xml"),
+                StandardCopyOption.REPLACE_EXISTING
+        );
+        Files.copy(
+                Paths.get("src/test/resources/diff-jjoules-toy-java-project-v2/AppTest.java.backup"),
+                Paths.get("src/test/resources/diff-jjoules-toy-java-project-v2/src/test/java/fr/davidson/AppTest.java"),
+                StandardCopyOption.REPLACE_EXISTING
+        );
+        Files.copy(
+                Paths.get("src/test/resources/diff-jjoules-toy-java-project-v2/pom.xml.backup"),
+                Paths.get("src/test/resources/diff-jjoules-toy-java-project-v2/pom.xml"),
                 StandardCopyOption.REPLACE_EXISTING
         );
     }
