@@ -1,0 +1,26 @@
+diff -r test_resources/diff-jsjoules-toy-nodejs-project/src/app.js test_resources/diff-jsjoules-toy-nodejs-project-v2/src/app.js
+49a50
+>   console.log("Added");
+53d53
+<   console.log("ToRemove");
+58c58
+<   console.log("ToUpdate");
+---
+>   console.log("Updated");
+62d61
+<   console.log("ToRemove");
+65a65
+>   console.log("Added");
+69a70
+>   console.log("Added");
+73d73
+<   console.log("ToRemove");
+78c78
+<   console.log("ToUpdate");
+---
+>   console.log("Updated");
+82d81
+<   console.log("ToRemove");
+85a85
+>   console.log("Added");
+
