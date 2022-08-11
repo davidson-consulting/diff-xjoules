@@ -31,7 +31,12 @@ changelog-generator/package-lock.json
 # diff-jsjoules files
 
 diff-jsjoules/target
+diff-jsjoules/coverage
+diff-jsjoules/node_modules
+diff-jsjoules/package-lock.json
 diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project/node_modules
 diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project/package-lock.json
+diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project/coverage/
 diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project-v2/node_modules
 diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project-v2/package-lock.json
+diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project-v2/coverage/
