@@ -47,7 +47,9 @@ function compute_coverage(absolute_path_project_v1, coverage_output_json) {
         coverage.filename = sourceFile.substring(absolute_path_project_v1.length + 1);
         coverage.covered_lines = [];
         for (var coveredLine in coverateStatementMap) {
-            coverage.covered_lines.push(+coveredLine);
+            if (coverateStatementMap[coveredLine] > 0) {
+                coverage.covered_lines.push(+coveredLine);
+            }
         }
         coverages.push(coverage);
     }
@@ -87,3 +89,7 @@ async function main(project_path_v1, project_path_v2, diff_path_file, output_fol
 }
 
 main('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/diff', 'target'); 
+
+exports.coverage_task = coverage_task;
+exports.get_modified_files_from_diff = get_modified_files_from_diff;
+exports.sanitize_slash = sanitize_slash;
