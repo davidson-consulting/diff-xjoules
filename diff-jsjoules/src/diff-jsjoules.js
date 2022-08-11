@@ -1,11 +1,6 @@
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
 
-/**
- * Executes a shell command and return it as a Promise.
- * @param cmd {string}
- * @return {Promise<string>}
- */
 function exec_command(cmd, cwd) {
     console.log(cmd);
     const exec = require('child_process').exec;
@@ -39,12 +34,12 @@ function sanitize_slash(path) {
     return path.endsWith("/") ? path.slice(0, -1) : path;
 }
 
-function compute_coverage(absolute_path_project_v1, coverage_output_json) {
+function compute_coverage(absolute_path_project, coverage_output_json) {
     const coverages = [];
     for (var sourceFile in coverage_output_json.coverageMap) {
         const coverateStatementMap = coverage_output_json.coverageMap[sourceFile].s;
         const coverage = {}
-        coverage.filename = sourceFile.substring(absolute_path_project_v1.length + 1);
+        coverage.filename = sourceFile.substring(absolute_path_project.length + 1);
         coverage.covered_lines = [];
         for (var coveredLine in coverateStatementMap) {
             if (coverateStatementMap[coveredLine] > 0) {
@@ -88,8 +83,11 @@ async function main(project_path_v1, project_path_v2, diff_path_file, output_fol
     coverage_task(project_path_v1, project_path_v2, diff_path_file, output_folder_path);
 }
 
-main('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/diff', 'target'); 
+//main('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/diff', 'target'); 
 
 exports.coverage_task = coverage_task;
 exports.get_modified_files_from_diff = get_modified_files_from_diff;
 exports.sanitize_slash = sanitize_slash;
+exports.compute_coverage = compute_coverage;
+exports.compute_test_coverage = compute_test_coverage;
+exports.exec_command = exec_command;
