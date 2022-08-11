@@ -2,5 +2,8 @@
   "name": "diff-jsjoules",
   "version": "0.1.0",
   "description": "",
-  "author": "Benjamin Danglot"
+  "author": "Benjamin Danglot",
+  "dependencies": {
+    "yargs": "^17.5.1"
+  }
 }

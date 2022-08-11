@@ -1,5 +1,6 @@
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
+const yargs = require('yargs');
 
 function exec_command(cmd, cwd) {
     console.log(cmd);
@@ -65,7 +66,7 @@ function compute_test_coverage(coverage_output_json, coverages) {
     return testCoverages;
 }
 
-async function coverage_task(project_path_v1, project_path_v2, diff_path_file, output_folder_path) {
+async function coverage_task(project_path_v1, diff_path_file, output_folder_path) {
     // TODO we could here use --onChanged command line option of jest to rely on Jest for narrowing the test selection
     // TODO we could here run test per test to have their coverage individually, it would be an accurate mode but much more slower and expensive
     const modified_files = get_modified_files_from_diff(project_path_v1, diff_path_file);
@@ -76,14 +77,72 @@ async function coverage_task(project_path_v1, project_path_v2, diff_path_file, o
     writeFileSync(output_folder_path + '/coverage_v2.json', JSON.stringify(testCoverages, undefined, 4));
 }
 
-async function main(project_path_v1, project_path_v2, diff_path_file, output_folder_path) {
-    project_path_v1 = sanitize_slash(project_path_v1);
-    project_path_v2 = sanitize_slash(project_path_v2);
-    output_folder_path = sanitize_slash(output_folder_path);
-    coverage_task(project_path_v1, project_path_v2, diff_path_file, output_folder_path);
+async function main(args) {
+    if (args.help || args.version) {
+        return;
+    }
+    const project_path_v1 = sanitize_slash(args.pathToProjectV1);
+    const project_path_v2 = sanitize_slash(args.pathToProjectV2);
+    const output_folder_path = sanitize_slash(args.outputPath);
+    const json_test_path = args.tests;
+    const path_diff_file = args.pathDiffFile;
+    if (argv._.includes('coverage')) {
+        coverage_task(project_path_v1, path_diff_file, output_folder_path);
+    } else if (argv._.includes('instrumentation')) {
+        console.log('instrumentation');
+    } else if (argv._.includes('execution')) {
+        console.log('execution');
+    }
 }
 
-//main('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/diff', 'target'); 
+const argv = yargs
+    .command('coverage', 'Perform the coverage task', {
+        accurate: {
+            description: 'Enable accurate mode which may results with more precise test selection but slower execution.',
+            default: false,
+            type: 'boolean'
+        },
+        onChanges: {
+            description: 'Use --onChanges command line option from jest to compute test to run rather than using --findRelatedTests, requiring to be in a local git repository.',
+            default: false,
+            type: 'boolean'
+        }
+    })
+    .command('instrumentation', 'Perform the instrumentation task')
+    .command('execution', 'Perform the execution task')
+    .option('path-to-project-v1', {
+        alias: 'f',
+        description: 'Path to the program in the first version.',
+        type: 'string'
+    })
+    .option('path-to-project-v2', {
+        alias: 's',
+        description: 'Path to the program in the second version.',
+        type: 'string'
+    })
+    .option('tests', {
+        alias: 't',
+        description: 'Path to the json file of tests set.',
+        type: 'string'
+    })
+    .option('output-path', {
+        alias: 'o',
+        description: 'Path to the output.',
+        type: 'string'
+    })
+    .option('path-diff-file', {
+        alias: 'd',
+        description: 'Path to the file containing the UNIX diff.',
+        type: 'string'
+    })
+    .help()
+    .alias('help', 'h').argv;
+
+
+
+if (require.main === module) {
+    main(argv);
+}
 
 exports.coverage_task = coverage_task;
 exports.get_modified_files_from_diff = get_modified_files_from_diff;
