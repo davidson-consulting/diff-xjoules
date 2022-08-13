@@ -83,6 +83,23 @@ async function instrumentation_task(project_path_v1, project_path_v2, json_test_
     await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v2}/src`, `--tests=${json_test_path}`].join(' '));
 }
 
+async function send(project_path) {
+    const client = dgram.createSocket('udp4');
+    return new Promise((resolve, reject) => {
+        client.send(Buffer.from(`report ${project_path}/diff-measurements/measurements.json`), 2000, () => {
+            resolve(client.close());
+        });
+    });
+}
+
+async function execution_task(project_path_v1, project_path_v2, json_test_path) {
+    const tests_to_run = JSON.parse(readFileSync(json_test_path)).map(selected_path => '"' + selected_path + '"');
+    await exec_command(['jest', '-t', tests_to_run.join(' '), '--runInBand'], project_path_v1);
+    await send(project_path_v1);
+    await exec_command(['jest', '-t', tests_to_run.join(' '), '--runInBand'], project_path_v2);
+    await send(project_path_v2);
+}
+
 async function main(args) {
     if (args.help || args.version) {
         return;
@@ -97,7 +114,7 @@ async function main(args) {
     } else if (argv._.includes('instrumentation')) {
         instrumentation_task(project_path_v1, project_path_v2, json_test_path);
     } else if (argv._.includes('execution')) {
-        console.log('execution');
+        execution_task(project_path_v1, project_path_v2, json_test_path);
     }
 }
 
@@ -157,3 +174,4 @@ exports.compute_coverage = compute_coverage;
 exports.compute_test_coverage = compute_test_coverage;
 exports.exec_command = exec_command;
 exports.instrumentation_task = instrumentation_task;
+exports.execution_task = execution_task;
