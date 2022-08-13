@@ -1,7 +1,8 @@
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
 const yargs = require('yargs');
-const instrumentation = require('./instrumentation');
+const dgram = require('dgram');
+const { Buffer } = require('buffer');
 
 function exec_command(cmd, cwd) {
     console.log(cmd);
@@ -93,10 +94,10 @@ async function send(project_path) {
 }
 
 async function execution_task(project_path_v1, project_path_v2, json_test_path) {
-    const tests_to_run = JSON.parse(readFileSync(json_test_path)).map(selected_path => '"' + selected_path + '"');
-    await exec_command(['jest', '-t', tests_to_run.join(' '), '--runInBand'], project_path_v1);
+    const tests_to_run = JSON.parse(readFileSync(json_test_path)).test_selection.join('|');
+    await exec_command(['jest', '-t', `"${tests_to_run}"` +  + '"', '--runInBand'].join(' '), project_path_v1);
     await send(project_path_v1);
-    await exec_command(['jest', '-t', tests_to_run.join(' '), '--runInBand'], project_path_v2);
+    await exec_command(['jest', '-t', `"${tests_to_run}"`, '--runInBand'].join(' '), project_path_v2);
     await send(project_path_v2);
 }
 

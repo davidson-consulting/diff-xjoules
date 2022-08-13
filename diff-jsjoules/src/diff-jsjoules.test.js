@@ -75,3 +75,7 @@ test('test instrumentation_task', async () => {
     await diff_jsjoules.exec_command('cp test_resources/diff-jsjoules-toy-nodejs-project/app.test.js.backup test_resources/diff-jsjoules-toy-nodejs-project/src/app.test.js');
     await diff_jsjoules.exec_command('cp test_resources/diff-jsjoules-toy-nodejs-project-v2/app.test.js.backup test_resources/diff-jsjoules-toy-nodejs-project-v2/src/app.test.js');
 })
+
+test('test execution_task', async () => {
+    await diff_jsjoules.execution_task('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/test_selection.json');
+})
