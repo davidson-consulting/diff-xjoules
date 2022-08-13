@@ -1,6 +1,7 @@
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
 const yargs = require('yargs');
+const instrumentation = require('./instrumentation');
 
 function exec_command(cmd, cwd) {
     console.log(cmd);
@@ -77,6 +78,11 @@ async function coverage_task(project_path_v1, diff_path_file, output_folder_path
     writeFileSync(output_folder_path + '/coverage_v2.json', JSON.stringify(testCoverages, undefined, 4));
 }
 
+async function instrumentation_task(project_path_v1, project_path_v2, json_test_path) {
+    await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v1}/src`, `--tests=${json_test_path}`].join(' '));
+    await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v2}/src`, `--tests=${json_test_path}`].join(' '));
+}
+
 async function main(args) {
     if (args.help || args.version) {
         return;
@@ -89,8 +95,7 @@ async function main(args) {
     if (argv._.includes('coverage')) {
         coverage_task(project_path_v1, path_diff_file, output_folder_path);
     } else if (argv._.includes('instrumentation')) {
-        await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v1}/src`, `--tests=${json_test_path}`].join(' '));
-        await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v2}/src`, `--tests=${json_test_path}`].join(' '));
+        instrumentation_task(project_path_v1, project_path_v2, json_test_path);
     } else if (argv._.includes('execution')) {
         console.log('execution');
     }
