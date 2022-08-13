@@ -4,7 +4,6 @@ const { readFileSync, unlinkSync } = require('fs');
 
 test('test exec_command', async () => {
     const stdout_result = await diff_jsjoules.exec_command('ls -a');
-    const split_stdout = stdout_result.split('\n');
     expect(stdout_result).toContain('src');
 });
 
@@ -17,6 +16,7 @@ test('test get_modified_files_from_diff', () => {
 test('test sanitize slash', () => {
     expect(diff_jsjoules.sanitize_slash('path/with/end/slash/')).toBe('path/with/end/slash');
     expect(diff_jsjoules.sanitize_slash('path/without/end/slash')).toBe('path/without/end/slash');
+    expect(diff_jsjoules.sanitize_slash(undefined)).toBe(undefined);
 });
 
 test('test compute_coverage', () => {

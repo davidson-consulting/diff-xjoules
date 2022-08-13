@@ -32,7 +32,7 @@ function get_modified_files_from_diff(prefix_project, diff_path_file) {
 }
 
 function sanitize_slash(path) {
-    return path.endsWith("/") ? path.slice(0, -1) : path;
+    return path !== undefined && path.endsWith("/") ? path.slice(0, -1) : path;
 }
 
 function compute_coverage(absolute_path_project, coverage_output_json) {
@@ -89,7 +89,8 @@ async function main(args) {
     if (argv._.includes('coverage')) {
         coverage_task(project_path_v1, path_diff_file, output_folder_path);
     } else if (argv._.includes('instrumentation')) {
-        console.log('instrumentation');
+        await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v1}/src`, `--tests=${json_test_path}`].join(' '));
+        await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v2}/src`, `--tests=${json_test_path}`].join(' '));
     } else if (argv._.includes('execution')) {
         console.log('execution');
     }
