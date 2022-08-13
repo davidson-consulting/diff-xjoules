@@ -156,3 +156,4 @@ exports.sanitize_slash = sanitize_slash;
 exports.compute_coverage = compute_coverage;
 exports.compute_test_coverage = compute_test_coverage;
 exports.exec_command = exec_command;
+exports.instrumentation_task = instrumentation_task;

@@ -46,11 +46,11 @@ test('test compute_test_coverage', () => {
     expect(test_coverage[0].test_identifier).toBe('test added statement');
 })
 
-test('test coverage task', async () => {
-    var fs = require('fs');
+test('test coverage_task', async () => {
+    const fs = require('fs');
     unlinkSync('target/coverage_v1.json');
     unlinkSync('target/coverage_v2.json');
-    await diff_jsjoules.coverage_task('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/diff', 'target');
+    await diff_jsjoules.coverage_task('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff', 'target');
     const coverage_v1 = JSON.parse(readFileSync('target/coverage_v1.json', 'utf-8'));
     expect(coverage_v1.length).toBe(8);
     expect(coverage_v1[0].test_identifier).toBe('test added statement');
@@ -58,3 +58,20 @@ test('test coverage task', async () => {
     expect(coverage_v2.length).toBe(8);
     expect(coverage_v2[0].test_identifier).toBe('test added statement');
 });
+
+test('test instrumentation_task', async () => {
+    const fs = require('fs');
+    await diff_jsjoules.exec_command('cp test_resources/diff-jsjoules-toy-nodejs-project/src/app.test.js test_resources/diff-jsjoules-toy-nodejs-project/app.test.js.backup');
+    await diff_jsjoules.exec_command('cp test_resources/diff-jsjoules-toy-nodejs-project-v2/src/app.test.js test_resources/diff-jsjoules-toy-nodejs-project-v2/app.test.js.backup');
+    await diff_jsjoules.instrumentation_task('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/test_selection.json');
+    const content_app_v1 = readFileSync('test_resources/diff-jsjoules-toy-nodejs-project/src/app.test.js', 'utf-8')
+    const content_app_v2 = readFileSync('test_resources/diff-jsjoules-toy-nodejs-project-v2/src/app.test.js', 'utf-8')
+    expect(content_app_v1.startsWith('const diff_jsjoules = require(')).toBeTruthy();
+    expect(content_app_v2.startsWith('const diff_jsjoules = require(')).toBeTruthy();
+    expect(content_app_v1.indexOf('diff_jsjoules.start')).toBeGreaterThanOrEqual(-1);
+    expect(content_app_v2.indexOf('diff_jsjoules.start')).toBeGreaterThanOrEqual(-1);
+    expect(content_app_v1.indexOf('diff_jsjoules.stop')).toBeGreaterThanOrEqual(-1);
+    expect(content_app_v2.indexOf('diff_jsjoules.stop')).toBeGreaterThanOrEqual(-1);
+    await diff_jsjoules.exec_command('cp test_resources/diff-jsjoules-toy-nodejs-project/app.test.js.backup test_resources/diff-jsjoules-toy-nodejs-project/src/app.test.js');
+    await diff_jsjoules.exec_command('cp test_resources/diff-jsjoules-toy-nodejs-project-v2/app.test.js.backup test_resources/diff-jsjoules-toy-nodejs-project-v2/src/app.test.js');
+})
