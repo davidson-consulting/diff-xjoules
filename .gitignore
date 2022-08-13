@@ -40,3 +40,5 @@ diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project/coverage/
 diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project-v2/node_modules
 diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project-v2/package-lock.json
 diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project-v2/coverage/
+diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project-v2/app.test.js.backup
+diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project/app.test.js.backup
