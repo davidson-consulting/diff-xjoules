@@ -51,7 +51,6 @@ git clone https://github.com/google/gson.git /tmp/v2
 2. Hard reset on specific commits:
 
 ```sh
-16_03be835_69173b0
 git -C /tmp/v1 reset --hard d26c8189182fa96691cc8e0d0f312469ee0627bb
 git -C /tmp/v2 reset --hard 364de8061173b4b91f4477a55059f68e765fc3d1
 ```
