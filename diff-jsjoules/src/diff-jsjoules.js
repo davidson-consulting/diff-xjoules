@@ -1,4 +1,4 @@
-const { readFileSync, writeFileSync } = require('fs');
+const { readFileSync, writeFileSync, mkdirSync, existsSync } = require('fs');
 const { resolve } = require('path');
 const yargs = require('yargs');
 const dgram = require('dgram');
@@ -40,13 +40,14 @@ function sanitize_slash(path) {
 function compute_coverage(absolute_path_project, coverage_output_json) {
     const coverages = [];
     for (var sourceFile in coverage_output_json.coverageMap) {
-        const coverateStatementMap = coverage_output_json.coverageMap[sourceFile].s;
+        const statementMap = coverage_output_json.coverageMap[sourceFile].statementMap;
+        const coverageStatementMap = coverage_output_json.coverageMap[sourceFile].s;
         const coverage = {}
         coverage.filename = sourceFile.substring(absolute_path_project.length + 1);
         coverage.covered_lines = [];
-        for (var coveredLine in coverateStatementMap) {
-            if (coverateStatementMap[coveredLine] > 0) {
-                coverage.covered_lines.push(+coveredLine);
+        for (var coveredStatement in coverageStatementMap) {
+            if (coverageStatementMap[coveredStatement] > 0) {
+                coverage.covered_lines.push(+statementMap[coveredStatement].start.line);
             }
         }
         coverages.push(coverage);
@@ -55,14 +56,15 @@ function compute_coverage(absolute_path_project, coverage_output_json) {
 }
 
 function compute_test_coverage(coverage_output_json, coverages) {
-    const testCoverages = []
+    const testCoverages = {};
+    testCoverages.test_coverages = [];
     coverage_output_json.testResults.map(testResult => {
         testResult.assertionResults.forEach(assertionResult => {
             var testCoverage = {};
             testCoverage.test_identifier = assertionResult.fullName;
             testCoverage.file_coverages = [];
             coverages.forEach(coverage => testCoverage.file_coverages.push(coverage));
-            testCoverages.push(testCoverage);
+            testCoverages.test_coverages.push(testCoverage);
         })
     });
     return testCoverages;
@@ -80,8 +82,8 @@ async function coverage_task(project_path_v1, diff_path_file, output_folder_path
 }
 
 async function instrumentation_task(project_path_v1, project_path_v2, json_test_path) {
-    await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v1}/src`, `--tests=${json_test_path}`].join(' '));
-    await exec_command(['jscodeshift', '-t', 'src/instrumentation.js', `${project_path_v2}/src`, `--tests=${json_test_path}`].join(' '));
+    await exec_command(['jscodeshift', '-t', `${__dirname}/instrumentation.js`, `${project_path_v1}/src`, `--tests=${json_test_path}`].join(' '));
+    await exec_command(['jscodeshift', '-t', `${__dirname}/instrumentation.js`, `${project_path_v2}/src`, `--tests=${json_test_path}`].join(' '));
 }
 
 async function send(project_path) {
@@ -95,7 +97,11 @@ async function send(project_path) {
 
 async function execution_task(project_path_v1, project_path_v2, json_test_path) {
     const tests_to_run = JSON.parse(readFileSync(json_test_path)).test_selection.join('|');
-    await exec_command(['jest', '-t', `"${tests_to_run}"` +  + '"', '--runInBand'].join(' '), project_path_v1);
+    if (!existsSync(`${project_path_v1}/diff-measurements`)) {
+        mkdirSync(`${project_path_v1}/diff-measurements`);
+        mkdirSync(`${project_path_v2}/diff-measurements`);
+    }
+    await exec_command(['jest', '-t', `"${tests_to_run}"`, '--runInBand'].join(' '), project_path_v1);
     await send(project_path_v1);
     await exec_command(['jest', '-t', `"${tests_to_run}"`, '--runInBand'].join(' '), project_path_v2);
     await send(project_path_v2);
@@ -161,8 +167,6 @@ const argv = yargs
     })
     .help()
     .alias('help', 'h').argv;
-
-
 
 if (require.main === module) {
     main(argv);
