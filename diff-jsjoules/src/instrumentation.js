@@ -37,6 +37,7 @@ module.exports =
                     test_function.value.expression.arguments
                         .filter(args => args.type == jscodeshift.ArrowFunctionExpression)
                         .forEach((arrowFunctionExpression) => {
+                            arrowFunctionExpression.async = true;
                             const test_identifier_snaked_case = test_identifier.replaceAll(' ', '_');
                             const startCall = buildCall(jscodeshift, DIFF_JSJOULES_START_FUNCTION_NAME, test_identifier_snaked_case)
                             arrowFunctionExpression.body.body.unshift(startCall);
