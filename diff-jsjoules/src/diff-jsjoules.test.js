@@ -1,6 +1,6 @@
 const diff_jsjoules = require('./diff-jsjoules');
 
-const { readFileSync, unlinkSync } = require('fs');
+const { readFileSync, unlinkSync, existsSync } = require('fs');
 
 test('test exec_command', async () => {
     const stdout_result = await diff_jsjoules.exec_command('ls -a');
@@ -47,16 +47,19 @@ test('test compute_test_coverage', () => {
 })
 
 test('test coverage_task', async () => {
-    const fs = require('fs');
-    unlinkSync('target/coverage_v1.json');
-    unlinkSync('target/coverage_v2.json');
+    if (existsSync('target/coverage_v1.json')) {
+        unlinkSync('target/coverage_v1.json');
+    }
+    if (existsSync('target/coverage_v2.json')) {
+        unlinkSync('target/coverage_v2.json');
+    }
     await diff_jsjoules.coverage_task('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff', 'target');
     const coverage_v1 = JSON.parse(readFileSync('target/coverage_v1.json', 'utf-8'));
-    expect(coverage_v1.length).toBe(8);
-    expect(coverage_v1[0].test_identifier).toBe('test added statement');
+    expect(coverage_v1.test_coverages.length).toBe(8);
+    expect(coverage_v1.test_coverages[0].test_identifier).toBe('test added statement');
     const coverage_v2 = JSON.parse(readFileSync('target/coverage_v2.json', 'utf-8'));
-    expect(coverage_v2.length).toBe(8);
-    expect(coverage_v2[0].test_identifier).toBe('test added statement');
+    expect(coverage_v2.test_coverages.length).toBe(8);
+    expect(coverage_v2.test_coverages[0].test_identifier).toBe('test added statement');
 });
 
 test('test instrumentation_task', async () => {
