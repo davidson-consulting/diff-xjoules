@@ -1,4 +1,4 @@
-name: JSJoules CI
+name: JSJoules Checkstyle
 
 on:
   pull_request:
