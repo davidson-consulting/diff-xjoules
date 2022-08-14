@@ -33,7 +33,7 @@ function get_modified_files_from_diff(prefix_project, diff_path_file) {
     return modified_files;
 }
 
-function sanitize_slash(path) {
+function sanitize(path) {
     return path !== undefined && path.endsWith("/") ? path.slice(0, -1) : path;
 }
 
@@ -90,30 +90,56 @@ async function send(project_path) {
     const client = dgram.createSocket('udp4');
     return new Promise((resolve, reject) => {
         client.send(Buffer.from(`report ${project_path}/diff-measurements/measurements.json`), 2000, () => {
+            console.log(`report ${project_path}/diff-measurements/measurements.json sent`)
             resolve(client.close());
         });
     });
 }
 
+function convert_tlpc_report_to_diff_xjoules_report(absolute_project_path) {
+    const tlpc_report = JSON.parse(readFileSync(`${absolute_project_path}/diff-measurements/measurements.json`));
+    const diff_xjoules_report = {}
+    diff_xjoules_report.test_measures = [];
+    for (let test_identifier in tlpc_report) {
+        const test_measures = {};
+        test_measures.test_identifier = test_identifier;
+        const measure = []
+        for (let indicator in tlpc_report[test_identifier]) {
+            const indicator_measure = {}
+            indicator_measure.indicator = indicator;
+            indicator_measure.value = tlpc_report[test_identifier][indicator];
+            measure.push(indicator_measure);
+        }
+        test_measures.measures = [measure];
+        diff_xjoules_report.test_measures.push(test_measures);
+    }
+
+    writeFileSync(`${absolute_project_path}/diff-measurements/measurements.json`, JSON.stringify(diff_xjoules_report, undefined, 4));
+}
+
 async function execution_task(project_path_v1, project_path_v2, json_test_path) {
     const tests_to_run = JSON.parse(readFileSync(json_test_path)).test_selection.join('|');
-    if (!existsSync(`${project_path_v1}/diff-measurements`)) {
-        mkdirSync(`${project_path_v1}/diff-measurements`);
-        mkdirSync(`${project_path_v2}/diff-measurements`);
+    const absolute_project_path_v1 = resolve(project_path_v1);
+    const absolute_project_path_v2 = resolve(project_path_v2);
+    if (!existsSync(`${absolute_project_path_v1}/diff-measurements`)) {
+        mkdirSync(`${absolute_project_path_v1}/diff-measurements`);
+        mkdirSync(`${absolute_project_path_v2}/diff-measurements`);
     }
-    await exec_command(['jest', '-t', `"${tests_to_run}"`, '--runInBand'].join(' '), project_path_v1);
-    await send(project_path_v1);
-    await exec_command(['jest', '-t', `"${tests_to_run}"`, '--runInBand'].join(' '), project_path_v2);
-    await send(project_path_v2);
+    await exec_command(['jest', '-t', `"${tests_to_run}"`, '--runInBand'].join(' '), absolute_project_path_v1);
+    await send(absolute_project_path_v1);
+    convert_tlpc_report_to_diff_xjoules_report(absolute_project_path_v1);
+    await exec_command(['jest', '-t', `"${tests_to_run}"`, '--runInBand'].join(' '), absolute_project_path_v2);
+    await send(absolute_project_path_v2);
+    convert_tlpc_report_to_diff_xjoules_report(absolute_project_path_v2);
 }
 
 async function main(args) {
     if (args.help || args.version) {
         return;
     }
-    const project_path_v1 = sanitize_slash(args.pathToProjectV1);
-    const project_path_v2 = sanitize_slash(args.pathToProjectV2);
-    const output_folder_path = sanitize_slash(args.outputPath);
+    const project_path_v1 = sanitize(args.pathToProjectV1);
+    const project_path_v2 = sanitize(args.pathToProjectV2);
+    const output_folder_path = sanitize(args.outputPath);
     const json_test_path = args.tests;
     const path_diff_file = args.pathDiffFile;
     if (argv._.includes('coverage')) {
@@ -174,7 +200,7 @@ if (require.main === module) {
 
 exports.coverage_task = coverage_task;
 exports.get_modified_files_from_diff = get_modified_files_from_diff;
-exports.sanitize_slash = sanitize_slash;
+exports.sanitize_slash = sanitize;
 exports.compute_coverage = compute_coverage;
 exports.compute_test_coverage = compute_test_coverage;
 exports.exec_command = exec_command;

@@ -13,10 +13,10 @@ test('test get_modified_files_from_diff', () => {
     expect(modified_files[0]).toBe('src/app.js');
 });
 
-test('test sanitize slash', () => {
-    expect(diff_jsjoules.sanitize_slash('path/with/end/slash/')).toBe('path/with/end/slash');
-    expect(diff_jsjoules.sanitize_slash('path/without/end/slash')).toBe('path/without/end/slash');
-    expect(diff_jsjoules.sanitize_slash(undefined)).toBe(undefined);
+test('test sanitize', () => {
+    expect(diff_jsjoules.sanitize('path/with/end/slash/')).toBe('path/with/end/slash');
+    expect(diff_jsjoules.sanitize('path/without/end/slash')).toBe('path/without/end/slash');
+    expect(diff_jsjoules.sanitize(undefined)).toBe(undefined);
 });
 
 test('test compute_coverage', () => {
