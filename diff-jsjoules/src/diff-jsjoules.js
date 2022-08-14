@@ -56,18 +56,18 @@ function compute_coverage(absolute_path_project, coverage_output_json) {
 }
 
 function compute_test_coverage(coverage_output_json, coverages) {
-    const testCoverages = {};
-    testCoverages.test_coverages = [];
-    coverage_output_json.testResults.map(testResult => {
-        testResult.assertionResults.forEach(assertionResult => {
-            var testCoverage = {};
-            testCoverage.test_identifier = assertionResult.fullName;
-            testCoverage.file_coverages = [];
-            coverages.forEach(coverage => testCoverage.file_coverages.push(coverage));
-            testCoverages.test_coverages.push(testCoverage);
+    const test_coverages = {};
+    test_coverages.test_coverages = [];
+    coverage_output_json.testResults.map(test_result => {
+        test_result.assertionResults.forEach(assertion_result => {
+            var test_coverage = {};
+            test_coverage.test_identifier = assertion_result.fullName;
+            test_coverage.file_coverages = [];
+            coverages.forEach(coverage => test_coverage.file_coverages.push(coverage));
+            test_coverages.test_coverages.push(test_coverage);
         })
     });
-    return testCoverages;
+    return test_coverages;
 }
 
 async function coverage_task(project_path_v1, diff_path_file, output_folder_path) {
@@ -200,7 +200,7 @@ if (require.main === module) {
 
 exports.coverage_task = coverage_task;
 exports.get_modified_files_from_diff = get_modified_files_from_diff;
-exports.sanitize_slash = sanitize;
+exports.sanitize = sanitize;
 exports.compute_coverage = compute_coverage;
 exports.compute_test_coverage = compute_test_coverage;
 exports.exec_command = exec_command;

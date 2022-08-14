@@ -42,8 +42,8 @@ test('test compute_test_coverage', () => {
     ];
     const coverage_output_json = JSON.parse(readFileSync('test_resources/coverage_jest.json'));
     const test_coverage = diff_jsjoules.compute_test_coverage(coverage_output_json, coverages);
-    expect(test_coverage.length).toBe(8);
-    expect(test_coverage[0].test_identifier).toBe('test added statement');
+    expect(test_coverage.test_coverages.length).toBe(8);
+    expect(test_coverage.test_coverages[0].test_identifier).toBe('test added statement');
 })
 
 test('test coverage_task', async () => {

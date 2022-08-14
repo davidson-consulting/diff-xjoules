@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "",
   "author": "Benjamin Danglot",
+  "scripts": {
+    "test": "jest src/diff-jsjoules.test.js"
+  },
   "dependencies": {
     "yargs": "^17.5.1"
   }
