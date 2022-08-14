@@ -70,8 +70,8 @@ pub fn run(
 
 fn compute_coverages(configuration: &Configuration, diff_file_path: &str) {
     let mut data: HashMap<&str, &str> = HashMap::new();
-    data.insert("path_project", &configuration.path_v1);
-    data.insert("second_path_project", &configuration.path_v2);
+    data.insert("path_project_v1", &configuration.path_v1);
+    data.insert("path_project_v2", &configuration.path_v2);
     data.insert("path_diff_file", diff_file_path);
     data.insert("output_path", &configuration.path_output_dir);
     command::run_templated_command(&configuration.coverage_cmd, &data);
