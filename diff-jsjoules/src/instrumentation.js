@@ -3,7 +3,7 @@ const { resolve } = require('path');
 
 const TEST_FUNCTION_NAME = 'test';
 
-const DIFF_JSJOULES_FILE_NAME = resolve('src/diff-jsjoules-instr.js');
+const DIFF_JSJOULES_FILE_NAME = resolve(`${__dirname}/diff-jsjoules-instr.js`);
 const DIFF_JSJOULES_NAME = 'diff_jsjoules';
 const DIFF_JSJOULES_START_FUNCTION_NAME = 'start'
 const DIFF_JSJOULES_STOP_FUNCTION_NAME = 'stop'
