@@ -1,0 +1,17 @@
+name: JSJoules CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.0
+      - name: Install
+        run: npm install --prefix diff-jsjoules
+      - name: Run tests
+        run: cd diff-jsjoules && npx eslint src

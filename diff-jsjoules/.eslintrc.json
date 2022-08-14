@@ -1,0 +1,18 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "standard",
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "ignorePatterns": ["diff-jsjoules.test.js"],
+    "rules": {
+        "camelcase": "off",
+        "n/no-path-concat": "off"
+    }
+}
