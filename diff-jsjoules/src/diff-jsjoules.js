@@ -102,7 +102,7 @@ function convert_tlpc_report_to_diff_xjoules_report(absolute_project_path) {
     diff_xjoules_report.test_measures = [];
     for (let test_identifier in tlpc_report) {
         const test_measures = {};
-        test_measures.test_identifier = test_identifier;
+        test_measures.test_identifier = test_identifier.replaceAll('_', ' ');
         const measure = []
         for (let indicator in tlpc_report[test_identifier]) {
             const indicator_measure = {}
