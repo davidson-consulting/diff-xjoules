@@ -1,0 +1,58 @@
+{
+    "test_added_statement": {
+        "RAPL_ENERGY_PKG": 5815402496,
+        "INSTRUCTIONS_RETIRED": 119021899,
+        "LLC_MISSES": 582427,
+        "CYCLES": 110093468,
+        "duration": 32391738
+    },
+    "test_removed_statement": {
+        "RAPL_ENERGY_PKG": 270270464,
+        "INSTRUCTIONS_RETIRED": 6172825,
+        "LLC_MISSES": 67588,
+        "CYCLES": 6616532,
+        "duration": 1923727
+    },
+    "test_updated_statement": {
+        "RAPL_ENERGY_PKG": 216530944,
+        "INSTRUCTIONS_RETIRED": 3874601,
+        "LLC_MISSES": 55509,
+        "CYCLES": 4397294,
+        "duration": 1286914
+    },
+    "test_added_and_removed_statement": {
+        "RAPL_ENERGY_PKG": 373817344,
+        "INSTRUCTIONS_RETIRED": 10243223,
+        "LLC_MISSES": 52808,
+        "CYCLES": 9605831,
+        "duration": 2775303
+    },
+    "test_empty": {
+        "RAPL_ENERGY_PKG": 250085376,
+        "INSTRUCTIONS_RETIRED": 4492483,
+        "LLC_MISSES": 65999,
+        "CYCLES": 4964722,
+        "duration": 1449015
+    },
+    "test_singleton": {
+        "RAPL_ENERGY_PKG": 149946368,
+        "INSTRUCTIONS_RETIRED": 1877053,
+        "LLC_MISSES": 50670,
+        "CYCLES": 2477186,
+        "duration": 769369
+    },
+    "test_random": {
+        "RAPL_ENERGY_PKG": 134479872,
+        "INSTRUCTIONS_RETIRED": 2804982,
+        "LLC_MISSES": 55292,
+        "CYCLES": 3055962,
+        "duration": 858514
+    },
+    "test_quicksort": {
+        "RAPL_ENERGY_PKG": 124256256,
+        "INSTRUCTIONS_RETIRED": 3274863,
+        "LLC_MISSES": 31948,
+        "CYCLES": 2826610,
+        "duration": 794685
+    }
+}

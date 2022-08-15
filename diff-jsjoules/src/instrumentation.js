@@ -35,7 +35,7 @@ module.exports =
             one_test_has_been_instrumented = true
             console.log(`Instrumenting ${test_identifier}`)
             test_function.value.expression.arguments
-              .filter(args => args.type === jscodeshift.ArrowFunctionExpression)
+              .filter(args => args.type === 'ArrowFunctionExpression')
               .forEach((arrowFunctionExpression) => {
                 arrowFunctionExpression.async = true
                 const test_identifier_snaked_case = test_identifier.replaceAll(' ', '_')

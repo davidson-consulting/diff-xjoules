@@ -1,6 +1,6 @@
 const diff_jsjoules = require('./diff-jsjoules')
 
-const { readFileSync, unlinkSync, existsSync } = require('fs')
+const { readFileSync, unlinkSync, existsSync, mkdirSync } = require('fs')
 
 test('test exec_command', async () => {
   const stdout_result = await diff_jsjoules.exec_command('ls -a')
@@ -53,6 +53,9 @@ test('test coverage_task', async () => {
   if (existsSync('target/coverage_v2.json')) {
     unlinkSync('target/coverage_v2.json')
   }
+  if (!existsSync('target')) {
+    mkdirSync('target');
+  }
   await diff_jsjoules.coverage_task('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff', 'target')
   const coverage_v1 = JSON.parse(readFileSync('target/coverage_v1.json', 'utf-8'))
   expect(coverage_v1.test_coverages.length).toBe(8)
@@ -80,5 +83,11 @@ test('test instrumentation_task', async () => {
 })
 
 test('test execution_task', async () => {
+  if (!'test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements') {
+    mkdirSync('test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements')
+  }
+  await diff_jsjoules.exec_command('cp test_resources/data.json test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements/measurements.json')
   await diff_jsjoules.execution_task('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/test_selection.json')
+  const diff_xjoules_report = JSON.parse(readFileSync('test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements/measurements.json'));
+  expect(diff_xjoules_report.test_measures.length).toBe(8);
 })
