@@ -83,10 +83,14 @@ test('test instrumentation_task', async () => {
 })
 
 test('test execution_task', async () => {
-  if (!'test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements') {
+  if (!existsSync('test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements')) {
     mkdirSync('test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements')
   }
+  if (!existsSync('test_resources/diff-jsjoules-toy-nodejs-project-v2/diff-measurements')) {
+    mkdirSync('test_resources/diff-jsjoules-toy-nodejs-project-v2/diff-measurements')
+  }
   await diff_jsjoules.exec_command('cp test_resources/data.json test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements/measurements.json')
+  await diff_jsjoules.exec_command('cp test_resources/data.json test_resources/diff-jsjoules-toy-nodejs-project-v2/diff-measurements/measurements.json')
   await diff_jsjoules.execution_task('test_resources/diff-jsjoules-toy-nodejs-project', 'test_resources/diff-jsjoules-toy-nodejs-project-v2', 'test_resources/test_selection.json')
   const diff_xjoules_report = JSON.parse(readFileSync('test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements/measurements.json'));
   expect(diff_xjoules_report.test_measures.length).toBe(8);
