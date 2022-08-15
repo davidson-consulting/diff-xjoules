@@ -4,6 +4,8 @@
 
 [![JJoules CI](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jjoules.yml/badge.svg)](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jjoules.yml) [![JJoules Checkstyle](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jjoules-checkstyle.yml/badge.svg)](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jjoules-checkstyle.yml)
 
+[![JSJoules CI](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jsjoules.yml/badge.svg)](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jsjoules.yml) [![JSJoules Checkstyle](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jsjoules-checkstyle.yml/badge.svg)](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jsjoules-checkstyle.yml)
+
 **Diff-XJoules** is developped in Rust but aims to be used on any programming language.
 However, some part of the process is language-specific, and therefore **Diff-XJoules** is built to call external process to support language-specific parts.
 
@@ -65,6 +67,7 @@ You can find dedicated documentation for each language-specific parts:
 Here, the supported languages, with the link to the plugins:
 
 - Java: [diff-jjoules](https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-jjoules)
+- Javascript (NodeJS): [diff-jsjoules](https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-jsjoules)
 
 ## Contribution
 
