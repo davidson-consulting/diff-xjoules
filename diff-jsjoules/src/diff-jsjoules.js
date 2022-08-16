@@ -82,8 +82,8 @@ async function coverage_task (project_path_v1, diff_path_file, output_folder_pat
 }
 
 async function instrumentation_task (project_path_v1, project_path_v2, json_test_path) {
-  await exec_command(['jscodeshift', '-t', `${__dirname}/instrumentation.js`, `${project_path_v1}/src`, `--tests=${json_test_path}`].join(' '))
-  await exec_command(['jscodeshift', '-t', `${__dirname}/instrumentation.js`, `${project_path_v2}/src`, `--tests=${json_test_path}`].join(' '))
+  console.log(await exec_command(['jscodeshift', '-t', `${__dirname}/instrumentation.js`, `${project_path_v1}/src`, `--tests=${json_test_path}`].join(' ')));
+  console.log(await exec_command(['jscodeshift', '-t', `${__dirname}/instrumentation.js`, `${project_path_v2}/src`, `--tests=${json_test_path}`].join(' ')));
 }
 
 async function send (project_path) {
@@ -102,7 +102,7 @@ function convert_tlpc_report_to_diff_xjoules_report (absolute_project_path) {
   diff_xjoules_report.test_measures = []
   for (const test_identifier in tlpc_report) {
     const test_measures = {}
-    test_measures.test_identifier = test_identifier.replaceAll('_', ' ')
+    test_measures.test_identifier = test_identifier.replaceAll('_', ' ').replaceAll("-", "\"");
     const measure = []
     for (const indicator in tlpc_report[test_identifier]) {
       const indicator_measure = {}
