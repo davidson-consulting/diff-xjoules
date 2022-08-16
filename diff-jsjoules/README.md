@@ -41,7 +41,7 @@ $ ls diff-jsjoules/output_example
 coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  decisions.json  delta.json  diff  test_filter_selection.json  test_selection.json
 ```
 
-## Configuration file for TODO
+## Configuration file for jscodeshift
 
 In this section, we propose to execute `diff-xjoules` using `diff-jsjoules` on [jscodeshift](https://github.com/facebook/jscodeshift).
 
