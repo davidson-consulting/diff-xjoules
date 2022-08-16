@@ -58,13 +58,8 @@ impl MarkStrategy for CodeCoverageMarkStrategy {
             .test_selection
             .iter()
             .filter(|selected_test| {
-                data.coverage_v1
-                    .get_test_coverage_by_test_identifier(&selected_test)
-                    .is_some()
-                    && data
-                        .coverage_v2
-                        .get_test_coverage_by_test_identifier(&selected_test)
-                        .is_some()
+                data.data_v1.find_test_measure(&selected_test).is_some()
+                    && data.data_v2.find_test_measure(&selected_test).is_some()
             })
             .map(|selected_test| {
                 let weighted_considered_test_data_v1 = self.compute_weighted_data(
