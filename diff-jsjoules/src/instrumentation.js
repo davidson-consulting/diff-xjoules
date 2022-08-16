@@ -65,7 +65,12 @@ module.exports =
       .forEach(statement => {
         const base_test_identifier = statement.value.expression.arguments.filter(args => args.type === 'Literal')[0].value
         const describes = gather_describes_from_statement(statement)
-        const test_identifier = [describes, base_test_identifier].join(' ')
+        let test_identifier;
+        if (describes.length > 0) {
+          test_identifier = [describes, base_test_identifier].join(' ')
+        } else {
+          test_identifier = base_test_identifier;
+        }
         if (test_selection.test_selection.indexOf(test_identifier) >= 0) {
           one_test_has_been_instrumented = true
           console.log(`Instrumenting ${test_identifier}`)
