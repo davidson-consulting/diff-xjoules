@@ -43,28 +43,26 @@ coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  decisions.json  
 
 ## Configuration file for TODO
 
-:construction:
+In this section, we propose to execute `diff-xjoules` using `diff-jsjoules` on [jscodeshift](https://github.com/facebook/jscodeshift).
 
-In this section, we propose to execute `diff-xjoules` using `diff-jsjoules` on [TODO](#).
-
-1. Clone twice `TODO`:
+1. Clone twice `jscodeshift`:
 
 ```sh
-git clone TODO /tmp/v1
-git clone TODO /tmp/v2
+git clone https://github.com/facebook/jscodeshift /tmp/v1
+git clone https://github.com/facebook/jscodeshift /tmp/v2
 ```
 
 2. Hard reset on specific commits:
 
 ```sh
-git -C /tmp/v1 reset --hard TODO
-git -C /tmp/v2 reset --hard TODO
+git -C /tmp/v1 reset --hard adef04b97621b19420fd67919c2764910e15dabc
+git -C /tmp/v2 reset --hard 514f8c3e4e2e2801713beff93a04f8f8a771fe96
 ```
 
 3. Execute `diff-xjoules` using `diff-jsjoules`:
 
 ```
-cargo run diff-jsjoules/todo.yaml
+cargo run diff-jsjoules/configuration_file_jscodeshift.yaml
 ```
 
 4. After a while, you should observe the following:
@@ -82,7 +80,7 @@ Deciding using aggregate
 Deciding using vote
 Deciding using code_coverage
 Deciding using diff_coverage
-$ ls diff-jsjoules/output_todo
+$ ls diff-jsjoules/output_jscodeshift
 coverage_v1.json  coverage_v2.json  data_v1.json  data_v2.json  decisions.json  delta.json  diff  test_filter_selection.json  test_selection.json
 ```
 

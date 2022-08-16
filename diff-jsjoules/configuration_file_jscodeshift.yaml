@@ -1,0 +1,14 @@
+path_v1: "/tmp/v1"
+path_v2: "/tmp/v2"
+path_output_dir: "diff-jsjoules/output_jscodeshift"
+src_folder: "src"
+
+time_to_wait_in_millis: 3000
+iteration_run: 5
+iteration_warmup: 1
+
+coverage_cmd: "node diff-jsjoules/src/diff-jsjoules.js coverage --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --output-path {{ output_path }} --path-diff-file {{ path_diff_file }}"
+instrumentation_cmd: "node diff-jsjoules/src/diff-jsjoules.js instrumentation --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --tests {{ tests_set_path }}"
+execution_cmd: "node diff-jsjoules/src/diff-jsjoules.js execution --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --tests {{ tests_set_path }}"
+
+indicator_to_consider_for_marking: "RAPL_ENERGY_PKG"
