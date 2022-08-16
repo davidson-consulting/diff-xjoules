@@ -10,12 +10,11 @@ const DIFF_JSJOULES_NAME = 'diff_jsjoules'
 const DIFF_JSJOULES_START_FUNCTION_NAME = 'start'
 const DIFF_JSJOULES_STOP_FUNCTION_NAME = 'stop'
 
-
-function match_describe(candidate) {
-  return candidate.value.callee !== undefined && candidate.value.callee.name === DESCRIBE_FUNCTION_NAME;
+function match_describe (candidate) {
+  return candidate.value.callee !== undefined && candidate.value.callee.name === DESCRIBE_FUNCTION_NAME
 }
 
-function buildCall(jscodeshift, function_name, test_identifier) {
+function buildCall (jscodeshift, function_name, test_identifier) {
   return jscodeshift.awaitStatement(
     jscodeshift.callExpression(
       jscodeshift.memberExpression(
@@ -27,29 +26,29 @@ function buildCall(jscodeshift, function_name, test_identifier) {
   )
 }
 
-function find_describe_parent(startPoint) {
-  let current = startPoint.parentPath;
+function find_describe_parent (startPoint) {
+  let current = startPoint.parentPath
   while (!match_describe(current)) {
-      if (current === undefined || current.parentPath === undefined || current.parentPath === null) {
-          return undefined;
-      } else {
-          current = current.parentPath;
-      }
+    if (current === undefined || current.parentPath === undefined || current.parentPath === null) {
+      return undefined
+    } else {
+      current = current.parentPath
+    }
   }
-  return current;
+  return current
 }
 
-function gather_describes_from_statement(starting_point) {
-  let current = starting_point;
-  let describes = [];
-  while (current != undefined) {
-      current = find_describe_parent(current);
-      if (current !== undefined) {
-        describes.push(current.value.arguments[0].value);
-      }
+function gather_describes_from_statement (starting_point) {
+  let current = starting_point
+  const describes = []
+  while (current !== undefined) {
+    current = find_describe_parent(current)
+    if (current !== undefined) {
+      describes.push(current.value.arguments[0].value)
+    }
   }
-  describes.reverse();
-  return describes.join(' ');
+  describes.reverse()
+  return describes.join(' ')
 }
 
 module.exports =
@@ -65,14 +64,14 @@ module.exports =
       .filter(statement => statement.value.expression.arguments.filter(args => args.type === 'Literal')[0] !== undefined)
       .forEach(statement => {
         const base_test_identifier = statement.value.expression.arguments.filter(args => args.type === 'Literal')[0].value
-        const describes = gather_describes_from_statement(statement);
-        const test_identifier = [describes, base_test_identifier].join(' ');
+        const describes = gather_describes_from_statement(statement)
+        const test_identifier = [describes, base_test_identifier].join(' ')
         if (test_selection.test_selection.indexOf(test_identifier) >= 0) {
           one_test_has_been_instrumented = true
           console.log(`Instrumenting ${test_identifier}`)
-          const test_function = statement.value.expression.arguments[1];
+          const test_function = statement.value.expression.arguments[1]
           test_function.async = true
-          const test_identifier_snaked_case = test_identifier.replaceAll(' ', '_').replaceAll("\"", "-");
+          const test_identifier_snaked_case = test_identifier.replaceAll(' ', '_').replaceAll('"', '-')
           const startCall = buildCall(jscodeshift, DIFF_JSJOULES_START_FUNCTION_NAME, test_identifier_snaked_case)
           test_function.body.body.unshift(startCall)
           const stopCall = buildCall(jscodeshift, DIFF_JSJOULES_STOP_FUNCTION_NAME, test_identifier_snaked_case)
@@ -93,4 +92,3 @@ module.exports =
     }
     return source.toSource()
   }
- 
