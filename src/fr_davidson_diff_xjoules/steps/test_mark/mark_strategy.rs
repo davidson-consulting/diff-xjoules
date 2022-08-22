@@ -29,14 +29,6 @@ pub enum MarkStrategyEnum {
     DiffCov,
 }
 
-pub enum MarkStrategyTypedEnum {
-    Strict(StrictMarkStrategy),
-    Aggregate(AggregateMarkStrategy),
-    Vote(VoteMarkStrategy),
-    CodeCov(CodeCoverageMarkStrategy),
-    DiffCov(DiffCodeCoverageMarkStrategy),
-}
-
 impl fmt::Display for MarkStrategyEnum {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -50,19 +42,13 @@ impl fmt::Display for MarkStrategyEnum {
 }
 
 impl MarkStrategyEnum {
-    fn get(&self) -> MarkStrategyTypedEnum {
+    fn get(&self) -> Box<dyn MarkStrategy> {
         match self {
-            MarkStrategyEnum::Strict => MarkStrategyTypedEnum::Strict(StrictMarkStrategy::new()),
-            MarkStrategyEnum::Aggregate => {
-                MarkStrategyTypedEnum::Aggregate(AggregateMarkStrategy::new())
-            }
-            MarkStrategyEnum::Vote => MarkStrategyTypedEnum::Vote(VoteMarkStrategy::new()),
-            MarkStrategyEnum::CodeCov => {
-                MarkStrategyTypedEnum::CodeCov(CodeCoverageMarkStrategy::new())
-            }
-            MarkStrategyEnum::DiffCov => {
-                MarkStrategyTypedEnum::DiffCov(DiffCodeCoverageMarkStrategy::new())
-            }
+            MarkStrategyEnum::Strict => Box::new(StrictMarkStrategy::new()),
+            MarkStrategyEnum::Aggregate => Box::new(AggregateMarkStrategy::new()),
+            MarkStrategyEnum::Vote => Box::new(VoteMarkStrategy::new()),
+            MarkStrategyEnum::CodeCov => Box::new(CodeCoverageMarkStrategy::new()),
+            MarkStrategyEnum::DiffCov => Box::new(DiffCodeCoverageMarkStrategy::new()),
         }
     }
     pub fn decide(
@@ -72,33 +58,6 @@ impl MarkStrategyEnum {
         test_selection: &TestSelection,
     ) -> bool {
         return self.get().decide(configuration, data, test_selection);
-    }
-}
-
-impl MarkStrategyTypedEnum {
-    fn decide(
-        &self,
-        configuration: &Configuration,
-        data: &DiffXJoulesData,
-        test_selection: &TestSelection,
-    ) -> bool {
-        match self {
-            MarkStrategyTypedEnum::Strict(ref strict_mark_strategy) => {
-                strict_mark_strategy.decide(configuration, data, test_selection)
-            }
-            MarkStrategyTypedEnum::Aggregate(ref aggregate_mark_strategy) => {
-                aggregate_mark_strategy.decide(configuration, data, test_selection)
-            }
-            MarkStrategyTypedEnum::Vote(ref vote_mark_strategy) => {
-                vote_mark_strategy.decide(configuration, data, test_selection)
-            }
-            MarkStrategyTypedEnum::CodeCov(ref code_coverage_mark_strategy) => {
-                code_coverage_mark_strategy.decide(configuration, data, test_selection)
-            }
-            MarkStrategyTypedEnum::DiffCov(ref diff_coverage_mark_strategy) => {
-                diff_coverage_mark_strategy.decide(configuration, data, test_selection)
-            }
-        }
     }
 }
 

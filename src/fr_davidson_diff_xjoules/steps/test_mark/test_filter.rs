@@ -21,12 +21,6 @@ pub enum TestFilterEnum {
     EmptyIntersection,
     StudentTTest,
 }
-pub enum TestFilterTypedEnum {
-    All(AllTestFilter),
-    EmptyIntersection(EmptyIntersectionTestFilter),
-    StudentTTest(StudentTTestTestFilter),
-}
-
 impl fmt::Display for TestFilterEnum {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -38,35 +32,15 @@ impl fmt::Display for TestFilterEnum {
 }
 
 impl TestFilterEnum {
-    fn get(&self) -> TestFilterTypedEnum {
-        match self {
-            TestFilterEnum::All => TestFilterTypedEnum::All(AllTestFilter::new()),
-            TestFilterEnum::EmptyIntersection => {
-                TestFilterTypedEnum::EmptyIntersection(EmptyIntersectionTestFilter::new())
-            }
-            TestFilterEnum::StudentTTest => {
-                TestFilterTypedEnum::StudentTTest(StudentTTestTestFilter::new())
-            }
-        }
+    fn get(&self) -> Box<dyn TestFilter> {
+        return match self {
+            TestFilterEnum::All => Box::new(AllTestFilter::new()),
+            TestFilterEnum::EmptyIntersection => Box::new(EmptyIntersectionTestFilter::new()),
+            TestFilterEnum::StudentTTest => Box::new(StudentTTestTestFilter::new()),
+        };
     }
     pub fn filter(&self, configuration: &Configuration, data: &DiffXJoulesData) -> TestSelection {
         return self.get().filter(configuration, data);
-    }
-}
-
-impl TestFilterTypedEnum {
-    pub fn filter(&self, configuration: &Configuration, data: &DiffXJoulesData) -> TestSelection {
-        match self {
-            TestFilterTypedEnum::All(ref all_test_filter) => {
-                all_test_filter.filter(configuration, data)
-            }
-            TestFilterTypedEnum::EmptyIntersection(ref empty_intersection_test_filter) => {
-                empty_intersection_test_filter.filter(configuration, data)
-            }
-            TestFilterTypedEnum::StudentTTest(ref student_t_test_test_filter) => {
-                student_t_test_test_filter.filter(configuration, data)
-            }
-        }
     }
 }
 
