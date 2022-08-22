@@ -1,0 +1,22 @@
+name: RSJoules Checkstyle
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3.0.0
+    - name: Check format
+      run: cd diff-rsjoules && cargo fmt -- --check
+
+
