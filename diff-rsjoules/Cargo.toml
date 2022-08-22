@@ -14,3 +14,4 @@ keywords = ["sustainability", "continuous-integration"]
 
 [dependencies]
 clap = { version = "3.0", features = ["derive"] }
+diff-xjoules = { path = ".." }

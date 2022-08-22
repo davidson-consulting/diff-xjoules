@@ -2,6 +2,18 @@
 
 Diff-JSJoules is a plugin to be used by Diff-XJoules for Rust projects.
 
+It requires to install **Diff-XJoules**, from `diff-xjoules` folder, run:
+
+```sh
+cargo install --path .
+```
+
+Then, build **Diff-RSJoules**, from `diff-rsjoules` folder, run:
+
+```sh
+cargo build
+```
+
 :construction:
 
 ## Configuration file example
