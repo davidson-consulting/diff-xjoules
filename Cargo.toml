@@ -1,6 +1,6 @@
 [package]
 name = "diff-xjoules"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2021"
 authors = ["Benjamin Danglot <bdanglot@gmail.com>"]
 description = " diff-xjoules is a tool to run in your continuous integration to measure the impact of commits on the energy consumption of the program"

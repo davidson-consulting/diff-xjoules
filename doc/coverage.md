@@ -67,7 +67,7 @@ Then, the field `covered_lines` is an array containing all the covered line in t
 Below, a command line example for Java:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --second-path-to-project {{ second_path_project }} --task TEST_COVERAGE --output-path {{ output_path }}
+java -jar diff-jjoules/target/diff-jjoules-1.1.0-jar-with-dependencies.jar --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --second-path-to-project {{ second_path_project }} --task TEST_COVERAGE --output-path {{ output_path }}
 ```
 
 **Diff-XJoules** will execute this command once.
@@ -81,5 +81,5 @@ Notice that the command line for Java does not use the input `{{ path_diff_file 
 If we consider [this](https://github.com/davidson-consulting/diff-xjoules/blob/main/test_resources/configuration_file_example.yaml) configuration YAML file example, the resulting command executed will be:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project-v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --path-to-project-v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_COVERAGE --output-path path_output_dir/coverage_v1.json
+java -jar diff-jjoules/target/diff-jjoules-1.1.0-jar-with-dependencies.jar --path-to-project-v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --path-to-project-v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_COVERAGE --output-path path_output_dir/coverage_v1.json
 ```

@@ -82,7 +82,7 @@ However, be aware that the indicator will be used for the mark decision thanks t
 Below, a command line example for Java:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}
+java -jar diff-jjoules/target/diff-jjoules-1.1.0-jar-with-dependencies.jar --path-to-project-v1 {{ path_project_v1 }} --path-to-project-v2 {{ path_project_v2 }} --task TEST_EXECUTION --tests-set {{ tests_set_path }}
 ```
 
 **Diff-XJoules** will execute this command once for both versions of the program (before and after the commit).
@@ -94,5 +94,5 @@ In this command, we can observe the three templates `{{ path_project_v1 }}`, `{{
 If we consider [this](https://github.com/davidson-consulting/diff-xjoules/blob/main/test_resources/configuration_file_example.yaml) configuration YAML file example, the resulting command executed will be:
 
 ```sh
-java -jar diff-jjoules/target/diff-jjoules-1.0.0-SNAPSHOT-jar-with-dependencies.jar --path-to-project-v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --path-to-project-v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_EXECUTION --tests-set target/test_selection.json
+java -jar diff-jjoules/target/diff-jjoules-1.1.0-jar-with-dependencies.jar --path-to-project-v1 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project --path-to-project-v2 diff-jjoules/src/test/resources/diff-jjoules-toy-java-project-v2 --task TEST_EXECUTION --tests-set target/test_selection.json
 ```
