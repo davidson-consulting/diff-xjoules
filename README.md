@@ -6,6 +6,8 @@
 
 [![JSJoules CI](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jsjoules.yml/badge.svg)](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jsjoules.yml) [![JSJoules Checkstyle](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jsjoules-checkstyle.yml/badge.svg)](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-jsjoules-checkstyle.yml)
 
+[![RSJoules CI](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-rsjoules.yml/badge.svg)](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-rsjoules.yml) [![RSJoules Checkstyle](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-rsjoules-checkstyle.yml/badge.svg)](https://github.com/davidson-consulting/diff-xjoules/actions/workflows/diff-rsjoules-checkstyle.yml)
+
 **Diff-XJoules** is developped in Rust but aims to be used on any programming language.
 However, some part of the process is language-specific, and therefore **Diff-XJoules** is built to call external process to support language-specific parts.
 
