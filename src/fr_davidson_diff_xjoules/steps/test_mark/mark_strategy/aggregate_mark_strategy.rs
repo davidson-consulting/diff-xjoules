@@ -81,6 +81,7 @@ mod test {
         data.delta = delta;
         let mut test_selection = TestSelection::new();
         test_selection.test_selection.insert(String::from("test1"));
+        assert_eq!("aggregate", configuration.mark_strategies[0].to_string());
         assert!(configuration.mark_strategies[0].decide(&configuration, &data, &test_selection));
     }
 

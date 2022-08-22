@@ -106,6 +106,7 @@ mod test {
         };
         let mut data = DiffXJoulesData::new();
         data.delta = json_utils::read_json::<VersionMeasure>("test_resources/delta.json");
+        assert_eq!("strict", configuration.mark_strategies[0].to_string());
         let test_selection =
             json_utils::read_json::<TestSelection>("test_resources/test_filter_selection.json");
         assert!(!configuration.mark_strategies[0].decide(&configuration, &data, &test_selection));

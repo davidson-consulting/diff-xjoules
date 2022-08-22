@@ -91,6 +91,7 @@ mod test {
             String::from("fr.davidson.AppTest#testAddedAndRemovedStatement"),
             2,
         );
+        assert_eq!("diff_coverage", configuration.mark_strategies[0].to_string());
         assert!(!configuration.mark_strategies[0].decide(&configuration, &data, &test_selection));
     }
 }
