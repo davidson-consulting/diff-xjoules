@@ -39,3 +39,50 @@ This command will output a changelog from the provided tag to the current versio
 It might need some manual modifications for the classification, authors name, etc.
 
 Please, refer to the dedicated [README.md](https://github.com/davidson-consulting/changelog-generator/README.md) for more information.
+
+## Releasing
+
+In this section, we describe how we release `diff-xjoules` and its components.
+
+1. Bump the version of all component, _e.g._ [this commit](https://github.com/davidson-consulting/diff-xjoules/commit/7af2701f5aaccf8ff0c38262f4b25c1ee6b1e513)
+2. Create a new tag:
+
+```sh
+git tag diff-xjoules-X.Y.Z
+```
+
+3. push the new tag:
+```sh
+git push diff-xjoules-X.Y.Z
+```
+
+4. Go to the [tags section](https://github.com/davidson-consulting/diff-xjoules/tags) and create a new release from the tag your created and push in 1. and 2. : `diff-xjoules-X.Y.Z`
+
+5. generate changelog
+
+```sh
+node changelog-generator/changelog.js davidson-consulting diff-xjoules U.V.W
+```
+
+Where `U.V.W` is the previous version, latest tag before the one you had created above: _e.g._ from `1.0.0` to `1.1.0` where `U.V.W=1.0.0` and `X.Y.Z=1.1.0`.
+
+6. Copy and paste the change log in to GitHub. Correct potential issue (redundant lines, mis-categorized commits, etc.).
+
+7. build all executables, for example: 
+
+* diff-xjoules:
+
+```sh
+cargo clean
+cargo build --release
+```
+
+and upload `target/release/diff-xjoules`.
+
+* diff-jjoules:
+
+```sh
+mvn clean package -DskipTests -f `diff-jjoules`
+```
+
+and upload `target/diff-jjoules-X-Y-Z-jar-with-dependencies.jar`.
