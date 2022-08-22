@@ -1,8 +1,6 @@
 use super::Task;
 
-pub struct ExecutionTask {
-
-}
+pub struct ExecutionTask {}
 
 impl ExecutionTask {
     pub fn new() -> ExecutionTask {
