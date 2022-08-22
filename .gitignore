@@ -46,3 +46,8 @@ diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project/diff-measurements/
 diff-jsjoules/test_resources/diff-jsjoules-toy-nodejs-project-v2/diff-measurements/
 diff-jsjoules/output_example/
 diff-jsjoules/output_jscodeshift/
+
+# diff-rsjoules files
+
+diff-rsjoules/Cargo.lock
+diff-rsjoules/target

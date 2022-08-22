@@ -1,0 +1,16 @@
+[package]
+name = "diff-rsjoules"
+version = "1.0.0"
+edition = "2021"
+authors = ["Benjamin Danglot <bdanglot@gmail.com>"]
+description = "Rust Plugin for Diff-XJoules to measure the impact of commits on energy consumption exploiting existing test developers"
+documentation = "https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-rsjoules#readme"
+homepage = "https://davidson-consulting.github.io/diff-xjoules/tree/main/diff-rsjoules"
+readme = "https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-rsjoules#readme"
+repository = "https://github.com/davidson-consulting/diff-xjoules/tree/main/diff-rsjoules"
+keywords = ["sustainability", "continuous-integration"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "3.0", features = ["derive"] }
