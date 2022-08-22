@@ -8,6 +8,7 @@ impl InstrumentationTask {
     }
 }
 
+#[allow(unused)]
 impl Task for InstrumentationTask {
     fn run(
         &self,

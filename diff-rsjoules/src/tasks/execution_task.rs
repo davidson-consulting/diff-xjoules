@@ -8,6 +8,7 @@ impl ExecutionTask {
     }
 }
 
+#[allow(unused)]
 impl Task for ExecutionTask {
     fn run(
         &self,

@@ -8,6 +8,7 @@ impl CoverageTask {
     }
 }
 
+#[allow(unused)]
 impl Task for CoverageTask {
     fn run(
         &self,
