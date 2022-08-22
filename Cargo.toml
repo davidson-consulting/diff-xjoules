@@ -10,9 +10,16 @@ readme = "https://github.com/davidson-consulting/diff-xjoules/blob/main/README.m
 repository = "https://github.com/davidson-consulting/diff-xjoules"
 keywords = ["sustainability", "continuous-integration"]
 
+[[bin]]
+name = "diff_xjoules"
+path = "src/main.rs"
+
+[lib]
+name = "diff_xjoules_lib"
+path = "src/lib.rs"
+
 [dependencies]
 clap = { version = "3.0", features = ["derive"] }
-
 serde = "1.0.117"
 serde_derive = "1.0.117"
 serde_json = "1.0.59"
