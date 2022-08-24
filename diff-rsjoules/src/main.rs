@@ -40,33 +40,16 @@ struct Cli {
 
 fn main() {
     let args: Cli = Cli::parse();
-    match args.task {
-        TaskEnum::Coverage => {
-            CoverageTask::new().run(
-                &args.path_to_project_v1,
-                &args.path_to_project_v2,
-                &args.tests,
-                &args.output_path,
-                &args.path_diff_file,
-            );
-        }
-        TaskEnum::Instrumentation => {
-            InstrumentationTask::new().run(
-                &args.path_to_project_v1,
-                &args.path_to_project_v2,
-                &args.tests,
-                &args.output_path,
-                &args.path_diff_file,
-            );
-        }
-        TaskEnum::Execution => {
-            ExecutionTask::new().run(
-                &args.path_to_project_v1,
-                &args.path_to_project_v2,
-                &args.tests,
-                &args.output_path,
-                &args.path_diff_file,
-            );
-        }
-    }
+    let task: Box<dyn Task> = match args.task {
+        TaskEnum::Coverage => Box::new(CoverageTask::new()),
+        TaskEnum::Instrumentation => Box::new(InstrumentationTask::new()),
+        TaskEnum::Execution => Box::new(ExecutionTask::new()),
+    };
+    task.run(
+        &args.path_to_project_v1,
+        &args.path_to_project_v2,
+        &args.tests,
+        &args.output_path,
+        &args.path_diff_file,
+    );
 }
