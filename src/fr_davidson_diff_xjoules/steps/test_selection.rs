@@ -112,7 +112,7 @@ fn select_tests(path_to_project: &str, mut diff_xjoules_data: DiffXJoulesData) -
             i = i + 1;
             let mut nb_modified_line: i32 = 0;
             while i < lines_diff.len()
-                && (lines_diff[i].starts_with(">") || lines_diff[i].starts_with("<"))
+                && (lines_diff[i].starts_with(">") || lines_diff[i].starts_with("<") || lines_diff[i].starts_with("\\"))
             {
                 nb_modified_line = nb_modified_line + 1;
                 total_nb_modified_lines = total_nb_modified_lines + 1;
